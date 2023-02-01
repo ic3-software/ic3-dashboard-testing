@@ -1,0 +1,32 @@
+# This is a basic workflow that is manually triggered
+
+name: Cypress nightly
+on:
+  schedule:
+    - cron: '42 0 * * 1,2,3,4,5,6'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node16.13.2-chrome100-ff98
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cypress on Chrome
+        uses: cypress-io/github-action@v5
+        with:
+          config-file: cypress.config-github.ts
+          config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
+          browser: chrome
+          record: false
+        env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # ic3 related environment variables
+          CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
+          CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}

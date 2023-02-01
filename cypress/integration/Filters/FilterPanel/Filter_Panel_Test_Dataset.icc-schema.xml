@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schemaFactory revisionNumber="21">
+    <schemaDefinition name="Filter Panel Test Dataset" group="Test" loadOnStartup="false">
+        <activateIncrementalLoad>false</activateIncrementalLoad>
+        <useUnknownMembersInFacts>true</useUnknownMembersInFacts>
+        <autoCleanUpTableColumns>false</autoCleanUpTableColumns>
+        <useFactPartitioning>false</useFactPartitioning>
+        <memberPropertyConsistencyCheck>ACTIVE</memberPropertyConsistencyCheck>
+        <inMemoryDS name="Test Set" includeSynonyms="false" disableReadOnlyMode="false">
+            <memoryDataTable tableName="Test Data Set" rowLimit="-1" id="41d6533e-9f5b-4a76-a2be-99aa62a63662">
+                <column name="date" tableType="STRING" type="DATE" selected="true" primaryKey="false"/>
+                <column name="datetime" tableType="STRING" type="DATETIME" selected="true" primaryKey="false"/>
+                <column name="character" tableType="STRING" type="STRING" selected="true" primaryKey="false"/>
+                <column name="logical" tableType="STRING" type="BOOLEAN" selected="true" primaryKey="false"/>
+                <column name="numeric" tableType="STRING" type="DOUBLE" selected="true" primaryKey="false"/>
+                <addRowNumber>false</addRowNumber>
+                <trimStrings>true</trimStrings>
+                <columnSeparator>,</columnSeparator>
+                <commentMarker>#</commentMarker>
+                <dataAsString>date,datetime,character,logical,numeric
+                    2015-01-01,2015-01-01T10:00:00,foo,true,10
+                    ,,,,
+                    2017-01-10,2016-02-03T02:00:20,bar,false,-10
+                </dataAsString>
+            </memoryDataTable>
+        </inMemoryDS>
+        <multiLevelDimension dataTableId="41d6533e-9f5b-4a76-a2be-99aa62a63662" isTimeDimension="false"
+                             isDefaultTimeDimension="false" isIndexingByRange="false"
+                             unknownMemberName="empty-character" id="f1d7eaf3-618a-4ccb-a003-311a106f8200"
+                             name="Character">
+            <multiLevelHierarchy hasAllLevel="true" allLevelName="All Level" allMemberName="All" name="Character"
+                                 isDefault="true" uuid="3350c6af-92ca-43dd-8ca9-d6167b9f7784">
+                <level uuid="5040ee3e-d3a0-4824-a418-cb8cf8bbf1c6" name="Character" nameUnique="false"
+                       nameUniqueInParent="false" keyUnique="false" ignoreNameCollision="false">
+                    <property name="date">
+                        <column name="date"/>
+                    </property>
+                    <property name="datetime">
+                        <column name="datetime"/>
+                    </property>
+                    <property name="character">
+                        <column name="character"/>
+                    </property>
+                    <property name="logical">
+                        <column name="logical"/>
+                    </property>
+                    <property name="numeric">
+                        <column name="numeric"/>
+                    </property>
+                    <column name="character"/>
+                    <nameCol name="character"/>
+                    <orderType>NONE</orderType>
+                </level>
+            </multiLevelHierarchy>
+        </multiLevelDimension>
+        <timeWizardDimension isDefaultTimeDimension="false" isIndexingByRange="true"
+                             dataTableId="41d6533e-9f5b-4a76-a2be-99aa62a63662" unknownMemberName="empty-date"
+                             id="e3ff54a3-7f7e-4675-9241-a9e588b07fbe" name="Time">
+            <timeHierarchy hasAllLevel="true" allLevelName="" allMemberName="" name="Time" isDefault="true"
+                           uuid="cb6f9b90-09a6-4638-b090-7f3b9fd624f6">
+                <level uuid="3a8a994c-36d0-4122-9372-298a4fef64da" name="Year" type="YEAR">
+                    <useRelativeKey>false</useRelativeKey>
+                </level>
+                <level uuid="a55b09bb-b01f-4f22-8ad1-bad20cca763a" name="Quarter" type="QUARTER">
+                    <useRelativeKey>false</useRelativeKey>
+                </level>
+                <level uuid="b381a0cb-9097-4c01-9edc-eac19b9c2318" name="Month" type="MONTH">
+                    <useRelativeKey>false</useRelativeKey>
+                </level>
+                <level uuid="60b86226-ab96-4cf8-b0b4-4e24e4a51ab6" name="Day" type="DAY">
+                    <useRelativeKey>false</useRelativeKey>
+                </level>
+                <level uuid="1841aec0-ae68-4e51-bbe9-28b96a305ab8" name="Hour" type="HOUR" nameFormat="yyyy MMM d HH">
+                    <useRelativeKey>false</useRelativeKey>
+                </level>
+            </timeHierarchy>
+            <timeWizardColumn name="datetime"/>
+        </timeWizardDimension>
+        <cube id="55f29fab-9d57-4697-9b43-a9fb6adaf150" name="Cube" description="...">
+            <defaultFacts uuid="14d965a9-3d3e-467d-8d8d-7a58d554a0df" measureGroupName="Test Data Set"
+                          partitioningType="NONE" newGeneration="true"
+                          dataTableId="41d6533e-9f5b-4a76-a2be-99aa62a63662" aggregateDataSourceFacts="false"
+                          unresolvedRowsBehavior="ERROR">
+                <rowFactAggregationType>ADD_ROW</rowFactAggregationType>
+                <measure uuid="79261d0b-f804-4cb5-93b1-42d63220b9a5" name="Numeric" aggregationType="SUM">
+                    <dataColumn name="numeric"/>
+                </measure>
+                <links dimensionId="f1d7eaf3-618a-4ccb-a003-311a106f8200">
+                    <viewLinks type="LAST_LEVEL">
+                        <toColumns name="character"/>
+                    </viewLinks>
+                </links>
+                <links dimensionId="e3ff54a3-7f7e-4675-9241-a9e588b07fbe">
+                    <viewLinks type="LAST_LEVEL">
+                        <toColumns name="datetime"/>
+                    </viewLinks>
+                </links>
+            </defaultFacts>
+        </cube>
+        <localization enabled="false"/>
+        <colors enabled="false"/>
+        <script>
+            <content>--
+                -- Drop all calc. members, sets and functions declared at schema/cube levels.
+                --
+
+                DROP *
+
+            </content>
+        </script>
+    </schemaDefinition>
+</schemaFactory>

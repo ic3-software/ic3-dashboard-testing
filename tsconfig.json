@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es6",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "node",
+      "@4tw/cypress-drag-drop",
+      "cypress-real-events"
+    ]
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
