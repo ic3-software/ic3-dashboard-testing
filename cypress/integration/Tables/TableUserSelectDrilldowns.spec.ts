@@ -12,7 +12,7 @@ describe("Tables/Table User Select Drilldown", () => {
 
         const table = "ww0";
         cy.clickTableRow(table, 1);
-        cy.clickDrilldownMenu(table, [7, 5, 2]);
+        cy.clickDrilldownMenu(table, ["Product", 5, 2]);
         cy.assertTableColumnsEqual(table, "ww1", 5, 2)
 
     });
@@ -21,7 +21,7 @@ describe("Tables/Table User Select Drilldown", () => {
 
         const table = "ww2";
         cy.clickTableRow(table, 1);
-        cy.clickDrilldownMenu(table, [7, 5, 2]);
+        cy.clickDrilldownMenu(table, ["Product", 5, 2]);
         cy.assertTableColumnsEqual(table, "ww3", 5, 2)
 
     });
