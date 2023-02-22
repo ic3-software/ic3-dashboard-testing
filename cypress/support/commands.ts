@@ -202,6 +202,8 @@ declare namespace Cypress {
 
         clickUserMenuClearSelection(widgetId: string): void;
 
+        clickUserMenuToInitialState(widgetId: string): void;
+
         clickUserMenuClearSorting(widgetId: string): void;
 
         clickUserMenuZoom(widgetId: string): void;
@@ -1221,6 +1223,10 @@ Cypress.Commands.add('clickUserMenuBack', (widgetId: string) => {
 
 Cypress.Commands.add('clickUserMenuClearSelection', (widgetId: string) => {
     cy.clickUserMenu(widgetId, "clearSelection");
+});
+
+Cypress.Commands.add('clickUserMenuToInitialState', (widgetId: string) => {
+    cy.clickUserMenu(widgetId, "toInitialState");
 });
 
 Cypress.Commands.add('clickUserMenuClearSorting', (widgetId: string) => {
