@@ -1226,7 +1226,7 @@ Cypress.Commands.add('clickUserMenuClearSelection', (widgetId: string) => {
 });
 
 Cypress.Commands.add('clickUserMenuToInitialState', (widgetId: string) => {
-    cy.clickUserMenu(widgetId, "toInitialState");
+    cy.clickUserMenu(widgetId, "toInitialSelection");
 });
 
 Cypress.Commands.add('clickUserMenuClearSorting', (widgetId: string) => {

@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "@4tw/cypress-drag-drop": "2.2.3",
-    "@types/node": "18.13.0",
+    "@types/node": "18.14.1",
     "cypress": "12.6.0",
     "cypress-log-to-output": "1.1.2",
     "cypress-pipe": "2.0.0",

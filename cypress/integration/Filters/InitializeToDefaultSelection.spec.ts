@@ -1,13 +1,11 @@
-import {assertButtonsSelection} from "./FilterUtils";
-
 export {};
 
 
-describe("Filters/InitializeSelectionOnNewQuery", () => {
+describe("Filters/InitializeToDefaultSelection", () => {
 
     beforeEach(() => {
         cy.login();
-        cy.openViewerTestReport("Filters/InitializeSelectionOnNewQuery", true, false);
+        cy.openViewerTestReport("Filters/InitializeToDefaultSelection", true, false);
         cy.waitForQueryCount(8);
     });
 
