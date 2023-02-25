@@ -61,13 +61,13 @@ describe("Others/WidgetActions", () => {
             const downloadsFolder = Cypress.config("downloadsFolder");
 
             cy.selectButton(button, "Export To Excel");
-            cy.readFile(path.join(downloadsFolder, "Table.xlsx")).should("exist");
+            cy.readFile(path.join(downloadsFolder, "MyExcel.xlsx")).should("exist");
 
             cy.selectButton(button, "Export To SVG");
-            cy.readFile(path.join(downloadsFolder, "Table.svg")).should("exist");
+            cy.readFile(path.join(downloadsFolder, "MySVG.svg")).should("exist");
 
             cy.selectButton(button, "Export To PNG");
-            cy.readFile(path.join(downloadsFolder, "Table.png")).should("exist");
+            cy.readFile(path.join(downloadsFolder, "MyPNG.png")).should("exist");
         }
 
 
