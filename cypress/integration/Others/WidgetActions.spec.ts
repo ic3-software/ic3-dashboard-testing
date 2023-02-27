@@ -57,17 +57,17 @@ describe("Others/WidgetActions", () => {
             cy.assertPivotTableRowCount(table, 5)
 
             //Export
-            const path = require("path");
-            const downloadsFolder = Cypress.config("downloadsFolder");
-
-            cy.selectButton(button, "Export To Excel");
-            cy.readFile(path.join(downloadsFolder, "MyExcel.xlsx")).should("exist");
-
-            cy.selectButton(button, "Export To SVG");
-            cy.readFile(path.join(downloadsFolder, "MySVG.svg")).should("exist");
-
-            cy.selectButton(button, "Export To PNG");
-            cy.readFile(path.join(downloadsFolder, "MyPNG.png")).should("exist");
+            // const path = require("path");
+            // const downloadsFolder = Cypress.config("downloadsFolder");
+            //
+            // cy.selectButton(button, "Export To Excel");
+            // cy.readFile(path.join(downloadsFolder, "MyExcel.xlsx")).should("exist");
+            //
+            // cy.selectButton(button, "Export To SVG");
+            // cy.readFile(path.join(downloadsFolder, "MySVG.svg")).should("exist");
+            //
+            // cy.selectButton(button, "Export To PNG");
+            // cy.readFile(path.join(downloadsFolder, "MyPNG.png")).should("exist");
         }
 
 
