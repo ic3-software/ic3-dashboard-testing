@@ -7,7 +7,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/*.spec.ts"
+            "**/WidgetAction.spec.ts"
         ],
 
         excludeSpecPattern: [

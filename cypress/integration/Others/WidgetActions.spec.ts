@@ -39,35 +39,52 @@ describe("Others/WidgetActions", () => {
         }
 
         {
-            const table = "ww2";
+            const pivotTable = "ww2";
 
 
             // Show/Hide Data
-            cy.assertPivotTableRowCount(table, 5)
+            cy.assertPivotTableRowCount(pivotTable, 5)
             cy.selectButton(button, "Show/Hide Data");
-            cy.assertTableRowCount(table, 5);
+            cy.assertTableRowCount(pivotTable, 5);
             cy.selectButton(button, "Show/Hide Data");
-            cy.assertPivotTableRowCount(table, 5);
+            cy.assertPivotTableRowCount(pivotTable, 5);
 
 
             //Drilldown
-            cy.drilldownPivotTableLeftHeader(table, 1, 0)
-            cy.assertPivotTableRowCount(table, 5 + 4);
+            cy.drilldownPivotTableLeftHeader(pivotTable, 1, 0)
+            cy.assertPivotTableRowCount(pivotTable, 5 + 4);
             cy.selectButton(button, "Clear Drilldown");
-            cy.assertPivotTableRowCount(table, 5)
+            cy.assertPivotTableRowCount(pivotTable, 5)
 
             //Export
-            // const path = require("path");
-            // const downloadsFolder = Cypress.config("downloadsFolder");
-            //
-            // cy.selectButton(button, "Export To Excel");
-            // cy.readFile(path.join(downloadsFolder, "MyExcel.xlsx")).should("exist");
-            //
+            // if (!Cypress.env('GITHUB_ACTION')) {
+
+            const path = require("path");
+            const downloadsFolder = Cypress.config("downloadsFolder");
+
+            cy.selectButton(button, "Export To Excel");
+            cy.readFile(path.join(downloadsFolder, "MyExcel.xlsx")).should("exist");
+
             // cy.selectButton(button, "Export To SVG");
             // cy.readFile(path.join(downloadsFolder, "MySVG.svg")).should("exist");
             //
             // cy.selectButton(button, "Export To PNG");
             // cy.readFile(path.join(downloadsFolder, "MyPNG.png")).should("exist");
+            // }
+        }
+
+        {
+            const table = "ww4";
+
+
+            // Show/Hide Data
+            cy.assertTableRowCount(table, 5);
+            cy.assertTableValue(table, 1, 0, "2019");
+            cy.sortTable(table, 2);
+            cy.assertTableValue(table, 1, 0, "2022");
+            cy.selectButton(button, "Clear State");
+            cy.assertTableValue(table, 1, 0, "2019");
+
         }
 
 
