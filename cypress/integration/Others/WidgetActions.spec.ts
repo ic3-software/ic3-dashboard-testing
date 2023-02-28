@@ -3,7 +3,7 @@ describe("Others/WidgetActions", () => {
     beforeEach(() => {
         cy.login();
         cy.openViewerTestReport("Others/WidgetActions");
-        cy.waitForQueryCount(3);
+        cy.waitForQueryCount(4);
     });
 
     it("Save/Restore State", () => {
