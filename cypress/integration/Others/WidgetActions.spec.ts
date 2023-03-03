@@ -41,7 +41,6 @@ describe("Others/WidgetActions", () => {
         {
             const pivotTable = "ww2";
 
-
             // Show/Hide Data
             cy.assertPivotTableRowCount(pivotTable, 5)
             cy.selectButton(button, "Show/Hide Data");
@@ -57,14 +56,14 @@ describe("Others/WidgetActions", () => {
             cy.assertPivotTableRowCount(pivotTable, 5)
 
             //Export
-            // if (!Cypress.env('GITHUB_ACTION')) {
-
             const path = require("path");
             const downloadsFolder = Cypress.config("downloadsFolder");
 
             cy.selectButton(button, "Export To Excel");
             cy.readFile(path.join(downloadsFolder, "MyExcel.xlsx")).should("exist");
 
+            //  Chromium Renderer process just crashed ...
+            // if (!Cypress.env('GITHUB_ACTION')) {
             // cy.selectButton(button, "Export To SVG");
             // cy.readFile(path.join(downloadsFolder, "MySVG.svg")).should("exist");
             //
@@ -75,7 +74,6 @@ describe("Others/WidgetActions", () => {
 
         {
             const table = "ww4";
-
 
             // Show/Hide Data
             cy.assertTableRowCount(table, 5);
