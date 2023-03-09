@@ -90,7 +90,7 @@ declare namespace Cypress {
          * @param waitForQueryStatus defaulted to true
          * @param waitForPrintStatus defaulted to true
          */
-        openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
+        openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean): void;
 
         openGadgetEditor(path?: string): void
 
@@ -783,6 +783,14 @@ Cypress.Commands.add('performLogin', () => {
 
 });
 
+
+function forceRenderNotVisibleWidgets(doNotForceWidgetRendering?: boolean) {
+
+    if (doNotForceWidgetRendering !== true) {
+        cy.window().its('cypressReporting').then((reporting: any) => reporting.setForceWidgetsAlwaysVisible && reporting.setForceWidgetsAlwaysVisible());
+    }
+}
+
 Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
 
     const vURL = createAppViewingURL(testAppName);
@@ -801,10 +809,11 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
         ;
     }
 
+    forceRenderNotVisibleWidgets();
 });
 
 
-Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true) => {
+Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true, doNotForceWidgetRendering?: boolean) => {
 
     const vURL = createViewingURL(path);
 
@@ -822,6 +831,7 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
         ;
     }
 
+    forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
 });
 
 
@@ -831,7 +841,9 @@ Cypress.Commands.add('openGadgetEditor', (path?: string) => {
 
     cy.visit(vURL);
 
+    forceRenderNotVisibleWidgets();
 });
+
 
 Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
 
@@ -850,6 +862,8 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
             .should('have.class', 'data-cy-ready')
         ;
     }
+
+    forceRenderNotVisibleWidgets();
 
 });
 
