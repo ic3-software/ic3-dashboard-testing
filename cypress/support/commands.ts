@@ -786,8 +786,8 @@ Cypress.Commands.add('performLogin', () => {
 
 function forceRenderNotVisibleWidgets(doNotForceWidgetRendering?: boolean) {
 
-    if (doNotForceWidgetRendering !== true) {
-        cy.window().its('cypressReporting').then((reporting: any) => reporting.setForceWidgetsAlwaysVisible && reporting.setForceWidgetsAlwaysVisible());
+    if (doNotForceWidgetRendering === true) {
+        Cypress.doNotForceWidgetRendering = true;
     }
 }
 
@@ -795,6 +795,8 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
 
     const vURL = createAppViewingURL(testAppName);
 
+    forceRenderNotVisibleWidgets();
+
     cy.visit(vURL);
 
     if (waitForQueryStatus) {
@@ -809,7 +811,6 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
         ;
     }
 
-    forceRenderNotVisibleWidgets();
 });
 
 
@@ -817,6 +818,7 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
 
     const vURL = createViewingURL(path);
 
+    forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
     cy.visit(vURL);
 
     if (waitForQueryStatus) {
@@ -831,7 +833,6 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
         ;
     }
 
-    forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
 });
 
 
@@ -839,9 +840,10 @@ Cypress.Commands.add('openGadgetEditor', (path?: string) => {
 
     const vURL = createGadgetEditorURL(path);
 
+    forceRenderNotVisibleWidgets();
     cy.visit(vURL);
 
-    forceRenderNotVisibleWidgets();
+
 });
 
 
@@ -849,6 +851,7 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
 
     const vURL = createEditingURL(path);
 
+    forceRenderNotVisibleWidgets();
     cy.visit(vURL);
 
     if (waitForQueryStatus) {
@@ -863,7 +866,6 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
         ;
     }
 
-    forceRenderNotVisibleWidgets();
 
 });
 
