@@ -916,13 +916,13 @@ Cypress.Commands.add('waitForQueryCount', (countAsNumber: number) => {
 
 Cypress.Commands.add('waitForChartRendering', (count: number) => {
 
-    cy.waitForQueryStatus().get("div.ic3AppStats").assertAttribute("data-cy-chart-rendering", count);
+    cy.waitForQueryStatus().get("div.ic3AppStats").assertAttribute("data-cy-chart-rendering", "" + count);
 
 });
 
 Cypress.Commands.add('waitForBoxContentHook', (count: number) => {
 
-    cy.waitForQueryStatus().get("div.ic3AppStats").assertAttribute("data-cy-box-content-hook", count);
+    cy.waitForQueryStatus().get("div.ic3AppStats").assertAttribute("data-cy-box-content-hook", "" + count);
 
 });
 
