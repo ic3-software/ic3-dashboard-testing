@@ -82,7 +82,7 @@ describe("Tables/Table Local State", () => {
 
         cy.clickUserMenu(widgetId, "clearState");
         if (Cypress.env('GITHUB_ACTIONS')) {
-            cy.wait(1000);
+            cy.wait(5000);
         }
         cy.assertTableColumnTitle(widgetId, 0, "Country");
 
