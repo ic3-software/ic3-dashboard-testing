@@ -80,6 +80,7 @@ describe("Tables/Table Local State", () => {
 
         cy.assertTableColumnTitle(widgetId, 0, "Server");
         cy.clickUserMenu(widgetId, "clearState");
+        cy.wait(5000);
         cy.assertTableColumnTitle(widgetId, 0, "Country");
 
     });
