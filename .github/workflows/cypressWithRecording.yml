@@ -1,0 +1,33 @@
+# This is a basic workflow that is manually triggered
+
+name: Cypress manual
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node18.12.0-chrome107
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cypress on Chrome
+        uses: cypress-io/github-action@v5
+        with:
+          config-file: cypress.config-github-recording.ts
+          config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
+          browser: chrome
+          record: true
+        env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # ic3 related environment variables
+          CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
+          CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
