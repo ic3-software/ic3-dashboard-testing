@@ -21,13 +21,13 @@ describe("Tables/Table Local State", () => {
         dragTableColumnWidth(cy, widgetId, "Country", 55);
         assertTableColumnWidth(cy, widgetId, "Country", 180 + 55);
 
-        cy.reload();
+        cy.reloadAndWait();
 
         assertTableColumnWidth(cy, widgetId, "Country", 180 + 55);
         cy.clickUserMenu(widgetId, "clearState");
         assertTableColumnWidth(cy, widgetId, "Country", 180);
 
-        cy.reload();
+        cy.reloadAndWait();
         assertTableColumnWidth(cy, widgetId, "Country", 180);
     });
 
@@ -43,7 +43,7 @@ describe("Tables/Table Local State", () => {
         cy.getWidget(widgetId).find(".MuiDataGrid-row").should('have.length', 7)
             .assertTableValue(widgetId, 0, 0, 'India');
 
-        cy.reload();
+        cy.reloadAndWait();
 
         cy.getWidget(widgetId).find(".MuiDataGrid-row").should('have.length', 7)
             .assertTableValue(widgetId, 0, 0, 'India');
@@ -60,7 +60,7 @@ describe("Tables/Table Local State", () => {
 
         cy.assertTableColCount(widgetId, 5);
 
-        cy.reload();
+        cy.reloadAndWait();
 
         cy.assertTableColCount(widgetId, 5);
         cy.clickUserMenu(widgetId, "clearState");
@@ -75,7 +75,8 @@ describe("Tables/Table Local State", () => {
 
         cy.assertTableColumnTitle(widgetId, 0, "Server");
 
-        cy.reload();
+        cy.reloadAndWait();
+        cy.waitForQueryCount(1);
 
         cy.assertTableColumnTitle(widgetId, 0, "Server");
         cy.clickUserMenu(widgetId, "clearState");
@@ -90,7 +91,7 @@ describe("Tables/Table Local State", () => {
         cy.sortTable(widgetId, 0);
         cy.assertTableValue(widgetId, 0, 1, "€750");
 
-        cy.reload();
+        cy.reloadAndWait();
 
         cy.assertTableValue(widgetId, 0, 1, "€750");
         cy.clickUserMenu(widgetId, "clearState");
@@ -107,7 +108,7 @@ describe("Tables/Table Local State", () => {
         cy.assertTableColumnTitle(widgetId, 0, "Personal");
         cy.assertTableColumnTitle(widgetId, 4, "Country");
 
-        cy.reload();
+        cy.reloadAndWait();
 
         cy.assertTableColumnTitle(widgetId, 0, "Personal");
         cy.assertTableColumnTitle(widgetId, 4, "Country");

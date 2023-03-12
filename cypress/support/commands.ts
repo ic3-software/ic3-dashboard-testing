@@ -92,6 +92,8 @@ declare namespace Cypress {
          */
         openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean): void;
 
+        reloadAndWait(waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
+
         openGadgetEditor(path?: string): void
 
         /**
@@ -820,6 +822,24 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
 
     forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
     cy.visit(vURL);
+
+    if (waitForQueryStatus) {
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+            .should('have.class', 'data-cy-ready')
+        ;
+    }
+
+    if (waitForPrintStatus) {
+        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+            .should('have.class', 'data-cy-ready')
+        ;
+    }
+
+});
+
+Cypress.Commands.add('reloadAndWait', (waitForQueryStatus = true, waitForPrintStatus = true,) => {
+
+    cy.reload();
 
     if (waitForQueryStatus) {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
