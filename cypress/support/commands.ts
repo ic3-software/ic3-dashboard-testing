@@ -1530,8 +1530,7 @@ Cypress.Commands.add("assertTableColumnTitle", (widgetId: string, colIdx: number
 
     cy.getWidget(widgetId)
         .find(".MuiDataGrid-columnHeader[aria-colindex='" + (colIdx + 1) + "']")
-        .assertAttribute("data-field", expectedTitle)
-
+        .invoke('attr', "data-field").should('eq', expectedTitle)
 });
 
 Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: number) => {
