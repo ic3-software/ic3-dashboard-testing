@@ -31,3 +31,4 @@ jobs:
           # ic3 related environment variables
           CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
           CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
+          CYPRESS_GITHUB_ACTIONS: true
