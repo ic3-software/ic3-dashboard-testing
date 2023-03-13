@@ -27,10 +27,6 @@ require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
 
 import VisitOptions = Cypress.VisitOptions;
-import Loggable = Cypress.Loggable;
-import Shadow = Cypress.Shadow;
-import Withinable = Cypress.Withinable;
-import Timeoutable = Cypress.Timeoutable;
 
 type $widget = any;
 
@@ -568,8 +564,6 @@ declare namespace Cypress {
 
         clickOutside(): Chainable<Subject>;
 
-        assertAttribute(attributeName: string, attributeValue: string | number, options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<Subject>;
-
         keyCtrl(cb: () => void): void;
 
         keyShift(cb: () => void): void;
@@ -714,12 +708,6 @@ function createAppViewingURL(testAppName: string): Partial<VisitOptions> & { url
         }
     }
 }
-
-Cypress.Commands.add('assertAttribute', {prevSubject: 'element'}, (element: any, attributeName: string, attributeValue: string | number, options?: Partial<Loggable & Timeoutable & Withinable & Shadow>) => {
-
-    return cy.wrap(element, options).invoke('attr', attributeName).should('eq', attributeValue);
-
-});
 
 Cypress.Commands.add('refreshDashboard', () => {
 
@@ -927,23 +915,24 @@ Cypress.Commands.add('waitForQueryCount', (countAsNumber: number) => {
     // -----------------------------------------------------------------------------------------------------------------
 
     const count = "" + countAsNumber;
-    cy.waitForQueryStatus()
-        .get("div.ic3AppStats").assertAttribute('data-cy-queries-on-success', count, {timeout: QUERY_COUNT_TIMEOUT})
-        .get("div.ic3AppStats").assertAttribute('data-cy-queries', count)
+    cy.waitForQueryStatus();
+    cy.get("div.ic3AppStats").invoke('attr', 'data-cy-queries-on-success').should('eq', count, {timeout: QUERY_COUNT_TIMEOUT})
+        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', count)
         .wait(waitTime)
-        .get("div.ic3AppStats").assertAttribute('data-cy-queries', count)
+        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', count)
 });
 
 Cypress.Commands.add('waitForChartRendering', (count: number) => {
 
-    cy.waitForQueryStatus().get("div.ic3AppStats").assertAttribute("data-cy-chart-rendering", "" + count);
+    cy.waitForQueryStatus().get("div.ic3AppStats")
+        .invoke('attr', "data-cy-chart-rendering").should('eq', "" + count)
 
 });
 
 Cypress.Commands.add('waitForBoxContentHook', (count: number) => {
 
-    cy.waitForQueryStatus().get("div.ic3AppStats").assertAttribute("data-cy-box-content-hook", "" + count);
-
+    cy.waitForQueryStatus().get("div.ic3AppStats")
+        .invoke('attr', "data-cy-box-content-hook").should('eq', "" + count)
 });
 
 Cypress.Commands.add('setChartRendering', (alias: string) => {
@@ -1381,9 +1370,7 @@ Cypress.Commands.add("assertTableRowCount", (widgetId: string, count: number) =>
 
     cy.getWidget(widgetId)
         .find('.MuiDataGrid-root')
-        .assertAttribute("aria-rowcount", "" + (count + 1))
-    ;
-
+        .invoke('attr', "aria-rowcount").should('eq', "" + (count + 1))
 });
 
 Cypress.Commands.add("assertTableColCount", (widgetId: string, count: number) => {
@@ -1665,7 +1652,7 @@ Cypress.Commands.add("assertPivotTableDetails", (pageNb: number, widgetId: strin
     ;
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}'] .ic3-pt`)
-        .assertAttribute("data-cy-row-size", "" + rowCount)
+        .invoke('attr', "data-cy-row-size").should('eq', "" + rowCount)
     ;
 
 });
@@ -1703,7 +1690,7 @@ Cypress.Commands.add("assertPivotTableTopHeader", (widgetId: string, row: number
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${col}']`)
-        .assertAttribute("data-name", value)
+        .invoke('attr', "data-name").should('eq', value)
 });
 
 Cypress.Commands.add("assertPivotTableCell", (widgetId: string, row: number, col: number, value: string | string[]) => {
