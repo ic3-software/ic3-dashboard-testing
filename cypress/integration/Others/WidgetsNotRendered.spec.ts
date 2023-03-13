@@ -16,7 +16,8 @@ describe("Others/WidgetsNotRendered", () => {
         // check ww1 is not rendered
         cy.get('[data-cy="widget-box-ww1"]').contains("box not into view yet");
         // scroll dow the page (class needs to be the one with the scrollbar)
-        cy.get(".ic3App-payload").scrollTo("bottom")
+        cy.get(".ic3App-payload").scrollTo("bottom");
+        cy.waitForChartRendering(2);
 
         // the widget is visible
         cy.assertTableRowCount("ww1", 5)

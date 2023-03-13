@@ -924,8 +924,9 @@ Cypress.Commands.add('waitForQueryCount', (countAsNumber: number) => {
 
 Cypress.Commands.add('waitForChartRendering', (count: number) => {
 
-    cy.waitForQueryStatus().get("div.ic3AppStats")
-        .invoke('attr', "data-cy-chart-rendering").should('eq', "" + count)
+    cy.waitForQueryStatus();
+    cy.get('.ic3WidgetBox-header[data-cy-render-status="RENDERED"')
+        .should('have.length', count)
 
 });
 
