@@ -263,6 +263,10 @@ declare namespace Cypress {
 
         assertTableCellSelected(widgetId: string, rowIdx: number, cellIdx: number): void;
 
+        assertTableCellBold(widgetId: string, rowIdx: number, cellIdx: number): void;
+
+        assertTableHeaderBold(widgetId: string, title: string): void;
+
         assertTableColumnNotSelected(widgetId: string, colIdx: number): void;
 
         // -------------------------------------------------------------------------------------------------------------
@@ -300,6 +304,12 @@ declare namespace Cypress {
         assertPivotTableCellOnError(widgetId: string, row: number, col: number): void;
 
         assertPivotTableColumnsEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colCount: number): void;
+
+        assertPivotTableCellBold(widgetId: string, row: number, col: number): void;
+
+        assertPivotTableTopHeaderBold(widgetId: string, row: number, col: number): void;
+
+        assertPivotTableLeftHeaderBold(widgetId: string, row: number, col: number): void;
 
         // -------------------------------------------------------------------------------------------------------------
         // Repetition Widget
@@ -1538,6 +1548,22 @@ Cypress.Commands.add("assertTableCellSelected", (widgetId: string, rowIdx: numbe
 
 });
 
+Cypress.Commands.add("assertTableCellBold", (widgetId: string, rowIdx: number, colIdx: number) => {
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[data-colindex='${colIdx}'][role='cell']`)
+        .should("have.css", "font-weight", "700");
+
+});
+
+Cypress.Commands.add("assertTableHeaderBold", (widgetId: string, title: string) => {
+
+    cy.getTableHeader(widgetId, title)
+        .find(".MuiDataGrid-columnHeaderTitle")
+        .should("have.css", "font-weight", "700");
+
+});
+
 Cypress.Commands.add("assertTableColumnNotSelected", (widgetId: string, colIdx: number) => {
 
     cy.getWidget(widgetId)
@@ -1595,6 +1621,15 @@ Cypress.Commands.add("selectPivotTableLeftHeader", (widgetId: string, row: numbe
 
 });
 
+Cypress.Commands.add("assertPivotTableLeftHeaderBold", (widgetId: string, row: number, col: number) => {
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-left-header div[data-vr='${row}'][data-vc='${col}'] .ic3-pt-header-label`)
+        .should("have.css", "font-weight", "700")
+    ;
+
+});
+
 Cypress.Commands.add("selectPivotTableTopHeader", (widgetId: string, row: number, col: number) => {
 
     // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
@@ -1602,6 +1637,15 @@ Cypress.Commands.add("selectPivotTableTopHeader", (widgetId: string, row: number
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${col}'] .ic3-pt-header-label`)
         .click()
+    ;
+
+});
+
+Cypress.Commands.add("assertPivotTableTopHeaderBold", (widgetId: string, row: number, col: number) => {
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${col}'] .ic3-pt-header-label`)
+        .should("have.css", "font-weight", "700")
     ;
 
 });
@@ -1719,6 +1763,15 @@ Cypress.Commands.add("assertPivotTableCellSelected", (widgetId: string, row: num
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-rows div.ic3-pt-selected[data-r='${row}'][data-c='${col}']`)
+    ;
+
+});
+
+Cypress.Commands.add("assertPivotTableCellBold", (widgetId: string, row: number, col: number) => {
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-rows div[data-r='${row}'][data-c='${col}']`)
+        .should('have.css', 'font-weight', '700')
     ;
 
 });
