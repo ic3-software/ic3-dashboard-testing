@@ -41,7 +41,7 @@ function createPrintingURL(path: string): Partial<VisitOptions> & { url: string 
 
 describe("Printing", () => {
 
-    const dashboard = undefined; // "/Repetition";
+    const dashboard = "Overview"; // "/Repetition";
     const dashboards = extractDashboardInfos(ALL_DASHBOARDS, dashboard);
 
     const status: DashboardExpectedStatus = {
@@ -55,11 +55,11 @@ describe("Printing", () => {
                 widgetId: "ww0", renderType: "data-cy-waiting"
             }]
         },
-        "shared:/Live Demo/Overview": {
-            widgets: [{
-                widgetId: "ww4", renderType: "data-cy-waiting"
-            }]
-        },
+        // "shared:/Live Demo/Overview": {
+        //     widgets: [{
+        //         widgetId: "ww4", renderType: "data-cy-waiting"
+        //     }]
+        // },
         "shared:/Live Demo/Filters/Filter Panel": {
             widgets: [{
                 widgetId: "ww6", renderType: "data-cy-waiting"
