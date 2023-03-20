@@ -41,7 +41,7 @@ function createPrintingURL(path: string): Partial<VisitOptions> & { url: string 
 
 describe("Printing", () => {
 
-    const dashboard = "Overview"; // "/Repetition";
+    const dashboard = undefined; // "/Repetition";
     const dashboards = extractDashboardInfos(ALL_DASHBOARDS, dashboard);
 
     const status: DashboardExpectedStatus = {
