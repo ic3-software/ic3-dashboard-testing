@@ -21,16 +21,18 @@ describe("Filters/DatePicker Clear", () => {
         const widgetId = "ww0";
         const eventWidgetId = "ww1";
 
-        assertDate(widgetId, eventWidgetId, null, "");
+        assertDate(widgetId, eventWidgetId, "15 Sep 2022", "15 Sep 2022");
 
         cy.selectDatePickerFromInput(widgetId, "01 Sep 2021");
         assertDate(widgetId, eventWidgetId, "01 Sep 2021", "01 Sep 2021");
 
         // Clear date picker
-        cy.clickUserMenu(widgetId, "datePickerClearEvent");
-
+        cy.clickUserMenuClearSelection(widgetId);
         // Earlier selected date should remain
         assertDate(widgetId, eventWidgetId, null, "");
+
+        cy.clickUserMenuToInitialState(widgetId);
+        assertDate(widgetId, eventWidgetId, "15 Sep 2022", "15 Sep 2022");
 
     });
 
