@@ -7,7 +7,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/TableLocalState.spec.ts"
+            "**/RestoreState.spec.ts"
         ],
 
         excludeSpecPattern: [
