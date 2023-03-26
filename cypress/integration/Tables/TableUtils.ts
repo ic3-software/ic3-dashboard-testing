@@ -8,5 +8,5 @@ export function assertTableColumnWidth(cy: Cypress.cy & CyEventEmitter, widgetId
 
 export function dragTableColumnWidth(cy: Cypress.cy & CyEventEmitter, widgetId: string, headerTitle: string, sizePx: number) {
     cy.getWidget(widgetId).find(".MuiDataGrid-columnHeader[data-field='" + headerTitle + "'] .MuiDataGrid-columnSeparator--resizable")
-        .move({deltaX: sizePx})
+        .move({force: true, deltaX: sizePx})
 }

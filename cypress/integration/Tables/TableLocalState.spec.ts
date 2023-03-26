@@ -105,6 +105,9 @@ describe("Tables/Table Local State", () => {
 
     it("column order", () => {
 
+        cy.assertTableColumnTitle(widgetId, 0, "Country");
+        cy.assertTableColumnTitle(widgetId, 4, "Gold");
+
         cy.getTableHeader(widgetId, 'Country', ".MuiDataGrid-columnHeaderTitle").drag(getTableHeaderSelector('Gold', ".MuiDataGrid-columnHeaderTitle"), {
             force: true,
         });
@@ -113,10 +116,13 @@ describe("Tables/Table Local State", () => {
         cy.assertTableColumnTitle(widgetId, 4, "Country");
 
         cy.reloadAndWait();
+        cy.log("RELOADED")
 
         cy.assertTableColumnTitle(widgetId, 0, "Personal");
         cy.assertTableColumnTitle(widgetId, 4, "Country");
+
         cy.clickUserMenu(widgetId, "clearState");
+        cy.log("CLEARSTATE")
         cy.assertTableColumnTitle(widgetId, 0, "Country");
         cy.assertTableColumnTitle(widgetId, 4, "Gold");
 
