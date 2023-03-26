@@ -2504,82 +2504,25 @@ Cypress.Commands.add("assertSlider", (widgetId: string, labels: string[]) => {
 function setDateOnMuiDatePicker($div: any, date: string) {
 
     /*
-    Note:
-    Running Cypress locally uses the desktop date picker.
-    Gits headless Cypress uses the mobile datepicker.
+    Note: Force Cypress to use desktop
      */
-
-    const mobilePickerSelector = "input[readonly]";
-    const mobilePickerButton = "button";
-
-    const isMobile = $div.find(mobilePickerSelector).length > 0;
-
-    if (isMobile) {
-        // The MobileDatePicker component has readonly inputs and needs to
-        // be opened and clicked on edit so its inputs can be edited
-
-        const hasButton = $div.find(mobilePickerButton).length > 0;
-        // click to open a second dialog
-        if (hasButton) {
-            cy.wrap($div).find(mobilePickerButton).click();
-        } else {
-            cy.wrap($div).find(mobilePickerSelector).click();
-        }
-
-        // Click on pencil icon to show edit date text field
-        cy.get('[role="dialog"] [data-testid="PenIcon"]').first().click();
-
-        // now we can eventually enter our date
-        if (date) {
-            cy.log("input date")
-            cy.get(`[role="dialog"] input`).clear().type(date);
-        } else {
-            cy.log("clear date")
-            cy.get(`[role="dialog"] input`).clear()
-        }
-
-        cy.get('[role="dialog"] [data-testid="CalendarIcon"]').click();
-
-        // click Ok on the dialog
-        cy.contains('[role="dialog"] button', 'OK').click();
-
+    if (date) {
+        cy.wrap($div).find('input').type("{ctrl}a{leftArrow}")
+            .type(date + "{enter}");
     } else {
-        if (date) {
-            cy.wrap($div).find('input').clear()
-                .type(date + "{enter}");
-        } else {
-            cy.wrap($div).find('input').clear()
-        }
+        cy.wrap($div).find('input').type("{ctrl}a{del}")
     }
 }
 
 function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last") {
 
-    // The MobileDatePicker component has readonly inputs and needs to
-    // be opened and clicked on edit so its inputs can be edited
-
-    // click to open the first dialog
-    cy.wrap($div).find(`input:${where}`).click();
-
-    // click to open a second dialog
-    cy.get('[role="dialog"] [data-testid="PenIcon"]').first().click();
-
-    // now we can eventually enter our date
     if (date) {
-        cy.log("input date")
-        cy.get(`[role="dialog"] input:${where}`).clear().type(date);
+        cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
+            .type(date + "{enter}");
     } else {
-        cy.log("clear date")
-        cy.get(`[role="dialog"] input:${where}`).clear()
+        cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
     }
 
-    cy.get('[role="dialog"] [data-testid="CalendarIcon"]').click();
-
-    // click Ok on the dialog
-    cy.contains('[role="dialog"] button', 'OK').click();
-
-    // be sure to close all
-    cy.clickOutside();
 }
 
 Cypress.Commands.add("selectDatePickerFromInput", (widgetId: string, date: string) => {
@@ -2590,93 +2533,52 @@ Cypress.Commands.add("selectDatePickerFromInput", (widgetId: string, date: strin
 
 Cypress.Commands.add("selectDatePickerRangeFromFromInput", (widgetId: string, date: string) => {
 
-    cy.getWidget(widgetId).find('[data-cy="fromDate"]')
+    cy.getWidget(widgetId).find('[data-cy-from-date]')
         .then(($fromDate: any) => setDateOnMuiDatePickerR($fromDate, date, "first"));
 
 });
 
 Cypress.Commands.add("selectDatePickerRangeToFromInput", (widgetId: string, date: string) => {
 
-    cy.getWidget(widgetId).find('[data-cy="toDate"]')
+    cy.getWidget(widgetId).find('[data-cy-to-date]')
         .then(($toDate: any) => setDateOnMuiDatePickerR($toDate, date, "last"));
 
 });
 
+function assertDate(widgetId: string, tag: string, _date: string | null, nthChild?: number) {
+
+    const date = _date ?? "";
+    // https://mui.com/x/react-date-pickers/base-concepts/#testing-caveats
+    const cleanText = (s: string) => s.replace(/\u200e|\u2066|\u2067|\u2068|\u2069/g, '');
+
+    cy.getWidget(widgetId)
+        .find('[' + tag + '="' + date + '"]')// retry wait
+        .find("input")
+        .eq(nthChild ?? 0)
+        .then(input => {
+            const cleaned = cleanText("" + input.val()).replaceAll(" / ", "/");
+            cy.wrap(cleaned).should('equal', date)
+        })
+
+}
+
 Cypress.Commands.add("assertDatePicker", (widgetId: string, date: string | null) => {
 
-    if (date != null) {
-
-        cy.getWidget(widgetId)
-            .find("input")
-            .should("have.value", date)
-        ;
-
-    } else {
-
-        cy.getWidget(widgetId)
-            .find("input")
-            .should($input => {
-                const val = $input.val();
-                expect(val).to.satisfy((v: string) => v == null || v === '')
-            })
-        ;
-
-    }
+    assertDate(widgetId, "data-cy-date", date);
 
 });
 
 
 Cypress.Commands.add("assertDatePickerRangeFrom", (widgetId: string, date: string | null) => {
 
-    if (date != null) {
-
-        cy.getWidget(widgetId)
-            .find("input")
-            .should('have.length', 2)
-            .first()
-            .should("have.value", date)
-        ;
-
-    } else {
-
-        cy.getWidget(widgetId)
-            .find("input")
-            .should('have.length', 2)
-            .first()
-            .should($input => {
-                const val = $input.val();
-                expect(val).to.satisfy((v: string) => v == null || v === '')
-            })
-        ;
-
-    }
+    assertDate(widgetId, "data-cy-from-date", date, 0);
 
 });
 
 Cypress.Commands.add("assertDatePickerRangeTo", (widgetId: string, date: string | null) => {
 
-    if (date != null) {
 
-        cy.getWidget(widgetId)
-            .find("input")
-            .should('have.length', 2)
-            .last()
-            .should("have.value", date)
-        ;
-
-    } else {
-
-        cy.getWidget(widgetId)
-            .find("input")
-            .should('have.length', 2)
-            .last()
-            .should($input => {
-                const val = $input.val();
-                expect(val).to.satisfy((v: string) => v == null || v === '')
-            })
-        ;
-
-    }
+    assertDate(widgetId, "data-cy-to-date", date, 1);
 
 });
 
@@ -2771,9 +2673,8 @@ Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, inde
     cy.getWidget(widgetId)
         .get("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-        .get('div[data-cy="input-datetime"]')
+        .get('.ic3FilterPanel-dateTimePicker')
         .then(($div: any) => setDateOnMuiDatePicker($div, date))
-
 });
 
 Cypress.Commands.add("panelFilterSetDefaultFilter", (widgetId: string) => {

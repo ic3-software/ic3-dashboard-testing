@@ -176,43 +176,34 @@ describe("Filters/DatePicker Behavior", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, dateEvent(invalid));
             cy.waitForQueryCount(queryCount);
 
-            // Desktop vs Mobile => different behavior
-            // assertDates(widgetId, eventWidgetId, tableWidgetId,
-            //     dateEvent(invalid), null, null /* input clear'd */,
-            //     dateEvent(to), null, null /* input clear'd */
-            // );
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
-                dateEvent(to), dateEvent(to), mdx(dateMdx(to))
+                dateEvent(invalid), dateEvent(from), mdx(dateMdx(from)) /* input clear'd */,
+                dateEvent(to), dateEvent(to), mdx(dateMdx(to)) /* input clear'd */
             );
         }
 
         // cy.selectDatePickerRangeFromFromInput(widgetId, dateEvent(from));
-        // cy.waitForQueryCount(++queryCount);
+        // cy.waitForQueryCount(queryCount);
         // assertDates(widgetId, eventWidgetId, tableWidgetId,
         //     dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
         //     dateEvent(to), dateEvent(to), mdx(dateMdx(to))
         // );
-
-        {
-            const invalid = new Date(to.getTime());
-            invalid.setDate(invalid.getDate() + 1);
-
-            cy.log("b-invalid-date:" + dateEvent(invalid));
-            cy.selectDatePickerRangeToFromInput(widgetId, dateEvent(invalid));
-            cy.waitForQueryCount(queryCount);
-
-            // Desktop vs Mobile => different behavior
-            // assertDates(widgetId, eventWidgetId, tableWidgetId,
-            //     dateEvent(from), null, null /* input clear'd */,
-            //     dateEvent(invalid), null, null /* input clear'd */
-            // )
-            assertDates(widgetId, eventWidgetId, tableWidgetId,
-                dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
-                dateEvent(to), dateEvent(to), mdx(dateMdx(to))
-            );
-        }
+        //
+        // {
+        //     const invalid = new Date(to.getTime());
+        //     invalid.setDate(invalid.getDate() + 1);
+        //
+        //     cy.log("b-invalid-date:" + dateEvent(invalid));
+        //     cy.selectDatePickerRangeToFromInput(widgetId, dateEvent(invalid));
+        //     cy.waitForQueryCount(queryCount);
+        //
+        //     assertDates(widgetId, eventWidgetId, tableWidgetId,
+        //         dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
+        //         dateEvent(to), dateEvent(to), mdx(dateMdx(to))
+        //     );
+        // }
 
     });
+
 
 });

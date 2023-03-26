@@ -130,9 +130,7 @@ describe("Filters/DatePicker Behavior", () => {
             cy.log("invalid-date:" + dateEvent(invalid));
             cy.selectDatePickerFromInput(widgetId, dateEvent(invalid));
 
-            // Desktop vs Mobile => different behavior
-            // assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), null, null) /* input clear'd */;
-            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), dateEvent(to), mdx(dateMdx(to)));
+            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), null, null);
 
         }
 
@@ -143,9 +141,7 @@ describe("Filters/DatePicker Behavior", () => {
             cy.log("invalid-date:" + dateEvent(invalid));
             cy.selectDatePickerFromInput(widgetId, dateEvent(invalid));
 
-            // Desktop vs Mobile => different behavior
-            // assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), null, null) /* input clear'd */;
-            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), dateEvent(to), mdx(dateMdx(to)));
+            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), null, null);
         }
     });
 
@@ -168,7 +164,7 @@ describe("Filters/DatePicker Behavior", () => {
 
     it("ww16: No Query", () => {
 
-        let queryCount = 6;
+        let queryCount = 7;
 
         const widgetId = "ww16";
         const eventWidgetId = "ww17";
