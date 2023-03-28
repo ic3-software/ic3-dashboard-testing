@@ -14,8 +14,10 @@ describe("Filters/Clear Event Widget Render", () => {
         const buttonsWidgetId = "ww1";
 
         cy.selectButton(buttonsWidgetId, "Business");
-        cy.selectButton(buttonsWidgetId, "Business");
         cy.getWidget(chartWidgetId).find("div[data-cy='data-mapping-error']", {timeout: 0}).should("not.exist");
+
+        cy.selectButton(buttonsWidgetId, "Business");
+        cy.get('[data-cy="widget-box-' + chartWidgetId + '"] .ic3WidgetBoxContentMessage-content').contains('Waiting for Event');
 
     });
 
