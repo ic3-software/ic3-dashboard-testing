@@ -996,7 +996,7 @@ Cypress.Commands.add('assertWidgetDetails', (pageNb: number, widgetId: string, l
 // Widget
 // -------------------------------------------------------------------------------------------------------------
 
-Cypress.Commands.add('getWidget', (widgetId: string, contentType?: WidgetBoxContentType) => {
+Cypress.Commands.add("getWidget", (widgetId: string, contentType?: WidgetBoxContentType) => {
 
     let checkRendering = true;
 
@@ -2503,12 +2503,9 @@ Cypress.Commands.add("assertSlider", (widgetId: string, labels: string[]) => {
 
 function setDateOnMuiDatePicker($div: any, date: string) {
 
-    /*
-    Note: Force Cypress to use desktop
-     */
     if (date) {
         cy.wrap($div).find('input').type("{ctrl}a{leftArrow}")
-            .type(date + "{enter}");
+            .type(date).type("{enter}");
     } else {
         cy.wrap($div).find('input').type("{ctrl}a{del}")
     }

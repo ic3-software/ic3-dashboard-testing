@@ -130,7 +130,7 @@ describe("Filters/DatePicker Behavior", () => {
             cy.log("invalid-date:" + dateEvent(invalid));
             cy.selectDatePickerFromInput(widgetId, dateEvent(invalid));
 
-            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), null, null);
+            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), dateEvent(to), mdx(dateMdx(to)));
 
         }
 
@@ -141,7 +141,7 @@ describe("Filters/DatePicker Behavior", () => {
             cy.log("invalid-date:" + dateEvent(invalid));
             cy.selectDatePickerFromInput(widgetId, dateEvent(invalid));
 
-            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), null, null);
+            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), dateEvent(to), mdx(dateMdx(to)));
         }
     });
 
@@ -164,7 +164,7 @@ describe("Filters/DatePicker Behavior", () => {
 
     it("ww16: No Query", () => {
 
-        let queryCount = 7;
+        let queryCount = 6;
 
         const widgetId = "ww16";
         const eventWidgetId = "ww17";
