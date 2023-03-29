@@ -60,7 +60,7 @@ describe("Filters/DatePicker State", () => {
         const widgetId = "ww2";
         const eventWidgetId = "ww6";
 
-        assertRange(widgetId, eventWidgetId, "05 Jan 2022", "05 Jan 2023", "{[Time].[Time].[Day].&[2022-01-05]:[Time].[Time].[Day].&[2023-01-05]}");
+        assertRange(widgetId, eventWidgetId, "05 Jan 2022", "15 Jan 2022", "{[Time].[Time].[Day].&[2022-01-05]:[Time].[Time].[Day].&[2022-01-15]}");
 
         // TODO range picker Cypress test not working.
         // cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
@@ -73,7 +73,7 @@ describe("Filters/DatePicker State", () => {
         // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
         cy.assertTableCellContent(widgetId, 0, 0, "2022-01-05");
-        cy.assertTableCellContent(widgetId, 1, 0, "2023-01-05");
+        cy.assertTableCellContent(widgetId, 1, 0, "2022-01-15");
         cy.clickUserMenuShowData(widgetId);
 
         // TODO range picker Cypress test not working.
