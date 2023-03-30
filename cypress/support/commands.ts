@@ -864,6 +864,8 @@ Cypress.Commands.add('openGadgetEditor', (path?: string) => {
 
 });
 
+let editorMode = false;
+
 
 Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
 
@@ -884,6 +886,7 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
         ;
     }
 
+    editorMode = true;
 
 });
 
@@ -2504,7 +2507,10 @@ Cypress.Commands.add("assertSlider", (widgetId: string, labels: string[]) => {
 function setDateOnMuiDatePicker($div: any, date: string) {
 
     if (date) {
-        cy.wrap($div).find('input').type("{ctrl}a{leftArrow}")
+        let gotToStart = editorMode ?
+            "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
+            : "{ctrl}a{leftArrow}";
+        cy.wrap($div).find('input').type(gotToStart)
             .type(date).type("{enter}");
     } else {
         cy.wrap($div).find('input').type("{ctrl}a{del}")
