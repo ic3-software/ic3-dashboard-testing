@@ -329,7 +329,7 @@ declare namespace Cypress {
 
         assertButtonsSelected(widgetId: string, labels?: string[]): void;
 
-        assertButtonNotSelected(widgetId: string, label: string): void;
+        assertButtonNotSelected(widgetId: string, ...label: string[]): void;
 
         assertButtons(widgetId: string, labels: string[]): void;
 
@@ -339,7 +339,7 @@ declare namespace Cypress {
 
         selectCheckbox(widgetId: string, label: string): void;
 
-        assertCheckboxSelected(widgetId: string, label: string): void;
+        assertCheckboxSelected(widgetId: string, ...label: string[]): void;
 
         assertCheckboxNotSelected(widgetId: string, label: string): void;
 
@@ -400,7 +400,7 @@ declare namespace Cypress {
 
         assertSliderWithoutSelection(widgetId: string): void;
 
-        assertSliderSelected(widgetId: string, label: string): void;
+        assertSliderSelected(widgetId: string, ...label: string[]): void;
 
         assertSliderNotSelected(widgetId: string, label: string): void;
 
@@ -427,6 +427,8 @@ declare namespace Cypress {
         // -------------------------------------------------------------------------------------------------------------
         // Filter: Filter Panel
         // -------------------------------------------------------------------------------------------------------------
+
+        assertFilterPanelCount(widgetId: string, filterCount: number): void;
 
         panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
 
@@ -1945,13 +1947,15 @@ Cypress.Commands.add("assertButtonsSelected", (widgetId: string, labels?: string
 
 });
 
-Cypress.Commands.add("assertButtonNotSelected", (widgetId: string, label: string) => {
+Cypress.Commands.add("assertButtonNotSelected", (widgetId: string, ...labels: string[]) => {
 
-    cy.getWidget(widgetId)
-        .find(".ic3WidgetBox-content")
-        .find(`button[data-name="${label}"]`)
-        .should("not.have.class", "ic3-selected")
-    ;
+    labels.forEach(label => {
+        cy.getWidget(widgetId)
+            .find(".ic3WidgetBox-content")
+            .find(`button[data-name="${label}"]`)
+            .should("not.have.class", "ic3-selected")
+
+    });
 
 });
 
@@ -1991,13 +1995,19 @@ Cypress.Commands.add("selectCheckbox", (widgetId: string, label: string) => {
 
 });
 
-Cypress.Commands.add("assertCheckboxSelected", (widgetId: string, label: string) => {
+Cypress.Commands.add("assertCheckboxSelected", (widgetId: string, ...labels: string[]) => {
 
-    cy.getWidget(widgetId)
-        .find(".ic3WidgetBox-content")
-        .find(`label[data-name="${label}"] > span`)
-        .should("have.class", "Mui-checked")
-    ;
+    labels?.forEach(label => {
+        cy.getWidget(widgetId)
+            .find(".ic3WidgetBox-content")
+            .find(`label[data-name="${label}"] > span`)
+            .should("have.class", "Mui-checked")
+    });
+
+    if (labels.length === 0) {
+        cy.getWidget(widgetId)
+            .find(".ic3WidgetBox-content .Mui-checked").should('not.exist')
+    }
 
 });
 
@@ -2455,15 +2465,21 @@ Cypress.Commands.add("assertSliderWithoutSelection", (widgetId: string) => {
 
 });
 
-Cypress.Commands.add("assertSliderSelected", (widgetId: string, label: string) => {
+Cypress.Commands.add("assertSliderSelected", (widgetId: string, ...labels: string[]) => {
 
-    cy.getWidget(widgetId)
-        .find(".ic3WidgetBox-content")
-        .find('[data-cy="ic-slider"]')
-        .find('span.MuiSlider-markLabel')
-        .contains(label)
-        .should("have.class", "MuiSlider-markLabelActive")
-    ;
+    labels.forEach(label => {
+        cy.getWidget(widgetId)
+            .find(".ic3WidgetBox-content [data-cy='ic-slider'] span.MuiSlider-markLabel")
+            .contains(label)
+            .should("have.class", "MuiSlider-markLabelActive")
+    })
+
+    if (labels.length === 0) {
+
+        cy.getWidget(widgetId)
+            .find(".ic3WidgetBox-content .ic3FilterSlider-EmptySelection")
+            .should('have.length', 1)
+    }
 
 });
 
@@ -2611,6 +2627,10 @@ Cypress.Commands.add("panelFilterRemove", (widgetId: string, index: number) => {
         .click()
     ;
 
+});
+
+Cypress.Commands.add("assertFilterPanelCount", (widgetId: string, count: number) => {
+    cy.getWidget(widgetId).get("[data-cy='filters'] [data-cy='filter-item']").should('have.length', count)
 });
 
 Cypress.Commands.add("panelFilterClear", (widgetId: string, index: number) => {
