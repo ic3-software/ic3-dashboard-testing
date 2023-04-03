@@ -6,7 +6,7 @@ function checkInitialSelection() {
     cy.assertButtonsSelected("ww10", ["Q1", "Q2", "Q3", "Q4"]);
     cy.assertButtonsSelected("ww0", ["Silver", "Gold"]);
     cy.assertCheckboxSelected("ww2", "Personal", "Platinum");
-    cy.assertDatePickerRangeFrom("ww3", "02 Apr 2022")
+    cy.assertDatePickerRangeFrom("ww3", "01 Jan 2018")
     cy.assertDatePickerRangeTo("ww3", "15 Sep 2022")
     cy.assertDropdownMultiSelection("ww5", ["AQ946SWPKEUDA", "AQ039PRYWTZEZ"])
     cy.assertTreeSelection("ww7", "control-icons", ["2018 Apr", "2018 May"])
