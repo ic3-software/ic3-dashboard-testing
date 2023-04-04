@@ -15,7 +15,7 @@ describe("EmbeddedReports/Filter Panel Smoke Run", () => {
         const wPanel = "ww0";
         const wTable = "ww1";
 
-        cy.panelFilterAdd(wPanel, "Character", 1);
+        cy.panelFilterAdd(wPanel, "Character", 0);
         cy.panelFilterSelectOperatorFromInput(wPanel, 0, "Contains");
         cy.panelFilterSetTextFieldValue(wPanel, 0, "foo");
         cy.waitForQueryCount(++queryCount);

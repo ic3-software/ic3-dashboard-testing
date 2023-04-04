@@ -9,14 +9,14 @@ describe("Filters/Filter Panel Logical Property", () => {
     });
 
     it("even values correct", () => {
-        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"logical\")==\"\" or b.currentMember.getProperty(\"logical\")==\"true\")");
+        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, ISEMPTY(b.currentMember.getProperty(\"logical\",TYPED)) or b.currentMember.getProperty(\"logical\",TYPED)==true)");
         cy.assertTableRowCount("ww14", 2);
         cy.assertTableCellContent("ww14", 0, 0, "foo");
         cy.assertTableCellContent("ww14", 1, 0, "empty-character");
         cy.assertTableCellContent("ww14", 0, 2, "true");
         cy.assertTableCellContent("ww14", 1, 2, "");
 
-        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"logical\")!=\"false\")");
+        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"logical\",TYPED)!=false)");
         cy.assertTableRowCount("ww19", 2);
         cy.assertTableCellContent("ww19", 0, 0, "foo");
         cy.assertTableCellContent("ww19", 1, 0, "empty-character");

@@ -10,11 +10,11 @@ describe("Filters/Filter Panel String Property", () => {
     });
 
     it("even values correct", () => {
-        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"character\")==\"bar\")");
+        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"character\",TYPED)==\"bar\")");
         cy.assertTableRowCount("ww14", 1);
         cy.assertTableCellContent("ww14", 0, 0, "bar");
 
-        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"character\")!=\"bar\")");
+        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"character\",TYPED)!=\"bar\")");
         cy.assertTableRowCount("ww19", 2);
         cy.assertTableCellContent("ww19", 0, 0, "foo");
         cy.assertTableCellContent("ww19", 1, 0, "empty-character");
