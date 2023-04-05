@@ -29,9 +29,9 @@ describe("EmbeddedReports/Filter Panel Short Filters", () => {
         const index = 1
         assertEvent("");
         cy.panelFilterSetSelectionSimple(wPanel, index, "2017-01-10");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("date")=="2017-01-10")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("date",TYPED)==datetime(2017,1,10,0,0,0))');
         cy.panelFilterSetSelectionSimple(wPanel, index, "<null>");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("date")=="2017-01-10" or b.currentMember.getProperty("date")=="")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("date",TYPED)==datetime(2017,1,10,0,0,0) or ISEMPTY(b.currentMember.getProperty("date",TYPED)))');
         cy.panelFilterClear(wPanel, index)
     });
 
@@ -39,7 +39,7 @@ describe("EmbeddedReports/Filter Panel Short Filters", () => {
         const index = 2;
         assertEvent("");
         cy.panelFilterSetSelectionSimple(wPanel, index, "2015-01-01T10:00:00.000");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("datetime")=="2015-01-01T10:00:00.000")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("datetime",TYPED)==datetime(2015,1,1,10,0,0))');
         cy.panelFilterClear(wPanel, index)
     });
 
@@ -47,9 +47,9 @@ describe("EmbeddedReports/Filter Panel Short Filters", () => {
         const index = 3;
         assertEvent("");
         cy.panelFilterSetSelectionSimple(wPanel, index, "foo");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("character")=="foo")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("character",TYPED)=="foo")');
         cy.panelFilterSetSelectionSimple(wPanel, index, "bar");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("character")=="foo" or b.currentMember.getProperty("character")=="bar")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("character",TYPED)=="foo" or b.currentMember.getProperty("character",TYPED)=="bar")');
         cy.panelFilterClear(wPanel, index)
     });
 
@@ -57,9 +57,9 @@ describe("EmbeddedReports/Filter Panel Short Filters", () => {
         const index = 4;
         assertEvent("");
         cy.panelFilterSetSelectionSimple(wPanel, index, "false");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("logical")=="false")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("logical",TYPED)==false)');
         cy.panelFilterSetSelectionSimple(wPanel, index, "<null>");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("logical")=="false" or b.currentMember.getProperty("logical")=="")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("logical",TYPED)==false or ISEMPTY(b.currentMember.getProperty("logical",TYPED)))');
         cy.panelFilterClear(wPanel, index)
     });
 
@@ -67,9 +67,9 @@ describe("EmbeddedReports/Filter Panel Short Filters", () => {
         const index = 5;
         assertEvent("");
         cy.panelFilterSetSelectionSimple(wPanel, index, /^10$/);
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("numeric")=="10")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("numeric",TYPED)==10)');
         cy.panelFilterSetSelectionSimple(wPanel, index, "-10");
-        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("numeric")=="10" or b.currentMember.getProperty("numeric")=="-10")');
+        assertEvent('Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("numeric",TYPED)==10 or b.currentMember.getProperty("numeric",TYPED)==-10)');
         cy.panelFilterClear(wPanel, index)
     });
 

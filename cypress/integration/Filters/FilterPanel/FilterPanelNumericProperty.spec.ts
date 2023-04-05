@@ -6,10 +6,25 @@ describe("Filters/Filter Panel Numeric Property", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Numeric Property");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(22);
     });
 
-    it("even values correct", () => {
+    it("event values correct", () => {
+
+        // is any of
+        cy.assertEventValue("ww28", 'Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty("numeric",TYPED)==-10 or ISEMPTY(b.currentMember.getProperty("numeric",TYPED)))');
+        cy.assertTableRowCount("ww29", 2);
+        cy.assertTableCellContent("ww29", 0, 0, "bar");
+        cy.assertTableCellContent("ww29", 0, 1, "-10");
+        cy.assertTableCellContent("ww29", 1, 0, "empty-character");
+        cy.assertTableCellContent("ww29", 1, 1, "");
+
+        // is none of
+        cy.assertEventValue("ww31", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"numeric\",TYPED)!=-10 and NOT ISEMPTY(b.currentMember.getProperty(\"numeric\",TYPED)))");
+        cy.assertTableRowCount("ww32", 1);
+        cy.assertTableCellContent("ww32", 0, 0, "foo");
+        cy.assertTableCellContent("ww32", 0, 1, "10");
+
         cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b,b.currentMember.getProperty(\"numeric\", TYPED) == -10)");
         cy.assertTableRowCount("ww14", 1);
         cy.assertTableCellContent("ww14", 0, 0, "bar");

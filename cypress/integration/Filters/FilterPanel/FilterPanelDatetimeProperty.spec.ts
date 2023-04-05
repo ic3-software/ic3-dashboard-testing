@@ -11,14 +11,14 @@ describe("Filters/Filter Panel Datetime Property", () => {
 
     it("event values correct", () => {
         // Is any of
-        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"datetime\")==\"2016-02-03T02:00:20.000\" or b.currentMember.getProperty(\"datetime\")==\"\")");
+        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"datetime\",TYPED)==datetime(2016,2,3,2,0,20) or ISEMPTY(b.currentMember.getProperty(\"datetime\",TYPED)))");
         cy.assertTableRowCount("ww14", 2);
         cy.assertTableCellContent("ww14", 0, 1, "2016-02-03T02:00:20.000");
         cy.assertTableCellContent("ww14", 1, 1, "");
     });
     it("event values correct", () => {
         // Is none of
-        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"datetime\")!=\"2015-01-01T10:00:00.000\")");
+        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"datetime\",TYPED)!=datetime(2015,1,1,10,0,0))");
         cy.assertTableRowCount("ww19", 2);
         cy.assertTableCellContent("ww19", 0, 1, "2016-02-03T02:00:20.000");
         cy.assertTableCellContent("ww19", 1, 1, "");

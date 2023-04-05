@@ -11,13 +11,13 @@ describe("Filters/Filter Panel Date Property", () => {
 
     it("event values correct ww14", () => {
         cy.assertTableRowCount("ww14", 2);
-        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"date\")==\"2017-01-10\" or b.currentMember.getProperty(\"date\")==\"\")");
+        cy.assertEventValue("ww1", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"date\",TYPED)==datetime(2017,1,10,0,0,0) or ISEMPTY(b.currentMember.getProperty(\"date\",TYPED)))");
         cy.assertTableCellContent("ww14", 0, 2, "2017-01-10");
         cy.assertTableCellContent("ww14", 1, 2, "");
     });
     it("event values correct ww19", () => {
         cy.assertTableRowCount("ww19", 2);
-        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, b.currentMember.getProperty(\"date\")!=\"\")");
+        cy.assertEventValue("ww3", "Filter([Character].[Character].[Character].members as b, NOT ISEMPTY(b.currentMember.getProperty(\"date\",TYPED)))");
         cy.assertTableCellContent("ww19", 0, 2, "2015-01-01");
         cy.assertTableCellContent("ww19", 1, 2, "2017-01-10");
     });
