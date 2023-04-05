@@ -46,10 +46,10 @@ describe("Selection/PivotTableSelection", () => {
         const eventWidgetId = "ww5";
 
         cy.selectPivotTableCell(widgetId, 1, 1);
-        cy.assertEventValue(eventWidgetId, "(% World,Business)");
+        cy.assertEventValue(eventWidgetId, "(% World, Business)");
 
         cy.selectPivotTableCell(widgetId, 2, 2);
-        cy.assertEventValue(eventWidgetId, "(Value,Consumer)");
+        cy.assertEventValue(eventWidgetId, "(Value, Consumer)");
 
         cy.selectPivotTableCell(widgetId, 2, 2);
         cy.assertEventValue(eventWidgetId, "");

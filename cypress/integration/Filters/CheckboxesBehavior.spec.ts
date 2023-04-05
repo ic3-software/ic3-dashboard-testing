@@ -246,13 +246,13 @@ describe("Filters/Checkboxes Behavior", () => {
 
         cy.log("adding: India")
         cy.selectCheckbox(widgetId_top, COUNTRIES[3]);
-        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3]], ["Egypt", COUNTRIES[3]].join(","));
-        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3]], ["Egypt", COUNTRIES[3]].join(","));
+        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3]], ["Egypt", COUNTRIES[3]].join(", "));
+        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3]], ["Egypt", COUNTRIES[3]].join(", "));
 
         cy.log("adding: Iran")
         cy.selectCheckbox(widgetId_bottom, COUNTRIES[5]);
-        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3], COUNTRIES[5]], ["Egypt", COUNTRIES[3], COUNTRIES[5]].join(","));
-        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3], COUNTRIES[5]], ["Egypt", COUNTRIES[3], COUNTRIES[5]].join(","));
+        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3], COUNTRIES[5]], ["Egypt", COUNTRIES[3], COUNTRIES[5]].join(", "));
+        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, ["Egypt", COUNTRIES[3], COUNTRIES[5]], ["Egypt", COUNTRIES[3], COUNTRIES[5]].join(", "));
 
         cy.log("ctrl: Egypt, India, Iran")
         {
@@ -271,8 +271,8 @@ describe("Filters/Checkboxes Behavior", () => {
                 });
             });
 
-            assertSelection(widgetId_top, eventWidgetId, COUNTRIES, selections, selections.join(","));
-            assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, selections, selections.join(","));
+            assertSelection(widgetId_top, eventWidgetId, COUNTRIES, selections, selections.join(", "));
+            assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, selections, selections.join(", "));
 
             // clear selection using the TOP widget
             selections.forEach(c => cy.selectCheckbox(widgetId_top, c));

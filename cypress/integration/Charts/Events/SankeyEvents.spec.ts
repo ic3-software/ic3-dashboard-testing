@@ -47,7 +47,7 @@ describe("Charts/Events/Sankey Click Events", () => {
 
         // Click flow Support -> Gold
         clickFirstSankeyFlow(widgetId, "#a05195", 0);
-        cy.assertEventValue(flowEventWidgetId, "Support,Gold");
+        cy.assertEventValue(flowEventWidgetId, "Support, Gold");
         cy.assertEventMdx(flowEventWidgetId, "{[Product].[Product].[Category].&[2],[Product].[Product].[Article].&[4]}");
 
 
@@ -70,7 +70,7 @@ describe("Charts/Events/Sankey Click Events", () => {
 
         // Click Global North -> Business
         clickFirstSankeyFlow(widgetId, "#e07a5f", 0);
-        cy.assertEventValue(flowEventWidgetId, "Global North,Business");
+        cy.assertEventValue(flowEventWidgetId, "Global North, Business");
         cy.assertEventMdx(flowEventWidgetId, "([Geography].[Classification].[Hemisphere].&[Global North],[Customer].[Customer].[Type].&[Business])");
 
     });
@@ -92,7 +92,7 @@ describe("Charts/Events/Sankey Click Events", () => {
 
         // Click Personal -> Gold
         clickFirstSankeyFlow(widgetId, "#ff7c43", 1);
-        cy.assertEventValue(flowEventWidgetId, "Personal,Gold");
+        cy.assertEventValue(flowEventWidgetId, "Personal, Gold");
         cy.assertEventMdx(flowEventWidgetId, "([Product].[Article].[Article].&[1],[Product].[Article].[Article].&[4])");
 
     });

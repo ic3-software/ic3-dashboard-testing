@@ -40,7 +40,7 @@ describe("Tables/Table Selection", () => {
         cy.clickTableCell(table, 1, 0, true);
         cy.clickTableCell(table, 2, 0, true);
         cy.clickTableCell(table, 3, 0, true);
-        cy.assertEventValue(tableEvent, "2019,2020,2021");
+        cy.assertEventValue(tableEvent, "2019, 2020, 2021");
         cy.assertEventMdx(tableEvent, "{[Time].[Time].[Year].&[2019-01-01],[Time].[Time].[Year].&[2020-01-01],[Time].[Time].[Year].&[2021-01-01]}");
 
     })
@@ -65,7 +65,7 @@ describe("Tables/Table Selection", () => {
         const tableEvent = "ww4";
         cy.clickTableCell(table, 0, 0, true);
         cy.clickTableCell(table, 1, 0, true);
-        cy.assertEventValue(tableEvent, "Amount,#Sales");
+        cy.assertEventValue(tableEvent, "Amount, #Sales");
         cy.assertEventMdx(tableEvent, "{[Measures].[Amount],[Measures].[#Sales]}");
 
     })
@@ -76,7 +76,7 @@ describe("Tables/Table Selection", () => {
         const table = "ww2";
         const tableEvent = "ww5";
         cy.clickTableCell(table, 1, 2);
-        cy.assertEventValue(tableEvent, "(Server,Global South)");
+        cy.assertEventValue(tableEvent, "(Server, Global South)");
         cy.assertEventMdx(tableEvent, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[Global South])");
 
         cy.clickTableCell(table, 1, 2);
@@ -91,7 +91,7 @@ describe("Tables/Table Selection", () => {
         const tableEvent = "ww5";
         cy.clickTableCell(table, 2, 2, true);
         cy.clickTableCell(table, 3, 1, true);
-        cy.assertEventValue(tableEvent, "(Silver,Global South),(Gold,Global North)");
+        cy.assertEventValue(tableEvent, "(Silver, Global South), (Gold, Global North)");
         cy.assertEventMdx(tableEvent, "{([Product].[Article].[Article].&[3],[Geography].[Classification].[Hemisphere].&[Global South]),([Product].[Article].[Article].&[4],[Geography].[Classification].[Hemisphere].&[Global North])}");
 
     })

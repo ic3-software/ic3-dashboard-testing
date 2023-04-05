@@ -96,7 +96,7 @@ describe("Filters/Autocomplete Behavior", () => {
             cy.selectDropdownFromInput(widgetId, selection);
         });
 
-        assertMultiSelection(widgetId, eventWidgetId, selections, selections.join(","));
+        assertMultiSelection(widgetId, eventWidgetId, selections, selections.join(", "));
 
         // Clear Selection from Dropdown
         cy.clearDropdown(widgetId);
@@ -146,13 +146,13 @@ describe("Filters/Autocomplete Behavior", () => {
         const widgetId = "ww27";
         const eventWidgetId = "ww28";
 
-        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(","));
+        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(", "));
 
         cy.selectDropdownFromInput(widgetId, "Egypt");
-        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES.slice(1), COUNTRIES.slice(1).join(","));
+        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES.slice(1), COUNTRIES.slice(1).join(", "));
 
         cy.clearDropdown(widgetId);
-        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(","));
+        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(", "));
     });
 
     it("ww27: Multi: Empty Behavior - Select All [clear selection]", () => {
@@ -160,13 +160,13 @@ describe("Filters/Autocomplete Behavior", () => {
         const widgetId = "ww27";
         const eventWidgetId = "ww28";
 
-        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(","));
+        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(", "));
 
         cy.selectDropdownFromInput(widgetId, "Egypt");
-        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES.slice(1), COUNTRIES.slice(1).join(","));
+        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES.slice(1), COUNTRIES.slice(1).join(", "));
 
         cy.clickUserMenuClearSelection(widgetId);
-        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(","));
+        assertMultiSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.join(", "));
 
     });
 
@@ -255,9 +255,9 @@ describe("Filters/Autocomplete Behavior", () => {
 
         cy.assertDropdownOptions(widgetId_bottom, ["Alexandria", "Cairo", "Durban", "Johannesburg", "Pretoria"]);
 
-        assertMultiSelection(widgetId_top, eventWidgetId, ["Africa"], "Africa-South Africa,Egypt-Durban");
-        assertMultiSelection(widgetId_middle, eventWidgetId, ["South Africa", "Egypt"], "Africa-South Africa,Egypt-Durban");
-        assertMultiSelection(widgetId_bottom, eventWidgetId, ["Durban"], "Africa-South Africa,Egypt-Durban");
+        assertMultiSelection(widgetId_top, eventWidgetId, ["Africa"], "Africa-South Africa, Egypt-Durban");
+        assertMultiSelection(widgetId_middle, eventWidgetId, ["South Africa", "Egypt"], "Africa-South Africa, Egypt-Durban");
+        assertMultiSelection(widgetId_bottom, eventWidgetId, ["Durban"], "Africa-South Africa, Egypt-Durban");
 
     });
 
@@ -275,8 +275,8 @@ describe("Filters/Autocomplete Behavior", () => {
         assertMultiSelection(widgetId_bottom, eventWidgetId, ["China"], "China");
 
         cy.selectDropdownFromPopup(widgetId_bottom, "India");
-        assertMultiSelection(widgetId_top, eventWidgetId, ["China", "India"], "China,India");
-        assertMultiSelection(widgetId_bottom, eventWidgetId, ["China", "India"], "China,India");
+        assertMultiSelection(widgetId_top, eventWidgetId, ["China", "India"], "China, India");
+        assertMultiSelection(widgetId_bottom, eventWidgetId, ["China", "India"], "China, India");
 
         cy.clearDropdown(widgetId_bottom);
         assertMultiSelection(widgetId_top, eventWidgetId, [], null);

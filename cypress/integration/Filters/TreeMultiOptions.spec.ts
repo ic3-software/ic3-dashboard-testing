@@ -47,7 +47,7 @@ describe("Filters/Tree Multi Options", () => {
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"], "Africa");
 
         cy.selectTree(widgetId, "control-icons", "Durban");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria", "Cairo", "Johannesburg", "Pretoria"], ["Egypt", "Johannesburg", "Pretoria"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria", "Cairo", "Johannesburg", "Pretoria"], ["Egypt", "Johannesburg", "Pretoria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "South Africa");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"], "Africa");
@@ -72,27 +72,27 @@ describe("Filters/Tree Multi Options", () => {
         assertSelection(widgetId, eventWidgetId, treeMode, ["Alexandria"], "Alexandria");
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria", "Cairo"], ["Egypt", "Alexandria", "Cairo"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria", "Cairo"], ["Egypt", "Alexandria", "Cairo"].join(", "));
 
         cy.selectTree(widgetId, treeMode, "Africa");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"],
-            ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria",].join(","));
+            ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria",].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
         assertSelection(widgetId, eventWidgetId, treeMode, ["South Africa", "Durban", "Johannesburg", "Pretoria"],
-            ["South Africa", "Durban", "Johannesburg", "Pretoria"].join(","));
+            ["South Africa", "Durban", "Johannesburg", "Pretoria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"],
-            ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"].join(","));
+            ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Durban");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria", "Cairo", "Johannesburg", "Pretoria"],
-            ["Egypt", "Alexandria", "Cairo", "Johannesburg", "Pretoria"].join(","));
+            ["Egypt", "Alexandria", "Cairo", "Johannesburg", "Pretoria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "South Africa");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"],
-            ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"].join(","));
+            ["Africa", "Egypt", "Alexandria", "Cairo", "South Africa", "Durban", "Johannesburg", "Pretoria"].join(", "));
 
         // clear selection
 

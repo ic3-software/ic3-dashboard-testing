@@ -40,7 +40,7 @@ describe("demo/pluginJS/SimpleTable", () => {
 
         })
 
-        cy.assertEventValue("ww3", "Europe,Oceania")
+        cy.assertEventValue("ww3", "Europe, Oceania")
         cy.assertEventMdx("ww3", "{[Geography].[Geography].[Continent].&[EU],[Geography].[Geography].[Continent].&[OC]}")
 
     });

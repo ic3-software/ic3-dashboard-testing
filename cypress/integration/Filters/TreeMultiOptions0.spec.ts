@@ -41,16 +41,16 @@ describe("Filters/Tree Multi Options 0", () => {
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria"], "Africa");
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Alexandria"], ["Africa", "Alexandria"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Alexandria"], ["Africa", "Alexandria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria"], "Africa");
 
         cy.selectTree(widgetId, "control-icons", "Durban");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Durban"], ["Africa", "Durban"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Durban"], ["Africa", "Durban"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "South Africa");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "South Africa", "Durban"], ["Africa"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "South Africa", "Durban"], ["Africa"].join(", "));
 
         // clear selection
 
@@ -74,7 +74,7 @@ describe("Filters/Tree Multi Options 0", () => {
             selection.forEach(label => cy.selectTree(widgetId, "control-icons", label));
         });
 
-        assertSelection(widgetId, eventWidgetId, treeMode, selection, selection.join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, selection, selection.join(", "));
 
         // clear selection
 
@@ -99,7 +99,7 @@ describe("Filters/Tree Multi Options 0", () => {
             cy.selectTree(widgetId, "control-icons", "Pretoria");
         });
 
-        assertSelection(widgetId, eventWidgetId, treeMode, selection, selection.join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, selection, selection.join(", "));
 
         // clear selection
 

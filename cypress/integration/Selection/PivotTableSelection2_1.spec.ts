@@ -20,7 +20,7 @@ describe("Selection/PivotTableSelection", () => {
             cy.assertPivotTableLeftHeader(widgetId, 0, 1, "2018");
 
             cy.selectPivotTableLeftHeader(widgetId, 0, 0);
-            cy.assertEventValue(eventWidgetId, "(South/Latin America,2018)");
+            cy.assertEventValue(eventWidgetId, "(South/Latin America, 2018)");
 
             cy.assertPivotTableCellSelected(widgetId, 0, 0);
             cy.assertPivotTableCellSelected(widgetId, 0, 1);
@@ -29,7 +29,7 @@ describe("Selection/PivotTableSelection", () => {
             cy.assertEventValue(eventWidgetId, "");
 
             cy.selectPivotTableCell(widgetId, 0, 0);
-            cy.assertEventValue(eventWidgetId, "(South/Latin America,2018)");
+            cy.assertEventValue(eventWidgetId, "(South/Latin America, 2018)");
 
         }
 

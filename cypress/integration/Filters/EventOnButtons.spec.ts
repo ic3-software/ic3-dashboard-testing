@@ -63,7 +63,7 @@ describe("Filters/Events On Buttons", () => {
             });
         });
 
-        cy.assertEventValue(eventWidgetId, 'Egypt,India');
+        cy.assertEventValue(eventWidgetId, 'Egypt, India');
         cy.assertEventMdx(eventWidgetId, '{[Geography].[Geography].[Country].&[EG],[Geography].[Geography].[Country].&[IN]}');
         cy.assertEventKey(eventWidgetId, 'EG,IN');
         cy.assertEventAsSet(eventWidgetId, '{[Geography].[Geography].[Country].&[EG],[Geography].[Geography].[Country].&[IN]}');

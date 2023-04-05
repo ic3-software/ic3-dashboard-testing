@@ -143,13 +143,13 @@ describe("Filters/Slider Behavior", () => {
         const widgetId = "ww27";
         const eventWidgetId = "ww28";
 
-        assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(","));
+        assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(", "));
 
         cy.selectSlider(widgetId, "South Africa");
-        assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.slice(1), COUNTRIES.slice(1).join(","));
+        assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES.slice(1), COUNTRIES.slice(1).join(", "));
 
         cy.clickUserMenuClearSelection(widgetId);
-        assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(","));
+        assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(", "));
     });
 
     it("ww8: Empty Behavior - Default Member All Regions", () => {
