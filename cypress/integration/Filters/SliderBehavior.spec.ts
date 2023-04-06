@@ -98,7 +98,7 @@ describe("Filters/Slider Behavior", () => {
         assertSelection(widgetId, eventWidgetId, COUNTRIES, ["Egypt"], "Egypt");
 
         cy.selectSlider(widgetId, "China");
-        assertSelection(widgetId, eventWidgetId, COUNTRIES, ["Egypt", "South Africa", "China"], "Egypt,South Africa,China");
+        assertSelection(widgetId, eventWidgetId, COUNTRIES, ["Egypt", "South Africa", "China"], "Egypt, South Africa, China");
 
         // Clear Selection
         cy.clickUserMenuClearSelection(widgetId);
@@ -120,7 +120,7 @@ describe("Filters/Slider Behavior", () => {
         const widgetId = "ww29";
         const eventWidgetId = "ww30";
 
-        assertSelection(widgetId, eventWidgetId, COUNTRIES, ["South Africa", "China", "India", "Indonesia"], "South Africa,China,India,Indonesia");
+        assertSelection(widgetId, eventWidgetId, COUNTRIES, ["South Africa", "China", "India", "Indonesia"], "South Africa, China, India, Indonesia");
 
     });
 

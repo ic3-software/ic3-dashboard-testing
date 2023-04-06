@@ -110,7 +110,7 @@ describe("Filters/Buttons Behavior", () => {
 
         assertButtonsSelection(widgetId, eventWidgetId, [],
             ["Egypt", "Japan"],
-            "Egypt,Japan");
+            "Egypt, Japan");
 
     });
 
