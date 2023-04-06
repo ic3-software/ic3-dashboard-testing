@@ -42,7 +42,7 @@ describe("Selection/Chart axis label selection", () => {
 
         selectChartLabel(widgetId, "United States");  // Clicking on united states axis label
 
-        assertEventValue(widgetId, eventWidgetId, "(United States,Business),(United States,Consumer)", "{([Geography].[Classification].[Country].&[US],[Customer].[Customer].[Type].&[Business]),([Geography].[Classification].[Country].&[US],[Customer].[Customer].[Type].&[Consumer])}");
+        assertEventValue(widgetId, eventWidgetId, "(United States, Business), (United States, Consumer)", "{([Geography].[Classification].[Country].&[US],[Customer].[Customer].[Type].&[Business]),([Geography].[Classification].[Country].&[US],[Customer].[Customer].[Type].&[Consumer])}");
 
     });
 

@@ -19,7 +19,7 @@ describe("Selection/PivotTableSelection", () => {
         cy.assertPivotTableTopHeader(widgetId, 1, 0, "Business");
 
         cy.selectPivotTableTopHeader(widgetId, 0, 0);
-        cy.assertEventValue(eventWidgetId, "(2018,Business)");
+        cy.assertEventValue(eventWidgetId, "(2018, Business)");
 
         cy.assertPivotTableCellSelected(widgetId, 0, 0);
         cy.assertPivotTableCellSelected(widgetId, 1, 0);
@@ -30,10 +30,10 @@ describe("Selection/PivotTableSelection", () => {
         cy.assertEventValue(eventWidgetId, "");
 
         cy.selectPivotTableCell(widgetId, 0, 0);
-        cy.assertEventValue(eventWidgetId, "(2018,Business)");
+        cy.assertEventValue(eventWidgetId, "(2018, Business)");
 
         cy.selectPivotTableCell(widgetId, 0, 1);
-        cy.assertEventValue(eventWidgetId, "(2018,Consumer)");
+        cy.assertEventValue(eventWidgetId, "(2018, Consumer)");
         cy.assertPivotTableCellSelected(widgetId, 0, 1);
         cy.assertPivotTableCellSelected(widgetId, 1, 1);
         cy.assertPivotTableCellSelected(widgetId, 2, 1);

@@ -35,23 +35,23 @@ describe("Filters/Tree Multi Options 2", () => {
         assertSelection(widgetId, eventWidgetId, treeMode, ["Alexandria"], "Alexandria");
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria"], ["Egypt", "Alexandria"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Egypt", "Alexandria"], ["Egypt", "Alexandria"].join(", "));
 
         cy.selectTree(widgetId, treeMode, "Africa");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria"], ["Africa", "Egypt", "Alexandria"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria"], ["Africa", "Egypt", "Alexandria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Alexandria"], ["Africa", "Alexandria"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Alexandria"], ["Africa", "Alexandria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Egypt");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria"], ["Africa", "Egypt", "Alexandria"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria"], ["Africa", "Egypt", "Alexandria"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "Durban");
-        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Durban"], ["Africa", "Egypt", "Alexandria", "Durban"].join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "Durban"], ["Africa", "Egypt", "Alexandria", "Durban"].join(", "));
 
         cy.selectTree(widgetId, "control-icons", "South Africa");
         assertSelection(widgetId, eventWidgetId, treeMode, ["Africa", "Egypt", "Alexandria", "South Africa", "Durban"],
-            ["Africa", "Egypt", "Alexandria", "South Africa", "Durban"].join(","));
+            ["Africa", "Egypt", "Alexandria", "South Africa", "Durban"].join(", "));
 
         // clear selection
 

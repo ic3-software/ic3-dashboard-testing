@@ -75,7 +75,7 @@ describe("Filters/Buttons Behavior", () => {
             });
         });
 
-        assertButtonsSelection(widgetId, eventWidgetId, COUNTRIES, selections, selections.join(","));
+        assertButtonsSelection(widgetId, eventWidgetId, COUNTRIES, selections, selections.join(", "));
 
         // Keep China only
         cy.selectButton(widgetId, "China");
@@ -92,7 +92,7 @@ describe("Filters/Buttons Behavior", () => {
                 cy.selectButton(widgetId, selection);
             });
         });
-        assertButtonsSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(","));
+        assertButtonsSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(", "));
     });
 
     it("ww4: Buttons - Initial Selection Egypt", () => {
@@ -236,8 +236,8 @@ describe("Filters/Buttons Behavior", () => {
                 });
             });
 
-            assertButtonsSelection(widgetId_top, eventWidgetId, COUNTRIES, selections, selections.join(","));
-            assertButtonsSelection(widgetId_bottom, eventWidgetId, COUNTRIES, selections, selections.join(","));
+            assertButtonsSelection(widgetId_top, eventWidgetId, COUNTRIES, selections, selections.join(", "));
+            assertButtonsSelection(widgetId_bottom, eventWidgetId, COUNTRIES, selections, selections.join(", "));
         }
 
         cy.selectButton(widgetId_top, COUNTRIES[0]);

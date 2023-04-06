@@ -18,17 +18,17 @@ describe("Filters/InitializeSelectionOnNewQuery", () => {
         making a selection in ww0.
          */
 
-        assertButtonsSelection("ww1", "ww2", ["Q1 2011", "Q2 2011", "Q3 2011", "Q4 2011"], ["Q3 2011", "Q4 2011"], "Q3 2011,Q4 2011");
+        assertButtonsSelection("ww1", "ww2", ["Q1 2011", "Q2 2011", "Q3 2011", "Q4 2011"], ["Q3 2011", "Q4 2011"], "Q3 2011, Q4 2011");
 
 
         cy.selectButton("ww0", "2007");
         cy.waitForQueryCount(2 + 1);
-        assertButtonsSelection("ww1", "ww2", ["Q1 2007", "Q2 2007", "Q3 2007", "Q4 2007"], ["Q3 2007", "Q4 2007"], "Q3 2007,Q4 2007");
+        assertButtonsSelection("ww1", "ww2", ["Q1 2007", "Q2 2007", "Q3 2007", "Q4 2007"], ["Q3 2007", "Q4 2007"], "Q3 2007, Q4 2007");
 
 
         cy.selectButton("ww0", "2008");
         cy.waitForQueryCount(2 + 2);
-        assertButtonsSelection("ww1", "ww2", ["Q1 2008", "Q2 2008", "Q3 2008", "Q4 2008"], ["Q3 2008", "Q4 2008"], "Q3 2008,Q4 2008");
+        assertButtonsSelection("ww1", "ww2", ["Q1 2008", "Q2 2008", "Q3 2008", "Q4 2008"], ["Q3 2008", "Q4 2008"], "Q3 2008, Q4 2008");
 
     });
 

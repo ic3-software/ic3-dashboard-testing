@@ -36,7 +36,7 @@ describe("Selection/PivotTableSelection", () => {
             cy.keyCtrl(() => {
 
                 cy.selectPivotTableLeftHeader(widgetId, 5, 0);
-                cy.assertEventValue(eventWidgetId, "Africa,South/Latin America");
+                cy.assertEventValue(eventWidgetId, "Africa, South/Latin America");
 
                 cy.selectPivotTableLeftHeader(widgetId, 0, 0);
                 cy.assertEventValue(eventWidgetId, "South/Latin America");
@@ -76,7 +76,7 @@ describe("Selection/PivotTableSelection", () => {
 
                 cy.selectPivotTableTopHeader(widgetId, 0, 0);
                 cy.wait(100)
-                cy.assertEventValue(eventWidgetId, "Consumer,Business");
+                cy.assertEventValue(eventWidgetId, "Consumer, Business");
 
                 cy.selectPivotTableTopHeader(widgetId, 0, 1);
                 cy.wait(100)
@@ -93,7 +93,7 @@ describe("Selection/PivotTableSelection", () => {
             const eventWidgetId = "ww1";
 
             cy.selectPivotTableCell(widgetId, 5, 0);
-            cy.assertEventValue(eventWidgetId, "(South/Latin America,Business)");
+            cy.assertEventValue(eventWidgetId, "(South/Latin America, Business)");
 
             cy.wait(100)
 
@@ -102,18 +102,18 @@ describe("Selection/PivotTableSelection", () => {
 
 
             cy.selectPivotTableCell(widgetId, 5, 0);
-            cy.assertEventValue(eventWidgetId, "(South/Latin America,Business)");
+            cy.assertEventValue(eventWidgetId, "(South/Latin America, Business)");
             cy.selectPivotTableCell(widgetId, 0, 1);
-            cy.assertEventValue(eventWidgetId, "(Africa,Consumer)");
+            cy.assertEventValue(eventWidgetId, "(Africa, Consumer)");
 
 
             cy.keyCtrl(() => {
 
                 cy.selectPivotTableTopHeader(widgetId, 0, 0);
-                cy.assertEventValue(eventWidgetId, "(Africa,Consumer),(Africa,Business)");
+                cy.assertEventValue(eventWidgetId, "(Africa, Consumer), (Africa, Business)");
 
                 cy.selectPivotTableCell(widgetId, 0, 1);
-                cy.assertEventValue(eventWidgetId, "(Africa,Business)");
+                cy.assertEventValue(eventWidgetId, "(Africa, Business)");
 
                 cy.selectPivotTableTopHeader(widgetId, 0, 0);
                 cy.assertEventValue(eventWidgetId, "");

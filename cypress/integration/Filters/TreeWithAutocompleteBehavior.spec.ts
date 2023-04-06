@@ -87,7 +87,7 @@ describe("Filters/Tree with Autocomplete Behavior", () => {
         const selections = ["Alexandria", "Cairo"];
 
         cy.selectTreeWithAutocompleteFromPopup(widgetId, treeMode, selections, true);
-        assertMultiSelection(widgetId, eventWidgetId, treeMode, selections, selections.join(","));
+        assertMultiSelection(widgetId, eventWidgetId, treeMode, selections, selections.join(", "));
 
         cy.clickUserMenuClearSelection(widgetId);
         assertMultiSelection(widgetId, eventWidgetId, treeMode, [], null);
@@ -244,9 +244,9 @@ describe("Filters/Tree with Autocomplete Behavior", () => {
         cy.selectTreeWithAutocompleteFromPopup(widgetId_top, treeMode, ["Asia"], true);
         cy.waitForQueryCount(queryCount);
         cy.log("assert Africa,Asia top")
-        assertMultiSelection(widgetId_top, eventWidgetId, treeMode, ["Africa", "Asia"], "Africa,Asia");
-        cy.log("assert Africa,Asia bottom")
-        assertMultiSelection(widgetId_bottom, eventWidgetId, treeMode, ["Africa", "Asia"], "Africa,Asia");
+        assertMultiSelection(widgetId_top, eventWidgetId, treeMode, ["Africa", "Asia"], "Africa, Asia");
+        cy.log("assert Africa, Asia bottom")
+        assertMultiSelection(widgetId_bottom, eventWidgetId, treeMode, ["Africa", "Asia"], "Africa, Asia");
 
         cy.log("select Africa bottom")
         cy.selectTreeWithAutocompleteFromPopup(widgetId_bottom, treeMode, ["Africa"], true);

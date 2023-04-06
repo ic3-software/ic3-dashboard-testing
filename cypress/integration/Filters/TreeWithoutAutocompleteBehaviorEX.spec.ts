@@ -107,8 +107,8 @@ describe("Filters/Tree without Autocomplete Behavior EX", () => {
 
         cy.selectTree(widgetId_bottom, treeMode, "Alexandria");
         cy.waitForQueryCount(queryCount);
-        assertSelection(widgetId_top, eventWidgetId, treeMode, ["Cairo", "Alexandria"], ["Alexandria", "Cairo"].join(","));
-        assertSelection(widgetId_bottom, eventWidgetId, treeMode, ["Cairo", "Alexandria"], ["Alexandria", "Cairo"].join(","));
+        assertSelection(widgetId_top, eventWidgetId, treeMode, ["Cairo", "Alexandria"], ["Alexandria", "Cairo"].join(", "));
+        assertSelection(widgetId_bottom, eventWidgetId, treeMode, ["Cairo", "Alexandria"], ["Alexandria", "Cairo"].join(", "));
 
     });
 

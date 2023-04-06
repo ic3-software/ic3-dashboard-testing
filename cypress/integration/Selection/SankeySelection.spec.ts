@@ -44,7 +44,7 @@ describe("Selection/Sankey Selection", () => {
 
         clickSankeyNode(widgetId, "Silver", false);
         clickSankeyNode(widgetId, "License", true);
-        cy.assertEventValue(eventWidgetId, "Silver,License");
+        cy.assertEventValue(eventWidgetId, "Silver, License");
         cy.assertEventMdx(eventWidgetId, "([Product].[Product].[Article].&[3],[Product].[Product].[Category].&[1])");
 
     });
@@ -71,7 +71,7 @@ describe("Selection/Sankey Selection", () => {
 
         clickSankeyNode(widgetId, "Server", false);
         clickSankeyNode(widgetId, "Global South", true);
-        cy.assertEventValue(eventWidgetId, "Server,Global South");
+        cy.assertEventValue(eventWidgetId, "Server, Global South");
         cy.assertEventMdx(eventWidgetId, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[Global South])");
 
     });
@@ -98,7 +98,7 @@ describe("Selection/Sankey Selection", () => {
 
         clickSankeyNode(widgetId, "Gold", false);
         clickSankeyNode(widgetId, "Platinum", true);
-        cy.assertEventValue(eventWidgetId, "Gold,Platinum");
+        cy.assertEventValue(eventWidgetId, "Gold, Platinum");
         cy.assertEventMdx(eventWidgetId, "([Product].[Article].[Article].&[4],[Product].[Article].[Article].&[5])");
 
     });

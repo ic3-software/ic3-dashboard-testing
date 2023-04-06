@@ -36,7 +36,7 @@ describe("Selection/PivotTableSelectionAndSorting", () => {
             cy.keyCtrl(() => {
 
                 cy.selectPivotTableLeftHeader(widgetId, 0, 0);
-                cy.assertEventValue(eventWidgetId, "South America,Africa");
+                cy.assertEventValue(eventWidgetId, "South America, Africa");
 
                 cy.selectPivotTableLeftHeader(widgetId, 5, 0);
                 cy.assertEventValue(eventWidgetId, "Africa");

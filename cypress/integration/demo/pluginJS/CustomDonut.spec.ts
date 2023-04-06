@@ -54,7 +54,7 @@ describe("demo/pluginJS/CustomDonut", () => {
         });
 
 
-        cy.assertEventValue(tableEvent, "2019,2020,2021");
+        cy.assertEventValue(tableEvent, "2019, 2020, 2021");
         cy.assertEventMdx(tableEvent, "{[Time].[Time].[Year].&[2019-01-01],[Time].[Time].[Year].&[2020-01-01],[Time].[Time].[Year].&[2021-01-01]}");
 
     })

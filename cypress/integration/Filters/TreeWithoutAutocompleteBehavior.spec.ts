@@ -73,7 +73,7 @@ describe("Filters/Tree without Autocomplete Behavior", () => {
             cy.selectTree(widgetId, treeMode, label);
         });
 
-        assertSelection(widgetId, eventWidgetId, treeMode, selections, selections.join(","));
+        assertSelection(widgetId, eventWidgetId, treeMode, selections, selections.join(", "));
 
         cy.clickUserMenuClearSelection(widgetId);
         assertSelection(widgetId, eventWidgetId, treeMode, [], null);

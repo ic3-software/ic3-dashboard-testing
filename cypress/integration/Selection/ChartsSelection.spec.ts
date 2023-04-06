@@ -17,13 +17,17 @@ function tuple(...items: string[]) {
     return "(" + items.join(",") + ")";
 }
 
+function tupleE(...items: string[]) {
+    return "(" + items.join(", ") + ")";
+}
+
 function eventValueI(item: Item): string {
 
     if (item.product === undefined) {
         return YEARS[item.year];
     }
 
-    return tuple(PRODUCTS[item.product], YEARS[item.year]);
+    return tupleE(PRODUCTS[item.product], YEARS[item.year]);
 }
 
 function eventValue(items: Item[]): string {
@@ -32,7 +36,7 @@ function eventValue(items: Item[]): string {
         return "";
     }
 
-    return items.map(i => eventValueI(i)).join(",");
+    return items.map(i => eventValueI(i)).join(", ");
 }
 
 function eventMdxI(item: Item): string {

@@ -31,7 +31,7 @@ describe("Filters/Autocomplete Lazy Behavior", () => {
         assertMultiSelection(widgetId, eventWidgetId, ["None"], "None", "[Barcode].[Barcode].[All].[None]");
 
         cy.selectDropdownFromInputLazy(widgetId, "AY004EYQQNQQT")
-        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None,AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
+        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None, AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
 
         // save state --------------------------------------------------------------------------------------------------
         cy.selectButton("ww4", "Save State (localstorage)");
@@ -42,7 +42,7 @@ describe("Filters/Autocomplete Lazy Behavior", () => {
         // restore state -----------------------------------------------------------------------------------------------
         cy.selectButton("ww4", "Restore State (localstorage)");
 
-        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None,AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
+        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None, AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
     });
 
     it("ww2: RAW MDX: Initial Selection", () => {
@@ -53,7 +53,7 @@ describe("Filters/Autocomplete Lazy Behavior", () => {
         assertMultiSelection(widgetId, eventWidgetId, ["None"], "None", "[Barcode].[Barcode].[All].[None]");
 
         cy.selectDropdownFromInputLazy(widgetId, "AY004EYQQNQQT")
-        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None,AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
+        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None, AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
 
         // save state --------------------------------------------------------------------------------------------------
         cy.selectButton("ww4", "Save State (localstorage)");
@@ -64,7 +64,7 @@ describe("Filters/Autocomplete Lazy Behavior", () => {
         // restore state -----------------------------------------------------------------------------------------------
         cy.selectButton("ww4", "Restore State (localstorage)");
 
-        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None,AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
+        assertMultiSelection(widgetId, eventWidgetId, ["None", "AY004EYQQNQQT"], "None, AY004EYQQNQQT", "{[Barcode].[Barcode].[All].[None],[Barcode].[Barcode].[All].&[AY004EYQQNQQT]}");
     });
 
 });
