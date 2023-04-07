@@ -22,7 +22,7 @@ describe("Others/Zoom", () => {
         cy.clickUserMenuZoom(widgetId);
 
         cy.waitForQueryCount(queryCount);
-        cy.assertZoomedHeader(widgetId, "Bars:2021,2022!");
+        cy.assertZoomedHeader(widgetId, "Bars:2021, 2022!");
         cy.closeZoomedWidget(widgetId);
 
     })
@@ -34,7 +34,7 @@ describe("Others/Zoom", () => {
 
         cy.clickUserMenuZoom(widgetId);
         cy.waitForQueryCount(queryCount);
-        cy.assertZoomedHeader(widgetId, "Repeated Bars:Europe-Business-2021,2022!");
+        cy.assertZoomedHeader(widgetId, "Repeated Bars:Europe-Business-2021, 2022!");
         cy.closeZoomedWidget(widgetId);
 
     })
@@ -46,7 +46,7 @@ describe("Others/Zoom", () => {
 
         cy.clickUserMenuZoom(widgetId);
         cy.waitForQueryCount(queryCount);
-        cy.assertZoomedHeader(widgetId, "Repeated Bars:Europe-Consumer-2021,2022!");
+        cy.assertZoomedHeader(widgetId, "Repeated Bars:Europe-Consumer-2021, 2022!");
         cy.closeZoomedWidget(widgetId);
 
     })
@@ -58,18 +58,18 @@ describe("Others/Zoom", () => {
 
         cy.clickUserMenuZoom(widgetId);
         cy.waitForQueryCount(queryCount);
-        cy.assertZoomedHeader(widgetId, "Repetition Widget:2021,2022!");
+        cy.assertZoomedHeader(widgetId, "Repetition Widget:2021, 2022!");
 
         cy.getZoomedWidget(widgetId)
             .find('[data-cy="widget-box-' + "ww2~0~:Rep-ww1-R:0-C:0" + '"]')
             .find('[data-cy="widget-box-header-' + "ww2~0~:Rep-ww1-R:0-C:0" + '"]')
-            .contains("Repeated Bars:Europe-Business-2021,2022!")
+            .contains("Repeated Bars:Europe-Business-2021, 2022!")
         ;
 
         cy.getZoomedWidget(widgetId)
             .find('[data-cy="widget-box-' + "ww2~0~:Rep-ww1-R:0-C:1" + '"]')
             .find('[data-cy="widget-box-header-' + "ww2~0~:Rep-ww1-R:0-C:1" + '"]')
-            .contains("Repeated Bars:Europe-Consumer-2021,2022!")
+            .contains("Repeated Bars:Europe-Consumer-2021, 2022!")
         ;
 
         // cy.closeZoomedWidget(widgetId);
