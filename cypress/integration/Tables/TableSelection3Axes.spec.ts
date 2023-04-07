@@ -103,7 +103,7 @@ describe("Tables/Table Selection 3 axes", () => {
         const table = "ww4";
         const tableEvent = "ww5";
         cy.clickTableCell(table, 1, 4);
-        cy.assertEventValue(tableEvent, "(2018,Support, Global South,Business)");
+        cy.assertEventValue(tableEvent, "(2018, Support, Global South, Business)");
         cy.assertEventMdx(tableEvent, "([Time].[Time].[Year].&[2018-01-01],[Product].[Product].[Category].&[2],[Geography].[Classification].[Hemisphere].&[Global South],[Customer].[Customer].[Type].&[Business])");
 
         cy.clickTableCell(table, 1, 4);
