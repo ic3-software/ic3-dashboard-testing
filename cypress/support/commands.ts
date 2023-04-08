@@ -2224,8 +2224,8 @@ Cypress.Commands.add("expandTree", (widgetId: string, treeMode: TreeMode, label:
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
-            .parent(".ic3VirtualizedTreeItem-labelContainer")
-            .siblings(".ic3VirtualizedTreeItem-icon")
+            .parent(".ic3LazyTreeView-itemLabelContainer")
+            .siblings(".ic3LazyTreeView-itemIcon")
             .click()
         ;
 
@@ -2233,8 +2233,8 @@ Cypress.Commands.add("expandTree", (widgetId: string, treeMode: TreeMode, label:
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
-            .parent(".ic3VirtualizedTreeItem-labelContainer")
-            .siblings(".ic3VirtualizedTreeItem-icon")
+            .parent(".ic3LazyTreeView-itemLabelContainer")
+            .siblings(".ic3LazyTreeView-itemIcon")
             .click()
         ;
 
@@ -2270,7 +2270,7 @@ Cypress.Commands.add("assertTreeSelection", (widgetId: string, treeMode: TreeMod
 
             cy.getWidget(widgetId)
                 .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
-                .closest(".ic3VirtualizedTreeItem-root.ic3-selected")
+                .closest(".ic3LazyTreeView-itemRoot.ic3-selected")
             ;
 
         });
@@ -2278,7 +2278,7 @@ Cypress.Commands.add("assertTreeSelection", (widgetId: string, treeMode: TreeMod
     } else {
 
         cy.getWidget(widgetId)
-            .find(".ic3VirtualizedTreeItem-root.ic3-selected")
+            .find(".ic3LazyTreeView-itemRoot.ic3-selected")
             .should("not.exist")
         ;
 
@@ -2373,7 +2373,7 @@ Cypress.Commands.add("assertTreeWithAutocompleteSingleSelection", (widgetId: str
 
             cy.get("div.MuiAutocomplete-popper[role='presentation']")
                 .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
-                .closest(".ic3VirtualizedTreeItem-root.ic3-selected")
+                .closest(".ic3LazyTreeView-itemRoot.ic3-selected")
             ;
 
         });
@@ -2381,7 +2381,7 @@ Cypress.Commands.add("assertTreeWithAutocompleteSingleSelection", (widgetId: str
     } else {
 
         cy.get("div.MuiAutocomplete-popper[role='presentation']")
-            .find(".ic3VirtualizedTreeItem-root.ic3-selected")
+            .find(".ic3LazyTreeView-itemRoot.ic3-selected")
             .should("not.exist")
         ;
 
@@ -2424,7 +2424,7 @@ Cypress.Commands.add("assertTreeWithAutocompleteMultiSelection", (widgetId: stri
 
             cy.get("div.MuiAutocomplete-popper[role='presentation']")
                 .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
-                .closest(".ic3VirtualizedTreeItem-root.ic3-selected")
+                .closest(".ic3LazyTreeView-itemRoot.ic3-selected")
             ;
 
         });
@@ -2432,7 +2432,7 @@ Cypress.Commands.add("assertTreeWithAutocompleteMultiSelection", (widgetId: stri
     } else {
 
         cy.get("div.MuiAutocomplete-popper[role='presentation']")
-            .find(".ic3VirtualizedTreeItem-root.ic3-selected")
+            .find(".ic3LazyTreeView-itemRoot.ic3-selected")
             .should("not.exist")
         ;
 
