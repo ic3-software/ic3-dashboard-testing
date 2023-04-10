@@ -68,15 +68,7 @@ describe("Editor/Default Event Names", () => {
 
     it("Add buttons widget, check default year event name", () => {
 
-        cy.get("[data-cy='appMenu-button-newWidget']").click();
-        cy.get("[data-cy='ic3ItemChooser-ic3.FilterButtons']").click();
-
-        cy.get('[data-cy-page-nb="0"]')
-            .trigger('mousedown', 100, 100, {force: true})
-            .wait(100)
-            .trigger('mouseup', 100, 100, {force: true})
-
-        cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
+        cy.addWidgetAndOpenEditor("ic3.FilterButtons");
         cy.get('.MuiDrawer-root #tab-query').click();
 
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.DIMENSION, "Geography");

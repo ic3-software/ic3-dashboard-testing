@@ -616,15 +616,21 @@ declare namespace Cypress {
         /**
          * Widget Editor
          */
+        addWidgetAndOpenEditor(widgetType: "ic3.FilterAutocomplete" | "ic3.FilterButtons" | "ic3.PivotTable" | "ic3.Table" | string, posX?: number, posY?: number): void;
+
         widgetEditorOpen(widgetId: string): void;
-
-        widgetEditorOpenOptionGroup(name: string): void;
-
-        widgetEditorChooseOption(input: string, option: string): void;
 
         widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
 
+        widgetEditorEnterMdxStatement(mdxStatement: string): void;
+
+        widgetEditorOpenOptionGroup(name: string): void;
+
+        widgetEditorChangeOption(input: string, option: string): void;
+
         widgetEditorChangeTextOption(name: string, newValue: string): void;
+
+        widgetEditorChangeBoolean(name: string): void;
 
         widgetEditorApplyAndClose(): void;
 
@@ -3394,6 +3400,20 @@ Cypress.Commands.add("assertEventAsSet", (widgetId: string, value: string | null
 });
 
 
+Cypress.Commands.add("addWidgetAndOpenEditor", (widgetType: string, posX = 100, posY = 100) => {
+
+    cy.get("[data-cy='appMenu-button-newWidget']").click();
+    cy.get("[data-cy='ic3ItemChooser-" + widgetType + "']").click();
+
+    cy.get('[data-cy-page-nb="0"]')
+        .trigger('mousedown', posX, posY, {force: true})
+        .wait(100)
+        .trigger('mouseup', posX, posY, {force: true})
+
+    cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
+
+});
+
 Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 
     if (widgetId.startsWith("wg")) {
@@ -3410,6 +3430,17 @@ Cypress.Commands.add("widgetEditorChangeTab", (tabName: string) => {
 
 });
 
+Cypress.Commands.add("widgetEditorEnterMdxStatement", (statement: string) => {
+
+    cy.widgetEditorChangeTab("tab-query");
+    cy.get('button[data-cy="switchMdxToStatement"]').click();
+    cy.get('.cm-editor')
+        .keyboardDeleteAll()
+        .type(statement)
+        .wait(500)
+
+});
+
 Cypress.Commands.add("widgetEditorChangeTextOption", (name: string, newValue: string) => {
 
     cy.get(`div[data-cy='${name}'] input`).type(newValue);
@@ -3422,12 +3453,19 @@ Cypress.Commands.add("widgetEditorOpenOptionGroup", (name: string) => {
 
 });
 
-Cypress.Commands.add("widgetEditorChooseOption", (input: string, option: string) => {
+Cypress.Commands.add("widgetEditorChangeOption", (input: string, option: string) => {
 
     cy.get(`div[data-cy='${input}'] input`)
         .clear()
         .type(option)
         .get('li.MuiAutocomplete-option[data-option-index="0"]')
+        .click()
+    ;
+
+});
+Cypress.Commands.add("widgetEditorChangeBoolean", (input: string) => {
+
+    cy.get(`[data-cy='${input}'] input`)
         .click()
     ;
 

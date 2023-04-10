@@ -75,25 +75,9 @@ describe("Editor/Empty Report", () => {
         //
         // Add Pivot Table using Mdx statement
         //
-        cy.get("[data-cy='appMenu-button-newWidget']").click();
+        cy.addWidgetAndOpenEditor("ic3.PivotTable");
 
-        cy.get("[data-cy='ic3ItemChooser-ic3.PivotTable']").click();
-
-        cy.get('[data-cy-page-nb="0"]')
-            .trigger('mousedown', 100, 100, {force: true})
-            .wait(100)
-            .trigger('mouseup', 100, 100, {force: true})
-
-        cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
-
-        cy.get('.MuiDrawer-root #tab-query').click();
-        cy.get('button[data-cy="switchMdxToStatement"]').click();
-
-        cy.get('.cm-editor')
-            .keyboardDeleteAll()
-            .type("SELECT [Measures].members.head(3)  on 0, [Product].[Article].[Article] on 1 from [Sales]")
-            .wait(500)
-
+        cy.widgetEditorEnterMdxStatement("SELECT [Measures].members.head(3)  on 0, [Product].[Article].[Article] on 1 from [Sales]");
         cy.get('button[data-cy="runQuery"]').click();
 
 
@@ -110,14 +94,7 @@ describe("Editor/Empty Report", () => {
         //
         // Add Table using Mdx query wizard"f
         //
-        cy.get("[data-cy='appMenu-button-newWidget']").click();
-        cy.get("[data-cy='ic3ItemChooser-ic3.Table']").click();
-        cy.get('[data-cy-page-nb="0"]')
-            .trigger('mousedown', 100, 100, {force: true})
-            .wait(100)
-            .trigger('mouseup', 100, 100, {force: true})
-        cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
-        cy.get('.MuiDrawer-root #tab-query').click();
+        cy.addWidgetAndOpenEditor("ic3.Table");
 
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.DIMENSION, "Geography");
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.HIERARCHY, "Geography");
