@@ -28,7 +28,7 @@ describe("Editor/ChangeComboVariant", () => {
         cy.get('button[data-cy="runQuery"]').click();
 
         cy.widgetEditorChangeTab("tab-interactions");
-        cy.widgetEditorOpenOptionGroup("selection")
+        cy.widgetEditorOpenOptionGroup("groupSelection")
         cy.widgetEditorChangeOption("selectionMode", "Multiple Selection");
         cy.widgetEditorChangeOption("initSelectionUserDefined", "Select the first item");
         cy.widgetEditorApplyAndClose();

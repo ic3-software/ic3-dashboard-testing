@@ -624,7 +624,7 @@ declare namespace Cypress {
 
         widgetEditorEnterMdxStatement(mdxStatement: string): void;
 
-        widgetEditorOpenOptionGroup(name: string): void;
+        widgetEditorOpenOptionGroup(name: "groupSelection" | "widgetIcons" | "widgetActionsGroup"): void;
 
         widgetEditorChangeOption(input: string, option: string): void;
 

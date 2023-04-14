@@ -25,7 +25,7 @@ describe("Editor/CheckDisableQueryFilterIcon", () => {
         cy.addWidgetAndOpenEditor("ic3.FilterAutocomplete", 600);
         cy.widgetEditorEnterMdxStatement("SELECT [Time].[Time].[Year].allMembers ON 0 FROM [Sales] CELL PROPERTIES CELL_ORDINAL");
         cy.widgetEditorChangeTab("tab-interactions");
-        cy.widgetEditorOpenOptionGroup("selection")
+        cy.widgetEditorOpenOptionGroup("groupSelection")
         cy.widgetEditorChangeTextOption("Publish-Selection", "year");
 
         cy.widgetEditorApplyAndClose();

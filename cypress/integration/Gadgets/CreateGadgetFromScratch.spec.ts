@@ -26,13 +26,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
             .trigger('mouseup', 100, 100, {force: true})
 
         cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
-        cy.get('.MuiDrawer-root #tab-query').click();
-        cy.get('button[data-cy="switchMdxToStatement"]').click();
-
-        cy.get('.cm-editor')
-            .type('{ctrl}a{del}')
-            .type('SELECT [Measures].[Amount] ON "Columns" [Customer].[Customer].[Type].allmembers ON "Rows" FROM [Sales]')
-            .wait(500)
+        cy.widgetEditorEnterMdxStatement('SELECT [Measures].[Amount] ON "Columns" [Customer].[Customer].[Type].allmembers ON "Rows" FROM [Sales]')
 
         cy.widgetEditorApplyAndClose();
 
@@ -46,17 +40,11 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
             .trigger('mouseup', 100, 600, {force: true})
 
         cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
-        cy.get('.MuiDrawer-root #tab-query').click();
-        cy.get('button[data-cy="switchMdxToStatement"]').click();
+        cy.widgetEditorEnterMdxStatement('SELECT [Time].[Time].[Year].allmembers ON "MdxBuilderFilterItems"FROM [Sales] CELL PROPERTIES CELL_ORDINAL')
 
-        cy.get('.cm-editor').type('{ctrl}a{del}')
-            .type('SELECT [Time].[Time].[Year].allmembers ON "MdxBuilderFilterItems"FROM [Sales] CELL PROPERTIES CELL_ORDINAL')
-            .wait(500)
-
-        cy.get('.MuiDrawer-root #tab-interactions').click();
-        cy.get('[data-cy=selection]').click()
-        cy.get("div[data-cy='Publish-Selection'] input")
-            .type('selYear')
+        cy.widgetEditorChangeTab("tab-interactions");
+        cy.widgetEditorOpenOptionGroup("groupSelection");
+        cy.widgetEditorChangeTextOption("Publish-Selection", "selYear");
 
         cy.widgetEditorApplyAndClose();
 

@@ -22,7 +22,7 @@ describe("Filters/Change Initial Selection", () => {
 
         cy.widgetEditorOpen("ww0");
         cy.widgetEditorChangeTab("tab-interactions");
-        cy.widgetEditorOpenOptionGroup("selection");
+        cy.widgetEditorOpenOptionGroup("groupSelection");
         cy.widgetEditorChangeOption("initSelectionUserDefined", "Select the first item");
         cy.widgetEditorApply();
         assertButtonsSelection("ww0", "ww1", ["2018", "2019", "2020", "2021", "2022"], ["2018"], "2018");
