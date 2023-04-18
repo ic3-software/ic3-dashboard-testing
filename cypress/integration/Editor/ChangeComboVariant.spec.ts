@@ -50,10 +50,10 @@ describe("Editor/ChangeComboVariant", () => {
         // Change variant back
         cy.widgetEditorOpen("ww0")
         cy.widgetEditorChangeTab("tab-chart");
-        cy.widgetEditorChangeOption("options-chartOptions.variant", "Filled");
+        cy.widgetEditorChangeOption("options-chartOptions.variant", "Outlined");
         cy.widgetEditorApplyAndClose();
 
-        cy.getWidget("ww0").find(".MuiChip-root.MuiChip-filled").should('have.length', 2);
+        cy.getWidget("ww0").find(".MuiChip-root.MuiChip-outlined").should('have.length', 2);
 
 
     });
