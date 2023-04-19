@@ -442,7 +442,7 @@ declare namespace Cypress {
 
         panelFilterSetTextFieldValue(widgetId: string, index: number, value: string): void;
 
-        panelFilterSetDateTimeFieldValue(widgetId: string, index: number, value: string): void;
+        panelFilterSetDateTimeFieldValue(widgetId: string, index: number, value: string, isDate?: boolean): void;
 
         panelFilterSetDateFieldValue(widgetId: string, index: number, value: string): void;
 
@@ -2542,8 +2542,13 @@ function setDateOnMuiDatePicker($div: any, date: string) {
 function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last") {
 
     if (date) {
-        cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
-            .type(date + "{enter}");
+        // Mui is somehow capturing the enter , so we need to apply on tab :-(
+        if (where === "first")
+            cy.wrap($div).find('input').eq(0).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
+                .type(date + "{enter}");
+        else
+            cy.wrap($div).find('input').eq(1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
+                .type(date).tab();
     } else {
         cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
     }
@@ -2675,8 +2680,7 @@ Cypress.Commands.add("panelFilterSetTextFieldValue", (widgetId: string, index: n
     cy.getWidget(widgetId)
         .get("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-        .find("[data-cy='value-selector-text']")
-        .find("input")
+        .find("[data-cy='value-selector-text'] input")
         .type(value + "{enter}")
     ;
 
@@ -2684,12 +2688,12 @@ Cypress.Commands.add("panelFilterSetTextFieldValue", (widgetId: string, index: n
 
 Cypress.Commands.add("panelFilterSetDateFieldValue", (widgetId: string, index: number, date: string) => {
 
-    cy.panelFilterSetDateTimeFieldValue(widgetId, index, date)
+    cy.panelFilterSetDateTimeFieldValue(widgetId, index, date, true)
 
 });
 
 
-Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, index: number, date: string) => {
+Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, index: number, date: string, isDate = false) => {
 
     // Open date/time picker
     cy.getWidget(widgetId)
@@ -2698,12 +2702,14 @@ Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, inde
         .find("[data-cy='value-selector-text'] input")
         .click();
 
-    // choose one day from the popper if it's open
-    cy.get('body').then(($body) => {
-        if ($body.find(".MuiPickersPopper-root").length > 0) {
-            cy.get(".MuiPickersPopper-root button.MuiPickersDay-root").eq(0).click()
-        }
-    })
+    // choose one day from the popper if it's open (only for datetime, in MUI the input is disabled.. )
+    if (!isDate) {
+        cy.get('body').then(($body) => {
+            if ($body.find(".MuiPickersPopper-root").length > 0) {
+                cy.get(".MuiPickersPopper-root button.MuiPickersDay-root").eq(0).click()
+            }
+        })
+    }
 
     // Enter value
     cy.getWidget(widgetId)

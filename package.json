@@ -9,6 +9,7 @@
     "cypress-log-to-output": "1.1.2",
     "cypress-pipe": "2.0.0",
     "cypress-real-events": "1.7.6",
+    "cypress-plugin-tab": "1.0.5",
     "dotenv-json": "1.0.0",
     "node-fetch": "3.3.1",
     "typescript": "5.0.2"
@@ -19,5 +20,8 @@
     "cypress:run localhost": "cypress run --headless --config baseUrl=http://localhost:3000",
     "cypress:run": "cypress run --headless",
     "build All Dashboards": "node ./etc/build_all_dashboards.mjs"
+  },
+  "dependencies": {
+    "cypress-cloud": "^1.7.3"
   }
 }

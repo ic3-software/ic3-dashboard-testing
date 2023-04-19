@@ -78,11 +78,8 @@ describe("Editor/Empty Report", () => {
         cy.addWidgetAndOpenEditor("ic3.PivotTable");
 
         cy.widgetEditorEnterMdxStatement("SELECT [Measures].members.head(3)  on 0, [Product].[Article].[Article] on 1 from [Sales]");
-        cy.get('button[data-cy="runQuery"]').click();
-
-
-        cy.get('.MuiDrawer-root [data-cy="apply"]').click();
-        cy.get('.MuiDrawer-root [data-cy="close"]').click();
+        cy.widgetEditorApplyAndClose();
+        cy.waitForQueryStatus();
 
         cy.assertPivotTableRowCount("ww0", 5);
         cy.assertPivotTableColCount("ww0", 4);
@@ -110,8 +107,8 @@ describe("Editor/Empty Report", () => {
         schemaBrowserDragNode("Type", "Columns");
         schemaBrowserDragNode("Amount", "#Measures");
 
-        cy.get('.MuiDrawer-root [data-cy="apply"]').click();
-        cy.get('.MuiDrawer-root [data-cy="close"]').click();
+        cy.widgetEditorApplyAndClose();
+        cy.waitForQueryStatus();
 
         cy.assertTableColCount("ww0", 3)
         cy.assertTableValue("ww0", 0, 0, "Egypt")
