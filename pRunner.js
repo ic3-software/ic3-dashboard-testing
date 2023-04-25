@@ -3,13 +3,12 @@
 const {spawn} = require('child_process');
 const os = require('os')
 
-
-const maxParallelRuns = Math.round(os.cpus().length * 0.75);
-const ciBuildId = `run-local-${os.userInfo().username}-${new Date().toISOString()}`;
-
+const maxParallelRuns = Math.round(os.cpus().length * 0.5);
 const startDate = new Date();
 
 function launchParallelWork(specFiles) {
+
+    const ciBuildId = `run-local-${os.userInfo().username}-${new Date().toISOString()}`;
 
     const runners = specFiles ? ['pRun.js'] : new Array(maxParallelRuns).fill('pRun.js');
     console.log("Starting " + runners.length + " run in parallel");
@@ -133,4 +132,4 @@ function checkJobs(promises, maxFailedToRetryOrPreviousTotal) {
 }
 
 const promises = launchParallelWork()
-checkJobs(promises, 10)
+checkJobs(promises, 50)
