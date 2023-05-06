@@ -4,7 +4,7 @@ function assertDate(widgetId: string, eventWidgetId: string, date: string | null
 
     cy.assertDatePicker(widgetId, date);
 
-    cy.assertEventValue(eventWidgetId, event);
+    cy.assertDateEventValue(eventWidgetId, event);
     cy.assertEventMdx(eventWidgetId, mdx);
 
 }
@@ -28,7 +28,7 @@ describe("Filters/DatePicker First Last", () => {
 
         const widgetId = "ww0";
         const eventWidgetId = "ww1";
-        assertDate(widgetId, eventWidgetId, "05 Aug 2019", "05 Aug 2019", "[Time].[Time].[Day].&[2019-08-05]");
+        assertDate(widgetId, eventWidgetId, "5 Aug 2019", "5 Aug 2019", "[Time].[Time].[Day].&[2019-08-05]");
 
     });
 
@@ -44,7 +44,7 @@ describe("Filters/DatePicker First Last", () => {
 
         const widgetId = "ww2";
         const eventWidgetId = "ww3";
-        assertDateRange(widgetId, eventWidgetId, "05 Aug 2019", "05 Aug 2019", "05 Aug 2019 - 05 Aug 2019", "{[Time].[Time].[Day].&[2019-08-05]:[Time].[Time].[Day].&[2019-08-05]}");
+        assertDateRange(widgetId, eventWidgetId, "05 Aug 2019", "05 Aug 2019", "5 Aug 2019 - 5 Aug 2019", "{[Time].[Time].[Day].&[2019-08-05]:[Time].[Time].[Day].&[2019-08-05]}");
 
     });
 

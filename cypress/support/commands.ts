@@ -62,13 +62,17 @@ type TableMenuOption = "Unsort" | "Sort by ASC" | "Sort by DESC" | "Hide" | "Pin
 function getTableHeaderSelector(headerTitle: string, extra?: string): string {
     return ".MuiDataGrid-columnHeader[data-field='" + headerTitle + "'] " + (extra ?? "");
 }
+interface Cypress {
+    // Utils
+    migrateDate(date: string | null | undefined): string | null | undefined;
 
-
+}
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
 
 
     interface Chainable<Subject> {
+
 
         login(): void;
 
@@ -587,6 +591,16 @@ declare namespace Cypress {
          * </pre>
          */
         assertEventValue(widgetId: string, value: string | null): void;
+
+        /**
+         * Assuming the widget contains a marked down:
+         * <pre>
+         *      ##### Event value : @{event}!
+         * </pre>
+         *
+         * uses migrateDate
+         */
+        assertDateEventValue(widgetId: string, value: string | null): void;
 
         /**
          * Assuming the widget contains a marked down:
@@ -2548,7 +2562,7 @@ function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last
                 .type(date + "{enter}");
         else
             cy.wrap($div).find('input').eq(1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
-                .type(date).tab();
+                .type(date).realPress("Tab");
     } else {
         cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
     }
@@ -2577,9 +2591,11 @@ Cypress.Commands.add("selectDatePickerRangeToFromInput", (widgetId: string, date
 
 function assertDate(widgetId: string, tag: string, _date: string | null, nthChild?: number) {
 
-    const date = _date ?? "";
+    const date = Cypress.migrateDate(_date ?? "");
+
     // https://mui.com/x/react-date-pickers/base-concepts/#testing-caveats
     const cleanText = (s: string) => s.replace(/\u200e|\u2066|\u2067|\u2068|\u2069/g, '');
+
 
     cy.getWidget(widgetId)
         .find('[' + tag + '="' + date + '"]')// retry wait
@@ -3393,6 +3409,17 @@ Cypress.Commands.add("assertEventValue", (widgetId: string, value: string | null
 
 });
 
+Cypress.Commands.add("assertDateEventValue", (widgetId: string, date: string | null = null) => {
+
+    date = Cypress.migrateDate(date) ?? null;
+
+    Cypress.isBrowser('firefox')
+
+    cy.log("ASSERT-DATE-EVENT-VALUE [" + widgetId + "][" + date + "]")
+    assertEventWithText(date, widgetId, "value");
+
+});
+
 Cypress.Commands.add("assertEventMdx", (widgetId: string, value: string | null = null) => {
 
     cy.log("ASSERT-EVENT-MDX [" + widgetId + "][" + value + "]")
@@ -3531,6 +3558,13 @@ Cypress.Commands.add("widgetEditorFilter", (filter: string) => {
     else
         cy.get('.ic3EditorFilterBar-searchFilter input').clear();
 });
+
+Cypress["migrateDate"] = (date: string | undefined | null) => {
+
+    if (!date || !date.startsWith("0") || date.includes("/") || date.includes("-"))
+        return date;
+    return date.substring(1);
+}
 
 
 /**

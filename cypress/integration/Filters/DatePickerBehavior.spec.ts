@@ -4,7 +4,7 @@ function assertDate(widgetId: string, eventWidgetId: string, tableWidgetId: stri
 
     cy.assertDatePicker(widgetId, date);
 
-    cy.assertEventValue(eventWidgetId, event);
+    cy.assertDateEventValue(eventWidgetId, event);
     cy.assertEventMdx(eventWidgetId, mdx);
 
     if (!event) {

@@ -5,7 +5,7 @@ function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: str
     cy.assertDatePickerRangeFrom(widgetId, dateF);
     cy.assertDatePickerRangeTo(widgetId, dateT);
 
-    const event = (eventF || eventT) ? (eventF + " - " + eventT) : null;
+    const event = (eventF || eventT) ? (Cypress.migrateDate(eventF) + " - " + Cypress.migrateDate(eventT)) : null;
     const mdx = (mdxF || mdxT) ? ("{" + mdxF + ":" + mdxT + "}") : null;
 
     cy.assertEventValue(eventWidgetId, event);
@@ -18,7 +18,7 @@ function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: str
     } else if (eventF) {
 
         if (eventF.startsWith("0")) {
-            cy.assertTableValue(tableWidgetId, 0, 0, eventF.substr(1));
+            cy.assertTableValue(tableWidgetId, 0, 0, eventF.substring(1));
         } else {
             cy.assertTableValue(tableWidgetId, 0, 0, eventF);
         }
@@ -26,7 +26,7 @@ function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: str
     } else if (eventT) {
 
         if (eventT.startsWith("0")) {
-            cy.assertTableValue(tableWidgetId, 1, 0, eventT.substr(1));
+            cy.assertTableValue(tableWidgetId, 1, 0, eventT.substring(1));
         } else {
             cy.assertTableValue(tableWidgetId, 1, 0, eventT);
         }
@@ -90,7 +90,6 @@ describe("Filters/DatePicker Behavior", () => {
             "01 Sep 2021", "01 Sep 2021", mdx("2021-09-01"),
             "07 Sep 2021", "07 Sep 2021", mdx("2021-09-07")
         );
-
     });
 
     it("ww4: Date Picker with Default Date", () => {

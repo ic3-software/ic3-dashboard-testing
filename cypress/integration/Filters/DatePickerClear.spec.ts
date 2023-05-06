@@ -1,10 +1,10 @@
 export {};
 
-function assertDate(widgetId: string, eventWidgetId: string, date: string | null, mdx: string) {
+function assertDate(widgetId: string, eventWidgetId: string, date: string | null, dateAsString: string) {
 
     cy.assertDatePicker(widgetId, date);
 
-    cy.assertEventValue(eventWidgetId, mdx);
+    cy.assertDateEventValue(eventWidgetId, dateAsString);
 
 }
 
