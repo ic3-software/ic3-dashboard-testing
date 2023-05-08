@@ -7,12 +7,11 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/RestoreState.spec.ts"
+            "**/DatePickerBehavior.spec.ts"
         ],
 
         excludeSpecPattern: [
-            "**/ic3/**/*.spec.ts",
-            "**/DatePickerRangeBehavior.spec.ts",
+            "**/ic3/**/*.spec.ts"
         ],
 
         retries: {
