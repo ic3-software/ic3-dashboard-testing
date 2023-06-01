@@ -18,7 +18,7 @@ const COUNTRIES = [
     "Japan",
 ];
 
-function assertSingleSelection(widgetId: string, eventWidgetId: string, treeMode: TreeMode, selection: string | null, event: string | null, mdx?: string) {
+function assertSingleSelection(widgetId: string, eventWidgetId: string, treeMode: any, selection: string | null, event: string | null, mdx?: string) {
 
     cy.assertTreeWithAutocompleteSingleSelection(widgetId, treeMode, selection);
 
@@ -32,7 +32,7 @@ function assertSingleSelection(widgetId: string, eventWidgetId: string, treeMode
 
 }
 
-function assertMultiSelection(widgetId: string, eventWidgetId: string, treeMode: TreeMode, selection: string[], event: string | null, mdx?: string) {
+function assertMultiSelection(widgetId: string, eventWidgetId: string, treeMode: any, selection: string[], event: string | null, mdx?: string) {
 
     cy.assertTreeWithAutocompleteMultiSelection(widgetId, treeMode, selection);
 
@@ -112,11 +112,13 @@ describe("Filters/Tree with Autocomplete Behavior", () => {
 
         const treeMode = "control-icons";
 
-        const selections = ["Oceania", "Australia", "Canberra", "Sydney"];
+        // Since it's compacted selection, "Australia", "Canberra", "Sydney" are not shown as a selected chip.
+        const selections = ["Oceania"];
 
         assertMultiSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
 
-        cy.selectTreeWithAutocompleteFromPopup(widgetId, treeMode, selections, true);
+        cy.selectTreeWithAutocompleteFromPopup(widgetId, treeMode, ["Oceania", "Australia", "Canberra", "Sydney"], true);
+        // Selection now is empty -> should select all == Oceania.
         assertMultiSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
 
     });
@@ -128,16 +130,14 @@ describe("Filters/Tree with Autocomplete Behavior", () => {
 
         const treeMode = "control-icons";
 
-        const selections = ["Oceania", "Australia", "Canberra", "Sydney"];
-
-        assertMultiSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
+        assertMultiSelection(widgetId, eventWidgetId, treeMode, ["Oceania"], "Oceania");
 
         cy.selectTreeWithAutocompleteFromPopup(widgetId, treeMode, ["Oceania"], true);
-        assertMultiSelection(widgetId, eventWidgetId, treeMode, ["Australia", "Canberra", "Sydney"], "Australia");
+        assertMultiSelection(widgetId, eventWidgetId, treeMode, ["Australia"], "Australia");
 
         // Clear selection from user menu: select all items again
         cy.clickUserMenuClearSelection(widgetId);
-        assertMultiSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
+        assertMultiSelection(widgetId, eventWidgetId, treeMode, ["Oceania"], "Oceania");
 
     });
 
