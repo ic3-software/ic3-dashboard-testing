@@ -196,6 +196,8 @@ declare namespace Cypress {
         // User Menu
         // -------------------------------------------------------------------------------------------------------------
 
+        assertUserMenuVisibility(widgetId: string, option: string, isVisible: boolean): void;
+
         clickUserMenu(widgetId: string, option: string): void;
 
         clickUserMenuShowData(widgetId: string): void;
@@ -1260,6 +1262,19 @@ Cypress.Commands.add('clickDrilldownMenu', (widgetId: string, path: (number | st
 // User Menu
 // -------------------------------------------------------------------------------------------------------------
 
+Cypress.Commands.add('assertUserMenuVisibility', (widgetId: string, option: string, visible: boolean) => {
+
+    // ensure to click the "first" user menu (=> repetition widget)
+
+    cy.get('[data-cy="widget-box-' + widgetId + '"]' + "> div.ic3WidgetBox-container > div.ic3WidgetBox-userMenu [data-cy='userMenu']")
+        .click()
+    ;
+
+    cy.get("[data-cy='" + widgetId + "-" + option + "']")
+        .should(visible ? 'exist' : 'not.exist')
+
+    cy.get('.MuiModal-root').click()
+});
 Cypress.Commands.add('clickUserMenu', (widgetId: string, option: string) => {
 
     // ensure to click the "first" user menu (=> repetition widget)
