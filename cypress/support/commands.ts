@@ -2733,15 +2733,6 @@ Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, inde
         .find("[data-cy='value-selector-text'] input")
         .click();
 
-    // choose one day from the popper if it's open (only for datetime, in MUI the input is disabled.. )
-    if (!isDate) {
-        cy.get('body').then(($body) => {
-            if ($body.find(".MuiPickersPopper-root").length > 0) {
-                cy.get(".MuiPickersPopper-root button.MuiPickersDay-root").eq(0).click()
-            }
-        })
-    }
-
     // Enter value
     cy.getWidget(widgetId)
         .get("[data-cy='filters'] [data-cy='filter-item']")

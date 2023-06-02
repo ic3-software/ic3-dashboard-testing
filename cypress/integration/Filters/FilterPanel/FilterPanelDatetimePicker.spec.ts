@@ -28,17 +28,20 @@ describe("Filters/Filter Datetime Picker", () => {
 
         // Business as usual
         {
-            cy.panelFilterAdd(wPanel, "Character: datetime");
-            cy.panelFilterSelectOperatorFromInput(wPanel, 0, "Equals");
-            cy.panelFilterSetDateTimeFieldValue(wPanel, 0, "2016-02-03 00:00:00");
-            cy.assertEventValue(wEvent, "Filter([Character].[Character].[Character].members as b,b.currentMember.getProperty(\"datetime\", TYPED) == datetime(2016,2,3,0,0,0))");
-
             // Date
-            cy.panelFilterRemove(wPanel, 0);
+            // cy.panelFilterRemove(wPanel, 0);
             cy.panelFilterAdd(wPanel, "Character: date");
             cy.panelFilterSelectOperatorFromInput(wPanel, 0, "Equals");
             cy.panelFilterSetDateFieldValue(wPanel, 0, "2016-02-03");
             cy.assertEventValue(wEvent, "Filter([Character].[Character].[Character].members as b,b.currentMember.getProperty(\"date\", TYPED) == datetime(2016,2,3,0,0,0))");
+
+            // Date/Time
+            cy.panelFilterRemove(wPanel, 0);
+            cy.panelFilterAdd(wPanel, "Character: datetime");
+            cy.panelFilterSelectOperatorFromInput(wPanel, 0, "Equals");
+            // cy.panelFilterSetDateTimeFieldValue(wPanel, 0, "2016-02-03 01:05:10"); does not like the space !
+            cy.panelFilterSetDateTimeFieldValue(wPanel, 0, "2016-02-0301:05:10");
+            cy.assertEventValue(wEvent, "Filter([Character].[Character].[Character].members as b,b.currentMember.getProperty(\"datetime\", TYPED) == datetime(2016,2,3,1,5,10))");
 
         }
 
