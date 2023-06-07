@@ -62,11 +62,13 @@ type TableMenuOption = "Unsort" | "Sort by ASC" | "Sort by DESC" | "Hide" | "Pin
 function getTableHeaderSelector(headerTitle: string, extra?: string): string {
     return ".MuiDataGrid-columnHeader[data-field='" + headerTitle + "'] " + (extra ?? "");
 }
+
 interface Cypress {
     // Utils
     migrateDate(date: string | null | undefined): string | null | undefined;
 
 }
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
 
@@ -2558,13 +2560,18 @@ Cypress.Commands.add("assertSlider", (widgetId: string, labels: string[]) => {
 function setDateOnMuiDatePicker($div: any, date: string) {
 
     if (date) {
-        let gotToStart = editorMode ?
-            "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
-            : "{ctrl}a{leftArrow}";
-        cy.wrap($div).find('input').type(gotToStart)
+
+        const gotoStart = editorMode
+            ? "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
+            : "{ctrl}a{del}";
+
+        cy.wrap($div).find('input').type(gotoStart)
             .type(date).type("{enter}");
+
     } else {
+
         cy.wrap($div).find('input').type("{ctrl}a{del}")
+
     }
 }
 
