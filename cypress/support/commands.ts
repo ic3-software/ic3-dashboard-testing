@@ -234,7 +234,7 @@ declare namespace Cypress {
 
         clickTableColumnMenuIcon(widgetId: string, column: number, option: TableMenuOption): void;
 
-        filterTableMenuIcon(widgetId: string, colIdx: number, filter: string): void;
+        filterTableColumnWithMenuIcon(widgetId: string, colIdx: number, filter: string): void;
 
         clickTableHeaderMenu(widgetId: string, headerTitle: string, menuOption: TableMenuOption): void;
 
@@ -1373,7 +1373,7 @@ Cypress.Commands.add("clickTableColumnMenuIcon", (widgetId: string, column: numb
 
 });
 
-Cypress.Commands.add("filterTableMenuIcon", (widgetId: string, colIdx: number, filter: string) => {
+Cypress.Commands.add("filterTableColumnWithMenuIcon", (widgetId: string, colIdx: number, filter: string) => {
 
     cy.clickTableColumnMenuIcon(widgetId, colIdx, "Filter");
     cy.get(".MuiDataGrid-filterForm .MuiDataGrid-filterFormValueInput input").type(filter)

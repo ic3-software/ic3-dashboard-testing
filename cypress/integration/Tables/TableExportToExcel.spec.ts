@@ -24,7 +24,7 @@ describe("Tables/ExportToExcel", () => {
         cy.assertTableColumnTitle("ww0", 0, "Amount")
         cy.assertTableValue("ww0", 0, 1, "Personal")
 
-        cy.filterTableMenuIcon("ww0", 1, "er");
+        cy.filterTableColumnWithMenuIcon("ww0", 1, "er");
 
         cy.assertTableValue("ww0", 0, 1, "Personal");
         cy.assertTableValue("ww0", 1, 1, "Silver");
