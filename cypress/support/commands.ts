@@ -234,6 +234,8 @@ declare namespace Cypress {
 
         clickTableColumnMenuIcon(widgetId: string, column: number, option: TableMenuOption): void;
 
+        filterTableMenuIcon(widgetId: string, colIdx: number, filter: string): void;
+
         clickTableHeaderMenu(widgetId: string, headerTitle: string, menuOption: TableMenuOption): void;
 
         clickTableRow(widgetId: string, rowIdx: number): void;
@@ -1370,6 +1372,17 @@ Cypress.Commands.add("clickTableColumnMenuIcon", (widgetId: string, column: numb
     cy.get(".MuiDataGrid-menu .MuiMenuItem-root").contains(option).click();
 
 });
+
+Cypress.Commands.add("filterTableMenuIcon", (widgetId: string, colIdx: number, filter: string) => {
+
+    cy.clickTableColumnMenuIcon(widgetId, colIdx, "Filter");
+    cy.get(".MuiDataGrid-filterForm .MuiDataGrid-filterFormValueInput input").type(filter)
+    cy.get(".MuiDataGrid-filterForm .MuiDataGrid-filterFormValueInput svg").should('exist');
+    cy.get(".MuiDataGrid-filterForm .MuiDataGrid-filterFormValueInput svg").should('not.exist');
+    cy.getWidget(widgetId).click(-1, -1, {force: true})
+
+});
+
 
 Cypress.Commands.add("clickTableRow", (widgetId: string, rowIdx: number) => {
 
