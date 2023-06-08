@@ -214,6 +214,8 @@ declare namespace Cypress {
 
         clickUserMenuZoom(widgetId: string): void;
 
+        exportToExcel(widgetId: string): void;
+
         clickUserMenuRefreshQuery(widgetId: string): void;
 
         clickUserMenuAddEventToQueries(widgetId: string): void;
@@ -1313,6 +1315,10 @@ Cypress.Commands.add('clickUserMenuClearSorting', (widgetId: string) => {
 
 Cypress.Commands.add('clickUserMenuZoom', (widgetId: string) => {
     cy.clickUserMenu(widgetId, "maximize");
+});
+
+Cypress.Commands.add('exportToExcel', (widgetId: string) => {
+    cy.clickUserMenu(widgetId, "export_xls");
 });
 
 Cypress.Commands.add('clickUserMenuRefreshQuery', (widgetId: string) => {
