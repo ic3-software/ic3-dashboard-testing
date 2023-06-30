@@ -1,3 +1,5 @@
+import {DateUtils} from "./DateUtils";
+
 export {};
 
 function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: string, dateF: string | null, eventF: string | null, mdxF: string | null, dateT: string | null, eventT: string | null, mdxT: string | null) {
@@ -35,32 +37,6 @@ function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: str
 
 
 }
-
-function mdx(date: string): string {
-    return `[Time].[Time].[Day].&[${date}]`;
-}
-
-function dateEvent(date: Date): string {
-
-    const y = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(date);
-    const m = new Intl.DateTimeFormat('en', {month: 'short'}).format(date);
-    const d = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(date);
-
-    return `${d} ${m} ${y}`;
-
-}
-
-function dateMdx(date: Date): string {
-
-
-    const y = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(date);
-    const m = new Intl.DateTimeFormat('en', {month: '2-digit'}).format(date);
-    const d = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(date);
-
-    return `${y}-${m}-${d}`;
-
-}
-
 describe("Filters/DatePicker Behavior", () => {
 
     beforeEach(() => {
@@ -87,8 +63,8 @@ describe("Filters/DatePicker Behavior", () => {
         cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
         cy.waitForQueryCount(++queryCount);
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            "01 Sep 2021", "01 Sep 2021", mdx("2021-09-01"),
-            "07 Sep 2021", "07 Sep 2021", mdx("2021-09-07")
+            "01 Sep 2021", "01 Sep 2021", DateUtils.mdx("DateTime(2021,9,1)"),
+            "07 Sep 2021", "07 Sep 2021", DateUtils.mdx("DateTime(2021,9,7)")
         );
     });
 
@@ -107,8 +83,8 @@ describe("Filters/DatePicker Behavior", () => {
         to.setDate(to.getDate() + 7);
 
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
-            dateEvent(to), dateEvent(to), mdx(dateMdx(to))
+            DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
+            DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
         );
 
     });
@@ -125,7 +101,7 @@ describe("Filters/DatePicker Behavior", () => {
         from.setDate(from.getDate() - 7);
 
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            dateEvent(from), null, null,
+            DateUtils.dateEvent(from), null, null,
             null, null, null
         );
 
@@ -152,53 +128,53 @@ describe("Filters/DatePicker Behavior", () => {
             null, null, null
         );
 
-        cy.log("date-from:" + dateEvent(from));
-        cy.selectDatePickerRangeFromFromInput(widgetId, dateEvent(from));
+        cy.log("date-from:" + DateUtils.dateEvent(from));
+        cy.selectDatePickerRangeFromFromInput(widgetId, DateUtils.dateEvent(from));
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            dateEvent(from), null, null,
+            DateUtils.dateEvent(from), null, null,
             null, null, null
         );
 
-        cy.log("date-to:" + dateEvent(to));
-        cy.selectDatePickerRangeToFromInput(widgetId, dateEvent(to));
+        cy.log("date-to:" + DateUtils.dateEvent(to));
+        cy.selectDatePickerRangeToFromInput(widgetId, DateUtils.dateEvent(to));
         cy.waitForQueryCount(++queryCount);
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
-            dateEvent(to), dateEvent(to), mdx(dateMdx(to))
+            DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
+            DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
         );
 
         {
             const invalid = new Date(from.getTime());
             invalid.setDate(invalid.getDate() - 1);
 
-            cy.log("a-invalid-date:" + dateEvent(invalid));
-            cy.selectDatePickerRangeFromFromInput(widgetId, dateEvent(invalid));
+            cy.log("a-invalid-date:" + DateUtils.dateEvent(invalid));
+            cy.selectDatePickerRangeFromFromInput(widgetId, DateUtils.dateEvent(invalid));
             cy.waitForQueryCount(queryCount);
 
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                dateEvent(invalid), dateEvent(from), mdx(dateMdx(from)) /* input clear'd */,
-                dateEvent(to), dateEvent(to), mdx(dateMdx(to)) /* input clear'd */
+                DateUtils.dateEvent(invalid), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)) /* input clear'd */,
+                DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to)) /* input clear'd */
             );
         }
 
-        // cy.selectDatePickerRangeFromFromInput(widgetId, dateEvent(from));
+        // cy.selectDatePickerRangeFromFromInput(widgetId, DateUtils.dateEvent(from));
         // cy.waitForQueryCount(queryCount);
         // assertDates(widgetId, eventWidgetId, tableWidgetId,
-        //     dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
-        //     dateEvent(to), dateEvent(to), mdx(dateMdx(to))
+        //     DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
+        //     DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
         // );
         //
         // {
         //     const invalid = new Date(to.getTime());
         //     invalid.setDate(invalid.getDate() + 1);
         //
-        //     cy.log("b-invalid-date:" + dateEvent(invalid));
-        //     cy.selectDatePickerRangeToFromInput(widgetId, dateEvent(invalid));
+        //     cy.log("b-invalid-date:" + DateUtils.dateEvent(invalid));
+        //     cy.selectDatePickerRangeToFromInput(widgetId, DateUtils.dateEvent(invalid));
         //     cy.waitForQueryCount(queryCount);
         //
         //     assertDates(widgetId, eventWidgetId, tableWidgetId,
-        //         dateEvent(from), dateEvent(from), mdx(dateMdx(from)),
-        //         dateEvent(to), dateEvent(to), mdx(dateMdx(to))
+        //         DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
+        //         DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
         //     );
         // }
 

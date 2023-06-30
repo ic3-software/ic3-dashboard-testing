@@ -1,3 +1,5 @@
+import {DateUtils} from "./DateUtils";
+
 export {};
 
 function assertDate(widgetId: string, eventWidgetId: string, tableWidgetId: string, date: string | null, event: string | null, mdx: string | null) {
@@ -20,33 +22,6 @@ function assertDate(widgetId: string, eventWidgetId: string, tableWidgetId: stri
         }
 
     }
-
-
-}
-
-function mdx(date: string): string {
-    return `[Time].[Time].[Day].&[${date}]`;
-}
-
-function dateEvent(date: Date): string {
-
-    const y = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(date);
-    const m = new Intl.DateTimeFormat('en', {month: 'short'}).format(date);
-    const d = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(date);
-
-    return `${d} ${m} ${y}`;
-
-}
-
-function dateMdx(date: Date): string {
-
-
-    const y = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(date);
-    const m = new Intl.DateTimeFormat('en', {month: '2-digit'}).format(date);
-    const d = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(date);
-
-    return `${y}-${m}-${d}`;
-
 }
 
 describe("Filters/DatePicker Behavior", () => {
@@ -70,11 +45,11 @@ describe("Filters/DatePicker Behavior", () => {
         // Intermediate input values are not triggered (=> asserted by a single query being sent)
         cy.selectDatePickerFromInput(widgetId, "01 Sep 2021");
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "01 Sep 2021", "01 Sep 2021", mdx("2021-09-01"));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "01 Sep 2021", "01 Sep 2021", DateUtils.mdx("DateTime(2021,9,1)"));
 
         cy.selectDatePickerFromInput(widgetId, "03 Sep 2021");
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "03 Sep 2021", "03 Sep 2021", mdx("2021-09-03"));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "03 Sep 2021", "03 Sep 2021", DateUtils.mdx("DateTime(2021,9,3)"));
 
     });
 
@@ -87,7 +62,7 @@ describe("Filters/DatePicker Behavior", () => {
         const today = new Date();
         const initial = new Date(today.setDate(today.getDate() - 7));
 
-        assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(initial), dateEvent(initial), mdx(dateMdx(initial)));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, DateUtils.dateEvent(initial), DateUtils.dateEvent(initial), DateUtils.mdx(DateUtils.dateMdx(initial)));
 
     });
 
@@ -108,29 +83,29 @@ describe("Filters/DatePicker Behavior", () => {
         const to = new Date(today.getTime());
         to.setDate(to.getDate() + 7);
 
-        cy.log("date-today:" + dateEvent(today));
-        cy.selectDatePickerFromInput(widgetId, dateEvent(today));
+        cy.log("date-today:" + DateUtils.dateEvent(today));
+        cy.selectDatePickerFromInput(widgetId, DateUtils.dateEvent(today));
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(today), dateEvent(today), mdx(dateMdx(today)));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, DateUtils.dateEvent(today), DateUtils.dateEvent(today), DateUtils.mdx(DateUtils.dateMdx(today)));
 
-        cy.log("date-from:" + dateEvent(from));
-        cy.selectDatePickerFromInput(widgetId, dateEvent(from));
+        cy.log("date-from:" + DateUtils.dateEvent(from));
+        cy.selectDatePickerFromInput(widgetId, DateUtils.dateEvent(from));
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(from), dateEvent(from), mdx(dateMdx(from)));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)));
 
-        cy.log("date-to:" + dateEvent(to));
-        cy.selectDatePickerFromInput(widgetId, dateEvent(to));
+        cy.log("date-to:" + DateUtils.dateEvent(to));
+        cy.selectDatePickerFromInput(widgetId, DateUtils.dateEvent(to));
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(to), dateEvent(to), mdx(dateMdx(to)));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to)));
 
         {
             const invalid = new Date(from.getTime());
             invalid.setDate(invalid.getDate() - 1);
 
-            cy.log("invalid-date:" + dateEvent(invalid));
-            cy.selectDatePickerFromInput(widgetId, dateEvent(invalid));
+            cy.log("invalid-date:" + DateUtils.dateEvent(invalid));
+            cy.selectDatePickerFromInput(widgetId, DateUtils.dateEvent(invalid));
 
-            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), dateEvent(to), mdx(dateMdx(to)));
+            assertDate(widgetId, eventWidgetId, tableWidgetId, DateUtils.dateEvent(invalid), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to)));
 
         }
 
@@ -138,10 +113,10 @@ describe("Filters/DatePicker Behavior", () => {
             const invalid = new Date(to.getTime());
             invalid.setDate(invalid.getDate() + 1);
 
-            cy.log("invalid-date:" + dateEvent(invalid));
-            cy.selectDatePickerFromInput(widgetId, dateEvent(invalid));
+            cy.log("invalid-date:" + DateUtils.dateEvent(invalid));
+            cy.selectDatePickerFromInput(widgetId, DateUtils.dateEvent(invalid));
 
-            assertDate(widgetId, eventWidgetId, tableWidgetId, dateEvent(invalid), dateEvent(to), mdx(dateMdx(to)));
+            assertDate(widgetId, eventWidgetId, tableWidgetId, DateUtils.dateEvent(invalid), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to)));
         }
     });
 
@@ -158,7 +133,7 @@ describe("Filters/DatePicker Behavior", () => {
         // Intermediate input values are not triggered (=> asserted by a single query being sent)
         cy.selectDatePickerFromInput(widgetId, "01/09/2021");
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "01/09/2021", "01 Sep 2021", mdx("2021-09-01"));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "01/09/2021", "01 Sep 2021", DateUtils.mdx("DateTime(2021,9,1)"));
 
     });
 
@@ -174,19 +149,19 @@ describe("Filters/DatePicker Behavior", () => {
 
         cy.selectDatePickerFromInput(widgetId, initial);
         cy.waitForQueryCount(queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, initial, initial, mdx("2020-09-15"));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, initial, initial, DateUtils.mdxOld("2020-09-15"));
 
         const from = "01 Sep 2020";
 
         cy.selectDatePickerFromInput(widgetId, from);
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, from, from, mdx("2020-09-01"));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, from, from, DateUtils.mdxOld("2020-09-01"));
 
         const to = "30 Sep 2020";
 
         cy.selectDatePickerFromInput(widgetId, to);
         cy.waitForQueryCount(++queryCount);
-        assertDate(widgetId, eventWidgetId, tableWidgetId, to, to, mdx("2020-09-30"));
+        assertDate(widgetId, eventWidgetId, tableWidgetId, to, to, DateUtils.mdxOld("2020-09-30"));
 
     });
 
