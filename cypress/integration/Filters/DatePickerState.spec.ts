@@ -1,3 +1,5 @@
+import {DateUtils} from "./DateUtils";
+
 export {};
 
 function assertDate(widgetId: string, eventWidgetId: string, date: string | null, mdx: string) {
@@ -60,7 +62,7 @@ describe("Filters/DatePicker State", () => {
         const widgetId = "ww2";
         const eventWidgetId = "ww6";
 
-        assertRange(widgetId, eventWidgetId, "05 Jan 2022", "15 Jan 2022", "{[Time].[Time].[Day].&[2022-01-05]:[Time].[Time].[Day].&[2022-01-15]}");
+        assertRange(widgetId, eventWidgetId, "05 Jan 2022", "15 Jan 2022", DateUtils.rangeMdx(new Date(2022, 0, 5), new Date(2022, 0, 15)));
 
         // TODO range picker Cypress test not working.
         // cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
