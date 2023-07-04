@@ -3,15 +3,15 @@
   "version": "8.3.1-rc.1",
   "private": true,
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "2.2.3",
-    "@types/node": "18.15.11",
-    "cypress": "12.9.0",
+    "@4tw/cypress-drag-drop": "2.2.4",
+    "@types/node": "18.16.19",
+    "cypress": "12.16.0",
     "cypress-log-to-output": "1.1.2",
     "cypress-pipe": "2.0.0",
-    "cypress-real-events": "1.7.6",
+    "cypress-real-events": "1.8.1",
     "dotenv-json": "1.0.0",
     "node-fetch": "3.3.1",
-    "typescript": "5.0.2",
+    "typescript": "5.1.6",
     "read-excel-file": "5.6.1"
   },
   "scripts": {
