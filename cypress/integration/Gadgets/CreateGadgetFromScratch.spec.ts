@@ -14,6 +14,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
         // Open gadget editor
         cy.get("[data-cy='appMenu-button-newGadget']").click();
         cy.get("div[data-cy=schemaName] input").type("Sales (LiveDemo){downArrow}{enter}")
+        cy.get("div[data-cy='layoutConfigId'] input").type("Statos Desktop Layout{downArrow}{enter}")
         cy.get("[data-cy='button-ok']").click();
 
         // Place table
