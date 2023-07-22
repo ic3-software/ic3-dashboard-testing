@@ -14,8 +14,8 @@ describe("Tables/Pivot Table Sort (like Table Sort)", () => {
 
         // Cannot sort left header yet ---------------------------------------------------------------------------------
         // Sorted /Article
-        // cy.sortPivotTable(widgetId, 0);
-        // cy.assertPivotTableColumnsEqual(widgetId, "ww3", 5, 2);
+        cy.sortPivotTable(widgetId, -1);
+        cy.assertPivotTableColumnsEqual(widgetId, "ww3", 5, 2);
 
         // Sorted /#Sales
         cy.sortPivotTable(widgetId, 0);
@@ -28,8 +28,8 @@ describe("Tables/Pivot Table Sort (like Table Sort)", () => {
 
         // Cannot sort left header yet ---------------------------------------------------------------------------------
         // Sorted /Article
-        // cy.sortTable(widgetId, 0);
-        // cy.assertTableColumnsEqual(widgetId, "ww5", 5, 3);
+        cy.sortPivotTable(widgetId, -1);
+        cy.assertPivotTableColumnsEqual(widgetId, "ww5", 5, 3);
 
         // Sorted /Business
         cy.sortPivotTable(widgetId, 0);
@@ -46,8 +46,8 @@ describe("Tables/Pivot Table Sort (like Table Sort)", () => {
 
         // Cannot sort left header yet ---------------------------------------------------------------------------------
         // Sorted /Article
-        // cy.sortPivotTable(widgetId, 0);
-        // cy.assertTableColumnsEqual(widgetId, "ww6", 5, 3);
+        cy.sortPivotTable(widgetId, -1);
+        cy.assertPivotTableColumnsEqual(widgetId, "ww6", 5, 3);
 
         // Sorted /Business
         cy.sortPivotTable(widgetId, 0);
