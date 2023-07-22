@@ -28,24 +28,24 @@ describe("Filters/Filter Panel Character", () => {
         cy.assertTableCellContent("ww26", 1, 0, "bar");
         cy.assertTableCellContent("ww26", 2, 0, "empty-character");
 
-        cy.assertEventValue("ww5", "Filter([Character].[Character].[Character].members as b, PatternMatchesContains(\"fo\", b.currentMember.name, CASE_INSENSITIVE))");
+        cy.assertEventValue("ww5", "Filter([Character].[Character].[Character].members as b, PatternMatchesContains(\"fo\", b.currentMember.caption, CASE_INSENSITIVE))");
         cy.assertTableRowCount("ww20", 1);
         cy.assertTableCellContent("ww20", 0, 0, "foo");
 
-        cy.assertEventValue("ww7", "Filter([Character].[Character].[Character].members as b, NOT PatternMatchesContains(\"fo\", b.currentMember.name, CASE_INSENSITIVE))");
+        cy.assertEventValue("ww7", "Filter([Character].[Character].[Character].members as b, NOT PatternMatchesContains(\"fo\", b.currentMember.caption, CASE_INSENSITIVE))");
         cy.assertTableRowCount("ww21", 2);
         cy.assertTableCellContent("ww21", 0, 0, "bar");
         cy.assertTableCellContent("ww21", 1, 0, "empty-character");
 
-        cy.assertEventValue("ww9", "Filter([Character].[Character].[Character].members as b, PatternMatchesStartsWith(\"fo\", b.currentMember.name, CASE_INSENSITIVE))");
+        cy.assertEventValue("ww9", "Filter([Character].[Character].[Character].members as b, PatternMatchesStartsWith(\"fo\", b.currentMember.caption, CASE_INSENSITIVE))");
         cy.assertTableRowCount("ww22", 1);
         cy.assertTableCellContent("ww22", 0, 0, "foo");
 
-        cy.assertEventValue("ww11", "Filter([Character].[Character].[Character].members as b, PatternMatchesEndsWith(\"ar\", b.currentMember.name, CASE_INSENSITIVE))");
+        cy.assertEventValue("ww11", "Filter([Character].[Character].[Character].members as b, PatternMatchesEndsWith(\"ar\", b.currentMember.caption, CASE_INSENSITIVE))");
         cy.assertTableRowCount("ww23", 1);
         cy.assertTableCellContent("ww23", 0, 0, "bar");
 
-        cy.assertEventValue("ww13", `Filter([Character].[Character].[Character].members as b, PatternMatches(".+a.+", b.currentMember.name))`);
+        cy.assertEventValue("ww13", `Filter([Character].[Character].[Character].members as b, PatternMatches(".+a.+", b.currentMember.caption))`);
         cy.assertTableRowCount("ww24", 2);
         cy.assertTableCellContent("ww24", 0, 0, "bar");
         cy.assertTableCellContent("ww24", 1, 0, "empty-character");
