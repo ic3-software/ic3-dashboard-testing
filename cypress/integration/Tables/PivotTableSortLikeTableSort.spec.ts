@@ -12,7 +12,6 @@ describe("Tables/Pivot Table Sort (like Table Sort)", () => {
 
         const widgetId = "ww1";
 
-        // Cannot sort left header yet ---------------------------------------------------------------------------------
         // Sorted /Article
         cy.sortPivotTable(widgetId, -1);
         cy.assertPivotTableColumnsEqual(widgetId, "ww3", 5, 2);
@@ -26,7 +25,6 @@ describe("Tables/Pivot Table Sort (like Table Sort)", () => {
 
         const widgetId = "ww2";
 
-        // Cannot sort left header yet ---------------------------------------------------------------------------------
         // Sorted /Article
         cy.sortPivotTable(widgetId, -1);
         cy.assertPivotTableColumnsEqual(widgetId, "ww5", 5, 3);
@@ -44,7 +42,6 @@ describe("Tables/Pivot Table Sort (like Table Sort)", () => {
 
         const widgetId = "ww0";
 
-        // Cannot sort left header yet ---------------------------------------------------------------------------------
         // Sorted /Article
         cy.sortPivotTable(widgetId, -1);
         cy.assertPivotTableColumnsEqual(widgetId, "ww6", 5, 3);
