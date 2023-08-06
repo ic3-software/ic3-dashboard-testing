@@ -3,9 +3,6 @@ import readXlsxFile, {Row} from "read-excel-file";
 
 export {};
 
-const path = require("path");
-
-const downloadsFolder = Cypress.config("downloadsFolder");
 
 describe("Tables/ExportToExcel", () => {
 
@@ -33,7 +30,7 @@ describe("Tables/ExportToExcel", () => {
         cy.exportToExcel("ww0");
 
 
-        cy.readFile(path.join(downloadsFolder, "modifiedTidy.xlsx"), null).should("exist").then((blob) => {
+        cy.readFileFromDownload("modifiedTidy.xlsx").then((blob) => {
 
             readXlsxFile(blob).then((rows: Row[]) => {
 
@@ -46,7 +43,7 @@ describe("Tables/ExportToExcel", () => {
                 expect(rows[2][2]).to.eq('Silver')
                 expect(rows[3][2]).to.eq('Server')
 
-            })
+            });
 
         });
 

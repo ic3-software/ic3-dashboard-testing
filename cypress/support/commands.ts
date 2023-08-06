@@ -28,6 +28,7 @@ require('cypress-real-events/support')
 
 import VisitOptions = Cypress.VisitOptions;
 
+
 type $widget = any;
 
 const QUERY_STATUS_TIMEOUT = 30000;
@@ -74,7 +75,6 @@ declare namespace Cypress {
 
 
     interface Chainable<Subject> {
-
 
         login(): void;
 
@@ -285,7 +285,7 @@ declare namespace Cypress {
         // Pivot Table
         // -------------------------------------------------------------------------------------------------------------
 
-        sortPivotTable(widgetId: string, column: number): void;
+        sortPivotTable(widgetId: string, column: number, row?: number): void;
 
         drilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
@@ -667,6 +667,22 @@ declare namespace Cypress {
         widgetEditorFilter(filterText: string): void;
 
         paste(payload: string): Chainable<Subject>;
+
+        /**
+         *  exported files xls , csv, pdf
+         */
+
+        /**
+         * returns an existing file from the download folder  (binary  blob format)
+         */
+        readFileFromDownload(fileName: string): Chainable<Subject>;
+
+        /**
+         * returns a string with the content of the pdf
+         */
+        readPdfFromDownload(fileName: string): Chainable<string>;
+
+        assertOccurrences(tag: string, count: number): Chainable<Subject>;
 
         /**
          * Keyboard
@@ -1534,6 +1550,33 @@ Cypress.Commands.add("assertTableColumnsEqual", (widgetId: string, expectedWidge
 
 });
 
+
+const path = require("path");
+const downloadsFolder = Cypress.config("downloadsFolder");
+
+Cypress.Commands.add("readFileFromDownload", (fileName: string) => {
+
+    return cy.readFile(path.join(downloadsFolder, fileName), null).should("exist")
+});
+
+Cypress.Commands.add("readPdfFromDownload", (fileName: string) => {
+
+    return cy.task('readPdf', path.join(downloadsFolder, fileName));
+
+});
+
+Cypress.Commands.add("assertOccurrences", {prevSubject: true}, (subject, tag: string, count: number) => {
+
+    return cy.wrap(subject).then((text: any) => {
+
+        const found = (text?.toString().split(tag).length ?? 0) - 1;
+
+        expect(found).to.be.eq(count, "Could not find " + count + " times the tag '" + tag + "' in " + text?.toString())
+
+    })
+
+});
+
 Cypress.Commands.add("assertTableSingleRowSelected", (widgetId: string, rowIdx: number, rowCount: number) => {
 
     cy.getWidget(widgetId).then($w => {
@@ -1638,9 +1681,7 @@ Cypress.Commands.add("assertTableColumnNotSelected", (widgetId: string, colIdx: 
 // Pivot Table
 // -------------------------------------------------------------------------------------------------------------
 
-Cypress.Commands.add("sortPivotTable", (widgetId: string, column: number) => {
-
-    const row = 0;
+Cypress.Commands.add("sortPivotTable", (widgetId: string, column: number, row = 0) => {
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${column}']`)

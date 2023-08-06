@@ -1,9 +1,10 @@
-const {defineConfig} = require('cypress')
-const dotenvJSON = require("dotenv-json");
+import {defineConfig} from "cypress";
+import {readPdf} from "./cypress/scripts/readPdf";
 
+const dotenvJSON = require("dotenv-json");
 dotenvJSON({path: "cypress.env.json"});
 
-module.exports = defineConfig({
+export default defineConfig({
 
     e2e: {
 
@@ -19,5 +20,9 @@ module.exports = defineConfig({
         viewportHeight: 1200,
 
         video: false,
+
+        setupNodeEvents(on, config) {
+            on('task', {readPdf})
+        },
     }
 })
