@@ -1,4 +1,5 @@
 import {defineConfig} from "cypress";
+import {readPdf} from "./cypress/scripts/readPdf";
 
 export default defineConfig({
 
@@ -27,5 +28,8 @@ export default defineConfig({
 
         video: false,
 
+        setupNodeEvents(on, config) {
+            on('task', {readPdf})
+        },
     }
 })
