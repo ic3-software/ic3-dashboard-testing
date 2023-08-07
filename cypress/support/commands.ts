@@ -23,10 +23,14 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import Timeoutable = Cypress.Timeoutable;
+import VisitOptions = Cypress.VisitOptions;
+import Loggable = Cypress.Loggable;
+
 require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
 
-import VisitOptions = Cypress.VisitOptions;
+
 
 
 type $widget = any;
@@ -675,12 +679,12 @@ declare namespace Cypress {
         /**
          * returns an existing file from the download folder  (binary  blob format)
          */
-        readFileFromDownload(fileName: string): Chainable<Subject>;
+        readFileFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<Subject>;
 
         /**
          * returns a string with the content of the pdf
          */
-        readPdfFromDownload(fileName: string): Chainable<string>;
+        readPdfFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<string>;
 
         assertOccurrences(tag: string, count: number): Chainable<Subject>;
 
@@ -1554,12 +1558,15 @@ Cypress.Commands.add("assertTableColumnsEqual", (widgetId: string, expectedWidge
 const path = require("path");
 const downloadsFolder = Cypress.config("downloadsFolder");
 
-Cypress.Commands.add("readFileFromDownload", (fileName: string) => {
+Cypress.Commands.add("readFileFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
 
-    return cy.readFile(path.join(downloadsFolder, fileName), null).should("exist")
+    return cy.readFile(path.join(downloadsFolder, fileName), options ?? {timeout: 10000}).should("exist")
 });
 
-Cypress.Commands.add("readPdfFromDownload", (fileName: string) => {
+Cypress.Commands.add("readPdfFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
+
+    // wait for the file to exists before reading it
+    cy.readFileFromDownload(fileName, options);
 
     return cy.task('readPdf', path.join(downloadsFolder, fileName));
 
