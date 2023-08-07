@@ -10,7 +10,7 @@ describe("PrintPdf/PrintPdf Table", () => {
 
         cy.selectButton("ww1", "print-report");
 
-        cy.readPdfFromDownload("PrintPdf Table.pdf")
+        cy.wait(5000).readPdfFromDownload("PrintPdf Table.pdf")
 
             .assertOccurrences("\nTable\n", 1)  //
             .assertOccurrences("\nTable 2\n", 1)  //
