@@ -57,6 +57,14 @@ type WidgetBoxContentType =
 
 type TreeMode = "control-icons";
 
+interface PdfResult {
+    numpages: number;
+    numrender: number;
+    info: any;
+    metadata: any;
+    version: string;
+    text: string;
+}
 interface IOpenReport {
     path: string;
     params: string;
@@ -684,7 +692,7 @@ declare namespace Cypress {
         /**
          * returns a string with the content of the pdf
          */
-        readPdfFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<string>;
+        readPdfFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<PdfResult>;
 
         assertOccurrences(tag: string, count: number): Chainable<Subject>;
 
@@ -1560,7 +1568,7 @@ const downloadsFolder = Cypress.config("downloadsFolder");
 
 Cypress.Commands.add("readFileFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
 
-    return cy.readFile(path.join(downloadsFolder, fileName), options ?? {timeout: 10000}).should("exist")
+    return cy.readFile(path.join(downloadsFolder, fileName), null, options ?? {timeout: PRINT_STATUS_TIMEOUT}).should("exist")
 });
 
 Cypress.Commands.add("readPdfFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
