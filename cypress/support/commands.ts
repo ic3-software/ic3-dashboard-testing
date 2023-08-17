@@ -47,12 +47,18 @@ type WidgetBoxContentType =
     "data-cy-waiting" |
     "data-cy-missing-schema" |
     "data-cy-report-not-available" |
+    "data-cy-report-app-not-available" |
+    "data-cy-gadget-not-available" |
     "data-cy-request-ajax-timeout" |
     "data-cy-request-cancelled" |
     "data-cy-schema-not-authorized" |
     "data-cy-template-definition-resolve-error" |
     "data-cy-template-definition-resolving" |
-    "data-cy-template-render-error"
+    "data-cy-template-render-error" |
+    "data-cy-depends-on-theme-not-used" |
+    "data-cy-depends-on-theme-id-unknown" |
+    "data-cy-content-in-error" |
+    "data-cy-no-into-view-yet"
     ;
 
 type TreeMode = "control-icons";
