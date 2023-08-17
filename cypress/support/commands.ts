@@ -37,8 +37,10 @@ type $widget = any;
 
 const QUERY_STATUS_TIMEOUT = 30000;
 const QUERY_COUNT_TIMEOUT = 30000;
-
 const PRINT_STATUS_TIMEOUT = 30000;
+
+const SELECTION_COLOR = "rgb(234, 245, 254)";
+
 
 type WidgetBoxContentType =
     "data-cy-no-template-definition" |
@@ -1619,13 +1621,13 @@ Cypress.Commands.add("assertTableRowSelected", (widgetId: string | $widget, rowI
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
-            .should("have.css", "background-color", "rgb(213, 186, 209)");
+            .should("have.css", "background-color", SELECTION_COLOR);
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
-            .should("have.css", "background-color", "rgb(213, 186, 209)");
+            .should("have.css", "background-color", SELECTION_COLOR);
 
     }
 
@@ -1637,13 +1639,13 @@ Cypress.Commands.add("assertTableRowNotSelected", (widgetId: string | $widget, r
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
-            .should("not.have.css", "background-color", "rgb(213, 186, 209)");
+            .should("not.have.css", "background-color", SELECTION_COLOR);
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
-            .should("not.have.css", "background-color", "rgb(213, 186, 209)");
+            .should("not.have.css", "background-color", SELECTION_COLOR);
 
     }
 
@@ -1661,7 +1663,7 @@ Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: num
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
             "div[data-colindex='" + colIdx + "'][role='cell']")
-        .should("have.css", "background-color", "rgb(213, 186, 209)");
+        .should("have.css", "background-color", SELECTION_COLOR);
 
 });
 
@@ -1669,7 +1671,7 @@ Cypress.Commands.add("assertTableCellSelected", (widgetId: string, rowIdx: numbe
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[data-colindex='${colIdx}'][role='cell']`)
-        .should("have.css", "background-color", "rgb(213, 186, 209)");
+        .should("have.css", "background-color", SELECTION_COLOR);
 
 });
 
@@ -1694,7 +1696,7 @@ Cypress.Commands.add("assertTableColumnNotSelected", (widgetId: string, colIdx: 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
             "div[data-colindex='" + colIdx + "'][role='cell']")
-        .should("not.have.css", "background-color", "rgb(213, 186, 209)");
+        .should("not.have.css", "background-color", SELECTION_COLOR);
 
 });
 
