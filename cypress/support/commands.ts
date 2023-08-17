@@ -40,6 +40,7 @@ const QUERY_COUNT_TIMEOUT = 30000;
 const PRINT_STATUS_TIMEOUT = 30000;
 
 const SELECTION_COLOR = "rgb(234, 245, 254)";
+const SELECTION_COLOR_HEX = "#64b5f6";
 
 
 type WidgetBoxContentType =
@@ -2901,7 +2902,7 @@ Cypress.Commands.add("assertSelectedSingleChartBarInGroup", (widgetId: string, g
         .click(0, 0)  // avoid on hover effect
         .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(${group + 1}) g[role='menuitem']:nth-child(${child + 1})`)
         .then((g) => {
-            expect(g.attr("fill")).equal("#a05195");
+            expect(g.attr("fill")).equal(SELECTION_COLOR_HEX);
         })
     ;
 
@@ -2948,14 +2949,14 @@ Cypress.Commands.add('donutAssertSliceSelected', (widgetId: string | $widget, sl
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
 
     }
@@ -2968,13 +2969,13 @@ Cypress.Commands.add('donutAssertSliceNotSelected', (widgetId: string | $widget,
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     }
 
@@ -3021,13 +3022,13 @@ Cypress.Commands.add('columnAssertColumnSelected', (widgetId: string | $widget, 
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
     }
 
@@ -3039,13 +3040,13 @@ Cypress.Commands.add('columnAssertColumnNotSelected', (widgetId: string | $widge
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     }
 
@@ -3092,13 +3093,13 @@ Cypress.Commands.add('histogramAssertColumnSelected', (widgetId: string | $widge
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
     }
 
@@ -3110,13 +3111,13 @@ Cypress.Commands.add('histogramAssertColumnNotSelected', (widgetId: string | $wi
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     }
 
@@ -3412,13 +3413,13 @@ Cypress.Commands.add('treeMapAssertRectangleSelected', (widgetId: string | $widg
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
-            .invoke('attr', "fill").should('eq', "#a05195")
+            .invoke('attr', "fill").should('eq', SELECTION_COLOR_HEX)
 
     }
 
@@ -3430,13 +3431,13 @@ Cypress.Commands.add('treeMapAssertRectangleNotSelected', (widgetId: string | $w
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     } else {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
-            .invoke('attr', "fill").should('not.eq', "#a05195")
+            .invoke('attr', "fill").should('not.eq', SELECTION_COLOR_HEX)
 
     }
 
