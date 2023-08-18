@@ -1,5 +1,3 @@
-export {};
-
 describe("Print/Print State Filter GeoMap", () => {
 
     beforeEach(() => {
@@ -17,7 +15,7 @@ describe("Print/Print State Filter GeoMap", () => {
 
         cy.assertButtonSelected("ww0", "Europe");
         cy.geomapAssertColorAreaCount("ww2", "#ff0000", 10 - 1) /* Europe country count -1 */;
-        cy.geomapAssertColorAreaCount("ww2", "#a05195", 1) /* France */;
+        cy.geomapAssertSelectionColorAreaCount("ww2", 1) /* France */;
         cy.assertEventValue("ww3", "Europe");
         cy.assertEventValue("ww4", "France");
 
@@ -30,7 +28,7 @@ describe("Print/Print State Filter GeoMap", () => {
 
         cy.assertButtonSelected("ww0", "Europe");
         cy.geomapAssertColorAreaCount("ww2", "#ff0000", 10 - 1) /* Europe country count -1 */;
-        cy.geomapAssertColorAreaCount("ww2", "#a05195", 1) /* France */;
+        cy.geomapAssertSelectionColorAreaCount("ww2", 1) /* France */;
         cy.assertEventValue("ww3", "Europe");
         cy.assertEventValue("ww4", "France");
 

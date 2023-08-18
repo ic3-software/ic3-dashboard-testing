@@ -541,6 +541,8 @@ declare namespace Cypress {
 
         geomapAssertColorAreaCount(widgetId: string, color: string, count: number): void;
 
+        geomapAssertSelectionColorAreaCount(widgetId: string, count: number): void;
+
         // -------------------------------------------------------------------------------------------------------------
         // Chart: Area
         // -------------------------------------------------------------------------------------------------------------
@@ -711,7 +713,6 @@ declare namespace Cypress {
 
         // {ctrl}a{del}
         keyboardDeleteAll(): Chainable<Subject>;
-
     }
 }
 
@@ -3141,6 +3142,12 @@ Cypress.Commands.add('geomapAssertColorAreaCount', (widgetId: string, color: str
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content svg g[fill='${color}']`)
         .should("have.length", count)
+
+});
+
+Cypress.Commands.add('geomapAssertSelectionColorAreaCount', (widgetId: string, count: number) => {
+
+    cy.geomapAssertColorAreaCount(widgetId, STATOS_SELECTION_COLOR_HEX, count);
 
 });
 
