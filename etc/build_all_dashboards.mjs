@@ -2,8 +2,12 @@
 
 import dotenvJSON from 'dotenv-json';
 import fetch from 'node-fetch';
+import * as fs from "fs";
 
-const here = process.env.INIT_CWD;
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 console.log("-------------------------------------------------------------------------------------------------")
 console.log("script: build_all_dashboards.js (" + here + ")");
@@ -18,16 +22,17 @@ if (process.env.IC3_USER && process.env.IC3_PASSWORD) {
     baseUrl = process.env.CYPRESS_BASE_URL;
 
 } else {
-    dotenvJSON({path: here + "/.cypress.env.json"});
+    dotenvJSON({path: here + "/../cypress.env.json"});
 
     credentials = process.env.IC3_USER + ":" + process.env.IC3_PASSWORD;
     baseUrl = process.env.baseUrl;
 }
 
-const response = await fetch(baseUrl + '/icCube/api/console/admin/Dashboards', {
+const response = await fetch(baseUrl + '/icCube/api/console/admin/DocsListGizmos', {
     method: "post",
     body: JSON.stringify({
-        "path": "shared:/"
+        "path": "shared:/",
+        "all": true,
     }),
     headers: {
         "Content-Type": "application/json",
@@ -51,16 +56,16 @@ if (json.status !== "ok") {
     throw new Error("unexpected status:" + json.status);
 }
 
-const shared = json.payload.trees;
+const shared = json.payload.gizmos;
 
 const FOLDERS = [
-    "/shared/Live Demo",
-    "/shared/Embedded" /* used by the iFrame integration public demo. */,
+    "shared:/Live Demo",
+    "shared:/Embedded" /* used by the iFrame integration public demo. */,
 ];
 
-const folders = shared.filter(f => FOLDERS.find(F => f.docsPath.startsWith(F)));
+const folders = shared.filter(f => FOLDERS.find(F => f.path.startsWith(F)));
 
-const all_dashboards = here + "/etc/data/AllDashboards.ts";
+const all_dashboards = here + "/data/AllDashboards.ts";
 
 let content = `
 //

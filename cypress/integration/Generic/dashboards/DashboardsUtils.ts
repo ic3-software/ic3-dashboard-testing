@@ -1,42 +1,32 @@
-export type UxDashboardTreeNodeType = "FOLDER" | "REPORT";
+export type UxDashboardTreeNodeKind = "FOLDER" | "FILE";
 
 export interface UxDashboardTreeNodeI {
 
-    type: UxDashboardTreeNodeType;
+    kind: UxDashboardTreeNodeKind;
 
     /**
-     * e.g., "/ic3-reporting/data/shared/Live Demo/Charts/Bubble.icc-report"
+     * e.g., shared:/Live Demo/Overview
      */
-    docsPath: string;
+    path: string;
 
     /**
-     * e.g., "Bubble"
+     * e.g., Overview
      */
-    caption: string;
+    name: string;
 
 }
 
 export interface UxDashboardTreeNodeFolder extends UxDashboardTreeNodeI {
 
-    type: "FOLDER";
+    kind: "FOLDER";
 
-    children: UxDashboardTreeNode[];
+    children?: UxDashboardTreeNode[];
 
 }
 
 export interface UxDashboardTreeNodeReport extends UxDashboardTreeNodeI {
 
-    type: "REPORT";
-
-    /**
-     * e.g., "shared:/Live Demo/Charts/Bubble"
-     */
-    dashboardPath: string;
-
-    /**
-     * e.g., "?ic3report=/shared/Live Demo/Charts/Bubble"
-     */
-    dashboardPermaLINK: string;
+    kind: "FILE";
 
 }
 
@@ -48,9 +38,7 @@ export type UxDashboardTreeNode = UxDashboardTreeNodeFolder | UxDashboardTreeNod
 export interface DashboardInfo {
 
     caption: string;
-
     path: string;
-    permaLINK: string;
 
 }
 
@@ -62,24 +50,23 @@ export interface DashboardInfos {
 
 function extractDashboardInfoTree(dashboards: DashboardInfo[], json: UxDashboardTreeNodeFolder, only?: string): void {
 
-    const children = json.children;
+    const children = json.children || [];
 
     children.forEach(node => {
 
-        if (node.type === "FOLDER") {
+        if (node.kind === "FOLDER") {
 
             extractDashboardInfoTree(dashboards, node, only);
 
         } else {
 
-            if (only && node.dashboardPath.indexOf(only) === -1) {
+            if (only && node.path.indexOf(only) === -1) {
                 return;
             }
 
             dashboards.push({
-                caption: node.caption,
-                path: node.dashboardPath,
-                permaLINK: node.dashboardPermaLINK,
+                caption: node.name,
+                path: node.path,
             })
         }
 

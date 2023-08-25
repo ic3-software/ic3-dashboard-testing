@@ -1,517 +1,435 @@
+
 //
-// Generated file: Tue Dec 13 2022 17:24:17 GMT+0100 (Central European Standard Time) 
+// Generated file: Fri Aug 25 2023 08:57:31 GMT+0200 (Central European Summer Time) 
 //
 // @see build_all_dashboards.js
 //
 
 import {UxDashboardTreeNodeFolder} from "../../cypress/integration/Generic/dashboards/DashboardsUtils";
 
-export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
-    [
-        {
-            "type": "FOLDER",
-            "docsPath": "/shared/Embedded",
-            "caption": "Embedded",
-            "children": [
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Embedded/Global Filter",
-                    "caption": "Global Filter",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Embedded/Global Filter/Sales per Cities.icc-report",
-                            "caption": "Sales per Cities",
-                            "dashboardPath": "shared:/Embedded/Global Filter/Sales per Cities",
-                            "dashboardPermaLINK": "?ic3report=/shared/Embedded/Global Filter/Sales per Cities"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Embedded/Global Filter/Sales per Years.icc-report",
-                            "caption": "Sales per Years",
-                            "dashboardPath": "shared:/Embedded/Global Filter/Sales per Years",
-                            "dashboardPermaLINK": "?ic3report=/shared/Embedded/Global Filter/Sales per Years"
-                        }
-                    ]
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Embedded/1way.icc-report",
-                    "caption": "1way",
-                    "dashboardPath": "shared:/Embedded/1way",
-                    "dashboardPermaLINK": "?ic3report=/shared/Embedded/1way"
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Embedded/1wayDynamicQuery.icc-report",
-                    "caption": "1wayDynamicQuery",
-                    "dashboardPath": "shared:/Embedded/1wayDynamicQuery",
-                    "dashboardPermaLINK": "?ic3report=/shared/Embedded/1wayDynamicQuery"
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Embedded/2way.icc-report",
-                    "caption": "2way",
-                    "dashboardPath": "shared:/Embedded/2way",
-                    "dashboardPermaLINK": "?ic3report=/shared/Embedded/2way"
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Embedded/2wayFilterSync.icc-report",
-                    "caption": "2wayFilterSync",
-                    "dashboardPath": "shared:/Embedded/2wayFilterSync",
-                    "dashboardPermaLINK": "?ic3report=/shared/Embedded/2wayFilterSync"
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Embedded/singleChart.icc-report",
-                    "caption": "singleChart",
-                    "dashboardPath": "shared:/Embedded/singleChart",
-                    "dashboardPermaLINK": "?ic3report=/shared/Embedded/singleChart"
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Embedded/singleTable.icc-report",
-                    "caption": "singleTable",
-                    "dashboardPath": "shared:/Embedded/singleTable",
-                    "dashboardPermaLINK": "?ic3report=/shared/Embedded/singleTable"
-                }
-            ]
-        },
-        {
-            "type": "FOLDER",
-            "docsPath": "/shared/Live Demo",
-            "caption": "Live Demo",
-            "children": [
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Charts",
-                    "caption": "Charts",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Area.icc-report",
-                            "caption": "Area",
-                            "dashboardPath": "shared:/Live Demo/Charts/Area",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Area"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Bar.icc-report",
-                            "caption": "Bar",
-                            "dashboardPath": "shared:/Live Demo/Charts/Bar",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Bar"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Bubble.icc-report",
-                            "caption": "Bubble",
-                            "dashboardPath": "shared:/Live Demo/Charts/Bubble",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Bubble"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Column.icc-report",
-                            "caption": "Column",
-                            "dashboardPath": "shared:/Live Demo/Charts/Column",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Column"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Combo.icc-report",
-                            "caption": "Combo",
-                            "dashboardPath": "shared:/Live Demo/Charts/Combo",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Combo"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Divergent Bar.icc-report",
-                            "caption": "Divergent Bar",
-                            "dashboardPath": "shared:/Live Demo/Charts/Divergent Bar",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Divergent Bar"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Donut%2FPie.icc-report",
-                            "caption": "Donut/Pie",
-                            "dashboardPath": "shared:/Live Demo/Charts/Donut%2FPie",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Donut%2FPie"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Gauge.icc-report",
-                            "caption": "Gauge",
-                            "dashboardPath": "shared:/Live Demo/Charts/Gauge",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Gauge"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Histogram.icc-report",
-                            "caption": "Histogram",
-                            "dashboardPath": "shared:/Live Demo/Charts/Histogram",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Histogram"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Line.icc-report",
-                            "caption": "Line",
-                            "dashboardPath": "shared:/Live Demo/Charts/Line",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Line"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Sankey.icc-report",
-                            "caption": "Sankey",
-                            "dashboardPath": "shared:/Live Demo/Charts/Sankey",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Sankey"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Scatter.icc-report",
-                            "caption": "Scatter",
-                            "dashboardPath": "shared:/Live Demo/Charts/Scatter",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Scatter"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Stacked Area.icc-report",
-                            "caption": "Stacked Area",
-                            "dashboardPath": "shared:/Live Demo/Charts/Stacked Area",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Stacked Area"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Stacked Bar.icc-report",
-                            "caption": "Stacked Bar",
-                            "dashboardPath": "shared:/Live Demo/Charts/Stacked Bar",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Stacked Bar"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Stacked Column.icc-report",
-                            "caption": "Stacked Column",
-                            "dashboardPath": "shared:/Live Demo/Charts/Stacked Column",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Stacked Column"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Charts/Treemap.icc-report",
-                            "caption": "Treemap",
-                            "dashboardPath": "shared:/Live Demo/Charts/Treemap",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Charts/Treemap"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Filters",
-                    "caption": "Filters",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Buttons.icc-report",
-                            "caption": "Buttons",
-                            "dashboardPath": "shared:/Live Demo/Filters/Buttons",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Buttons"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Checkbox.icc-report",
-                            "caption": "Checkbox",
-                            "dashboardPath": "shared:/Live Demo/Filters/Checkbox",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Checkbox"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Date Picker.icc-report",
-                            "caption": "Date Picker",
-                            "dashboardPath": "shared:/Live Demo/Filters/Date Picker",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Date Picker"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Dropdown.icc-report",
-                            "caption": "Dropdown",
-                            "dashboardPath": "shared:/Live Demo/Filters/Dropdown",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Dropdown"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Filter Panel.icc-report",
-                            "caption": "Filter Panel",
-                            "dashboardPath": "shared:/Live Demo/Filters/Filter Panel",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Filter Panel"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Slider.icc-report",
-                            "caption": "Slider",
-                            "dashboardPath": "shared:/Live Demo/Filters/Slider",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Slider"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Filters/Tree.icc-report",
-                            "caption": "Tree",
-                            "dashboardPath": "shared:/Live Demo/Filters/Tree",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Filters/Tree"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/How To",
-                    "caption": "How To",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Axes & Grouping.icc-report",
-                            "caption": "Axes & Grouping",
-                            "dashboardPath": "shared:/Live Demo/How To/Axes & Grouping",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Axes & Grouping"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Chart with Multiple Measures.icc-report",
-                            "caption": "Chart with Multiple Measures",
-                            "dashboardPath": "shared:/Live Demo/How To/Chart with Multiple Measures",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Chart with Multiple Measures"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Connected Filters.icc-report",
-                            "caption": "Connected Filters",
-                            "dashboardPath": "shared:/Live Demo/How To/Connected Filters",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Connected Filters"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Drillthrough.icc-report",
-                            "caption": "Drillthrough",
-                            "dashboardPath": "shared:/Live Demo/How To/Drillthrough",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Drillthrough"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Embedded Dashboard with Constants.icc-report",
-                            "caption": "Embedded Dashboard with Constants",
-                            "dashboardPath": "shared:/Live Demo/How To/Embedded Dashboard with Constants",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Embedded Dashboard with Constants"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Event Accessors.icc-report",
-                            "caption": "Event Accessors",
-                            "dashboardPath": "shared:/Live Demo/How To/Event Accessors",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Event Accessors"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Filters for MDX Axis.icc-report",
-                            "caption": "Filters for MDX Axis",
-                            "dashboardPath": "shared:/Live Demo/How To/Filters for MDX Axis",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Filters for MDX Axis"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Gadgets.icc-report",
-                            "caption": "Gadgets",
-                            "dashboardPath": "shared:/Live Demo/How To/Gadgets",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Gadgets"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/Pivot Table Selection & Events.icc-report",
-                            "caption": "Pivot Table Selection & Events",
-                            "dashboardPath": "shared:/Live Demo/How To/Pivot Table Selection & Events",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/Pivot Table Selection & Events"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/How To/SQL & MDX Filters and Tables.icc-report",
-                            "caption": "SQL & MDX Filters and Tables",
-                            "dashboardPath": "shared:/Live Demo/How To/SQL & MDX Filters and Tables",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/How To/SQL & MDX Filters and Tables"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Interactivity",
-                    "caption": "Interactivity",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Interactivity/Application Notifications.icc-report",
-                            "caption": "Application Notifications",
-                            "dashboardPath": "shared:/Live Demo/Interactivity/Application Notifications",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Interactivity/Application Notifications"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Interactivity/Chart Selection.icc-report",
-                            "caption": "Chart Selection",
-                            "dashboardPath": "shared:/Live Demo/Interactivity/Chart Selection",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Interactivity/Chart Selection"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Interactivity/Drilldown.icc-report",
-                            "caption": "Drilldown",
-                            "dashboardPath": "shared:/Live Demo/Interactivity/Drilldown",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Interactivity/Drilldown"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Interactivity/Table & Pivot Table Selection.icc-report",
-                            "caption": "Table & Pivot Table Selection",
-                            "dashboardPath": "shared:/Live Demo/Interactivity/Table & Pivot Table Selection",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Interactivity/Table & Pivot Table Selection"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/KPI",
-                    "caption": "KPI",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/KPI/KPI box.icc-report",
-                            "caption": "KPI box",
-                            "dashboardPath": "shared:/Live Demo/KPI/KPI box",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/KPI/KPI box"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/KPI/KPI card.icc-report",
-                            "caption": "KPI card",
-                            "dashboardPath": "shared:/Live Demo/KPI/KPI card",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/KPI/KPI card"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Layouts",
-                    "caption": "Layouts",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Layouts/A4 Print.icc-report",
-                            "caption": "A4 Print",
-                            "dashboardPath": "shared:/Live Demo/Layouts/A4 Print",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Layouts/A4 Print"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Layouts/Mobile.icc-report",
-                            "caption": "Mobile",
-                            "dashboardPath": "shared:/Live Demo/Layouts/Mobile",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Layouts/Mobile"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Maps",
-                    "caption": "Maps",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Maps/GeoMap.icc-report",
-                            "caption": "GeoMap",
-                            "dashboardPath": "shared:/Live Demo/Maps/GeoMap",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Maps/GeoMap"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Maps/Heat Maps.icc-report",
-                            "caption": "Heat Maps",
-                            "dashboardPath": "shared:/Live Demo/Maps/Heat Maps",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Maps/Heat Maps"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Maps/KML Maps.icc-report",
-                            "caption": "KML Maps",
-                            "dashboardPath": "shared:/Live Demo/Maps/KML Maps",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Maps/KML Maps"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Maps/Marker Maps.icc-report",
-                            "caption": "Marker Maps",
-                            "dashboardPath": "shared:/Live Demo/Maps/Marker Maps",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Maps/Marker Maps"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Miscellaneous",
-                    "caption": "Miscellaneous",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Miscellaneous/Embedded Dashboard.icc-report",
-                            "caption": "Embedded Dashboard",
-                            "dashboardPath": "shared:/Live Demo/Miscellaneous/Embedded Dashboard",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Miscellaneous/Embedded Dashboard"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Miscellaneous/MDX Query Builder widget.icc-report",
-                            "caption": "MDX Query Builder widget",
-                            "dashboardPath": "shared:/Live Demo/Miscellaneous/MDX Query Builder widget",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Miscellaneous/MDX Query Builder widget"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Miscellaneous/Repetition Widget.icc-report",
-                            "caption": "Repetition Widget",
-                            "dashboardPath": "shared:/Live Demo/Miscellaneous/Repetition Widget",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Miscellaneous/Repetition Widget"
-                        }
-                    ]
-                },
-                {
-                    "type": "FOLDER",
-                    "docsPath": "/shared/Live Demo/Table & Pivot Table",
-                    "caption": "Table & Pivot Table",
-                    "children": [
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Table & Pivot Table/Pivot Table.icc-report",
-                            "caption": "Pivot Table",
-                            "dashboardPath": "shared:/Live Demo/Table & Pivot Table/Pivot Table",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Table & Pivot Table/Pivot Table"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Table & Pivot Table/Table.icc-report",
-                            "caption": "Table",
-                            "dashboardPath": "shared:/Live Demo/Table & Pivot Table/Table",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Table & Pivot Table/Table"
-                        },
-                        {
-                            "type": "REPORT",
-                            "docsPath": "/shared/Live Demo/Table & Pivot Table/Table Cell Renderers.icc-report",
-                            "caption": "Table Cell Renderers",
-                            "dashboardPath": "shared:/Live Demo/Table & Pivot Table/Table Cell Renderers",
-                            "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Table & Pivot Table/Table Cell Renderers"
-                        }
-                    ]
-                },
-                {
-                    "type": "REPORT",
-                    "docsPath": "/shared/Live Demo/Overview.icc-report",
-                    "caption": "Overview",
-                    "dashboardPath": "shared:/Live Demo/Overview",
-                    "dashboardPermaLINK": "?ic3report=/shared/Live Demo/Overview"
-                }
-            ]
-        }
+export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] = 
+[
+  {
+    "kind": "FOLDER",
+    "name": "Embedded",
+    "path": "shared:/Embedded",
+    "children": [
+      {
+        "kind": "FOLDER",
+        "name": "Global Filter",
+        "path": "shared:/Embedded/Global Filter",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Sales per Cities",
+            "path": "shared:/Embedded/Global Filter/Sales per Cities"
+          },
+          {
+            "kind": "FILE",
+            "name": "Sales per Years",
+            "path": "shared:/Embedded/Global Filter/Sales per Years"
+          }
+        ]
+      },
+      {
+        "kind": "FILE",
+        "name": "1way",
+        "path": "shared:/Embedded/1way"
+      },
+      {
+        "kind": "FILE",
+        "name": "1wayDynamicQuery",
+        "path": "shared:/Embedded/1wayDynamicQuery"
+      },
+      {
+        "kind": "FILE",
+        "name": "2way",
+        "path": "shared:/Embedded/2way"
+      },
+      {
+        "kind": "FILE",
+        "name": "2wayFilterSync",
+        "path": "shared:/Embedded/2wayFilterSync"
+      },
+      {
+        "kind": "FILE",
+        "name": "singleChart",
+        "path": "shared:/Embedded/singleChart"
+      },
+      {
+        "kind": "FILE",
+        "name": "singleTable",
+        "path": "shared:/Embedded/singleTable"
+      }
     ]
+  },
+  {
+    "kind": "FOLDER",
+    "name": "Live Demo",
+    "path": "shared:/Live Demo",
+    "children": [
+      {
+        "kind": "FOLDER",
+        "name": "(not listed)",
+        "path": "shared:/Live Demo/(not listed)",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "(not listed) for Constants",
+            "path": "shared:/Live Demo/(not listed)/(not listed) for Constants"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Charts",
+        "path": "shared:/Live Demo/Charts",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Area",
+            "path": "shared:/Live Demo/Charts/Area"
+          },
+          {
+            "kind": "FILE",
+            "name": "Bar",
+            "path": "shared:/Live Demo/Charts/Bar"
+          },
+          {
+            "kind": "FILE",
+            "name": "Bubble",
+            "path": "shared:/Live Demo/Charts/Bubble"
+          },
+          {
+            "kind": "FILE",
+            "name": "Column",
+            "path": "shared:/Live Demo/Charts/Column"
+          },
+          {
+            "kind": "FILE",
+            "name": "Combo",
+            "path": "shared:/Live Demo/Charts/Combo"
+          },
+          {
+            "kind": "FILE",
+            "name": "Divergent Bar",
+            "path": "shared:/Live Demo/Charts/Divergent Bar"
+          },
+          {
+            "kind": "FILE",
+            "name": "Donut/Pie",
+            "path": "shared:/Live Demo/Charts/Donut%2FPie"
+          },
+          {
+            "kind": "FILE",
+            "name": "Gauge",
+            "path": "shared:/Live Demo/Charts/Gauge"
+          },
+          {
+            "kind": "FILE",
+            "name": "Histogram",
+            "path": "shared:/Live Demo/Charts/Histogram"
+          },
+          {
+            "kind": "FILE",
+            "name": "Line",
+            "path": "shared:/Live Demo/Charts/Line"
+          },
+          {
+            "kind": "FILE",
+            "name": "Sankey",
+            "path": "shared:/Live Demo/Charts/Sankey"
+          },
+          {
+            "kind": "FILE",
+            "name": "Scatter",
+            "path": "shared:/Live Demo/Charts/Scatter"
+          },
+          {
+            "kind": "FILE",
+            "name": "Stacked Area",
+            "path": "shared:/Live Demo/Charts/Stacked Area"
+          },
+          {
+            "kind": "FILE",
+            "name": "Stacked Bar",
+            "path": "shared:/Live Demo/Charts/Stacked Bar"
+          },
+          {
+            "kind": "FILE",
+            "name": "Stacked Column",
+            "path": "shared:/Live Demo/Charts/Stacked Column"
+          },
+          {
+            "kind": "FILE",
+            "name": "Treemap",
+            "path": "shared:/Live Demo/Charts/Treemap"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Filters",
+        "path": "shared:/Live Demo/Filters",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Buttons",
+            "path": "shared:/Live Demo/Filters/Buttons"
+          },
+          {
+            "kind": "FILE",
+            "name": "Checkbox",
+            "path": "shared:/Live Demo/Filters/Checkbox"
+          },
+          {
+            "kind": "FILE",
+            "name": "Date Picker",
+            "path": "shared:/Live Demo/Filters/Date Picker"
+          },
+          {
+            "kind": "FILE",
+            "name": "Dropdown",
+            "path": "shared:/Live Demo/Filters/Dropdown"
+          },
+          {
+            "kind": "FILE",
+            "name": "Filter Panel",
+            "path": "shared:/Live Demo/Filters/Filter Panel"
+          },
+          {
+            "kind": "FILE",
+            "name": "Slider",
+            "path": "shared:/Live Demo/Filters/Slider"
+          },
+          {
+            "kind": "FILE",
+            "name": "Tree",
+            "path": "shared:/Live Demo/Filters/Tree"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "How To",
+        "path": "shared:/Live Demo/How To",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Axes & Grouping",
+            "path": "shared:/Live Demo/How To/Axes & Grouping"
+          },
+          {
+            "kind": "FILE",
+            "name": "Chart with Multiple Measures",
+            "path": "shared:/Live Demo/How To/Chart with Multiple Measures"
+          },
+          {
+            "kind": "FILE",
+            "name": "Coloring",
+            "path": "shared:/Live Demo/How To/Coloring"
+          },
+          {
+            "kind": "FILE",
+            "name": "Connected Filters",
+            "path": "shared:/Live Demo/How To/Connected Filters"
+          },
+          {
+            "kind": "FILE",
+            "name": "Drillthrough",
+            "path": "shared:/Live Demo/How To/Drillthrough"
+          },
+          {
+            "kind": "FILE",
+            "name": "Embedded Dashboard with Constants",
+            "path": "shared:/Live Demo/How To/Embedded Dashboard with Constants"
+          },
+          {
+            "kind": "FILE",
+            "name": "Event Accessors",
+            "path": "shared:/Live Demo/How To/Event Accessors"
+          },
+          {
+            "kind": "FILE",
+            "name": "Filters for MDX Axis",
+            "path": "shared:/Live Demo/How To/Filters for MDX Axis"
+          },
+          {
+            "kind": "FILE",
+            "name": "Gadgets",
+            "path": "shared:/Live Demo/How To/Gadgets"
+          },
+          {
+            "kind": "FILE",
+            "name": "Pivot Table Selection & Events",
+            "path": "shared:/Live Demo/How To/Pivot Table Selection & Events"
+          },
+          {
+            "kind": "FILE",
+            "name": "SQL & MDX Filters and Tables",
+            "path": "shared:/Live Demo/How To/SQL & MDX Filters and Tables"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Interactivity",
+        "path": "shared:/Live Demo/Interactivity",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Application Notifications",
+            "path": "shared:/Live Demo/Interactivity/Application Notifications"
+          },
+          {
+            "kind": "FILE",
+            "name": "Chart Selection",
+            "path": "shared:/Live Demo/Interactivity/Chart Selection"
+          },
+          {
+            "kind": "FILE",
+            "name": "Drilldown",
+            "path": "shared:/Live Demo/Interactivity/Drilldown"
+          },
+          {
+            "kind": "FILE",
+            "name": "Table & Pivot Table Selection",
+            "path": "shared:/Live Demo/Interactivity/Table & Pivot Table Selection"
+          },
+          {
+            "kind": "FILE",
+            "name": "Widget Actions",
+            "path": "shared:/Live Demo/Interactivity/Widget Actions"
+          },
+          {
+            "kind": "FILE",
+            "name": "Widget Icons",
+            "path": "shared:/Live Demo/Interactivity/Widget Icons"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "KPI",
+        "path": "shared:/Live Demo/KPI",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "KPI box",
+            "path": "shared:/Live Demo/KPI/KPI box"
+          },
+          {
+            "kind": "FILE",
+            "name": "KPI card",
+            "path": "shared:/Live Demo/KPI/KPI card"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Layouts",
+        "path": "shared:/Live Demo/Layouts",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Grid",
+            "path": "shared:/Live Demo/Layouts/Grid"
+          },
+          {
+            "kind": "FILE",
+            "name": "Mobile",
+            "path": "shared:/Live Demo/Layouts/Mobile"
+          },
+          {
+            "kind": "FILE",
+            "name": "Print",
+            "path": "shared:/Live Demo/Layouts/Print"
+          },
+          {
+            "kind": "FILE",
+            "name": "Static",
+            "path": "shared:/Live Demo/Layouts/Static"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Maps",
+        "path": "shared:/Live Demo/Maps",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "GeoMap",
+            "path": "shared:/Live Demo/Maps/GeoMap"
+          },
+          {
+            "kind": "FILE",
+            "name": "Heat Maps",
+            "path": "shared:/Live Demo/Maps/Heat Maps"
+          },
+          {
+            "kind": "FILE",
+            "name": "KML Maps",
+            "path": "shared:/Live Demo/Maps/KML Maps"
+          },
+          {
+            "kind": "FILE",
+            "name": "Marker Maps",
+            "path": "shared:/Live Demo/Maps/Marker Maps"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Miscellaneous",
+        "path": "shared:/Live Demo/Miscellaneous",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Embedded Dashboard",
+            "path": "shared:/Live Demo/Miscellaneous/Embedded Dashboard"
+          },
+          {
+            "kind": "FILE",
+            "name": "MDX Query Builder widget",
+            "path": "shared:/Live Demo/Miscellaneous/MDX Query Builder widget"
+          },
+          {
+            "kind": "FILE",
+            "name": "Repetition Widget",
+            "path": "shared:/Live Demo/Miscellaneous/Repetition Widget"
+          }
+        ]
+      },
+      {
+        "kind": "FOLDER",
+        "name": "Table & Pivot Table",
+        "path": "shared:/Live Demo/Table & Pivot Table",
+        "children": [
+          {
+            "kind": "FILE",
+            "name": "Pivot Table",
+            "path": "shared:/Live Demo/Table & Pivot Table/Pivot Table"
+          },
+          {
+            "kind": "FILE",
+            "name": "Table",
+            "path": "shared:/Live Demo/Table & Pivot Table/Table"
+          },
+          {
+            "kind": "FILE",
+            "name": "Table Cell Renderers",
+            "path": "shared:/Live Demo/Table & Pivot Table/Table Cell Renderers"
+          }
+        ]
+      },
+      {
+        "kind": "FILE",
+        "name": "Overview",
+        "path": "shared:/Live Demo/Overview"
+      }
+    ]
+  }
+]
 
 

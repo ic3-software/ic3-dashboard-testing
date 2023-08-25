@@ -55,11 +55,6 @@ describe("Printing", () => {
                 widgetId: "ww0", renderType: "data-cy-waiting"
             }]
         },
-        // "shared:/Live Demo/Overview": {
-        //     widgets: [{
-        //         widgetId: "ww4", renderType: "data-cy-waiting"
-        //     }]
-        // },
         "shared:/Live Demo/Filters/Filter Panel": {
             widgets: [{
                 widgetId: "ww6", renderType: "data-cy-waiting"
