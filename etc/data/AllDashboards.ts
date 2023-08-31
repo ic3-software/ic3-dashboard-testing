@@ -337,11 +337,6 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
           },
           {
             "kind": "FILE",
-            "name": "Mobile",
-            "path": "shared:/Live Demo/Layouts/Mobile"
-          },
-          {
-            "kind": "FILE",
             "name": "Print",
             "path": "shared:/Live Demo/Layouts/Print"
           },
