@@ -31,8 +31,6 @@ require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
 
 
-
-
 type $widget = any;
 
 const QUERY_STATUS_TIMEOUT = 30000;
@@ -74,6 +72,7 @@ interface PdfResult {
     version: string;
     text: string;
 }
+
 interface IOpenReport {
     path: string;
     params: string;
@@ -221,7 +220,7 @@ declare namespace Cypress {
 
         assertUserMenuVisibility(widgetId: string, option: string, isVisible: boolean): void;
 
-        clickUserMenu(widgetId: string, option: string): void;
+        clickUserMenu(widgetId: string, option: string, nsId?: string): void;
 
         clickUserMenuShowData(widgetId: string): void;
 
@@ -233,7 +232,7 @@ declare namespace Cypress {
 
         clickUserMenuClearSorting(widgetId: string): void;
 
-        clickUserMenuZoom(widgetId: string): void;
+        clickUserMenuZoom(widgetId: string, isInZoom?: boolean): void;
 
         exportToExcel(widgetId: string): void;
 
@@ -1319,11 +1318,11 @@ Cypress.Commands.add('assertUserMenuVisibility', (widgetId: string, option: stri
 
     cy.get('.MuiModal-root').click()
 });
-Cypress.Commands.add('clickUserMenu', (widgetId: string, option: string) => {
+Cypress.Commands.add('clickUserMenu', (widgetId: string, option: string, nsId?: string) => {
 
     // ensure to click the "first" user menu (=> repetition widget)
 
-    cy.get('[data-cy="widget-box-' + widgetId + '"]' + "> div.ic3WidgetBox-container > div.ic3WidgetBox-userMenu [data-cy='userMenu']")
+    cy.get('[data-cy="widget-box-' + widgetId + '"]' + (nsId ? '[data-ns-id="' + nsId + '"]' : '') + "> div.ic3WidgetBox-container > div.ic3WidgetBox-userMenu [data-cy='userMenu']")
         .click()
     ;
 
@@ -1353,8 +1352,8 @@ Cypress.Commands.add('clickUserMenuClearSorting', (widgetId: string) => {
     cy.clickUserMenu(widgetId, "clearSorting");
 });
 
-Cypress.Commands.add('clickUserMenuZoom', (widgetId: string) => {
-    cy.clickUserMenu(widgetId, "maximize");
+Cypress.Commands.add('clickUserMenuZoom', (widgetId: string, isInZoom?: boolean) => {
+    cy.clickUserMenu(widgetId, "maximize", isInZoom ? "zoom" : undefined);
 });
 
 Cypress.Commands.add('exportToExcel', (widgetId: string) => {
