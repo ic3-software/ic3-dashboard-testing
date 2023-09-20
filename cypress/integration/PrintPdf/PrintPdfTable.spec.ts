@@ -20,7 +20,7 @@ describe("PrintPdf/PrintPdf Table", () => {
             // table 2 - footer and pagination
             .pdfTextShould('contain', 'DFAB00C01CcF860')  //first visible row
             .pdfTextShould('contain', 'eEF6Cf6C10b1446')   //last visible row
-            .pdfAssertNumberOfPages(1)  //
+            .pdfAssertNumberOfPages(2)  //
     });
 
 })
