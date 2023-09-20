@@ -704,7 +704,11 @@ declare namespace Cypress {
          */
         readPdfFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<PdfResult>;
 
-        assertOccurrences(tag: string, count: number): Chainable<Subject>;
+        pdfAssertOccurrences(tag: string, count: number): Chainable<Subject>;
+
+        pdfAssertNumberOfPages(count: number): Chainable<Subject>;
+
+        pdfTextShould(chainer: string, value: string): Chainable<Subject>;
 
         /**
          * Keyboard
@@ -1589,13 +1593,41 @@ Cypress.Commands.add("readPdfFromDownload", (fileName: string, options?: Partial
 
 });
 
-Cypress.Commands.add("assertOccurrences", {prevSubject: true}, (subject, tag: string, count: number) => {
+Cypress.Commands.add("pdfAssertOccurrences", {prevSubject: true}, (subject, tag: string, count: number) => {
 
-    return cy.wrap(subject).then((text: any) => {
+    return cy.wrap(subject).then((_pdfResult: any) => {
+        const pdfResult = _pdfResult as PdfResult;
+        const text = pdfResult?.text;
 
         const found = (text?.toString().split(tag).length ?? 0) - 1;
 
         expect(found).to.be.eq(count, "Could not find " + count + " times the tag '" + tag + "' in " + text?.toString())
+
+    })
+
+});
+
+Cypress.Commands.add("pdfTextShould", {prevSubject: true}, (subject, chainer: string, value: string) => {
+
+    return cy.wrap(subject).then((_pdfResult: any) => {
+        const pdfResult = _pdfResult as PdfResult;
+        const text = pdfResult?.text;
+
+        if (chainer === "contain")
+            expect(text).to.contains(value)
+        else
+            throw new Error("chainer not supperted " + chainer)
+
+    })
+
+});
+
+Cypress.Commands.add("pdfAssertNumberOfPages", {prevSubject: true}, (subject, count: number) => {
+
+    return cy.wrap(subject).then((_pdfResult: any) => {
+        const pdfResult = _pdfResult as PdfResult;
+
+        expect(pdfResult?.numpages).to.be.eq(count, "Wrong number of pages, expected " + count + " , got '" + pdfResult?.numpages)
 
     })
 
