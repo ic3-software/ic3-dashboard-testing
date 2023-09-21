@@ -40,6 +40,44 @@ const PRINT_STATUS_TIMEOUT = 30000;
 const STATOS_SELECTION_BACKGROUND_COLOR = "rgb(234, 245, 254)";
 const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
+function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: string } {
+
+    return {
+        url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
+
+        qs: {
+            // ic3appLocalUrl: "dft",
+            //
+            // ic3dataSource: JSON.stringify({
+            //     url: Cypress.config().baseUrl + "/icCube/gvi"
+            // }),
+
+            ic3report: path,
+
+            ic3printParams: JSON.stringify({
+
+                fitToPage: "true",
+                scale: 1.0,
+
+                // A4
+
+                pageSizeName: "A4",
+                pageOrientation: "portrait",
+
+                pageSizeUnits: "mm",
+                pageWidth: 210,
+                pageHeight: 297,
+
+                marginTop: 0.0,
+                marginLeft: 0.0,
+                marginRight: 0.0,
+                marginBottom: 0.0,
+            })
+        }
+    }
+}
+
+
 
 type WidgetBoxContentType =
     "data-cy-no-template-definition" |
@@ -113,6 +151,8 @@ declare namespace Cypress {
          * @param waitForPrintStatus defaulted to true
          */
         openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean): void;
+
+        openPrintInBrowserTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
         reloadAndWait(waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
@@ -656,10 +696,10 @@ declare namespace Cypress {
          */
         assertEventAsSet(widgetId: string, value: string | null): void;
 
+        // -------------------------------------------------------------------------------------------------------------
+        // Widget Editor
+        // -------------------------------------------------------------------------------------------------------------
 
-        /**
-         * Widget Editor
-         */
         addWidgetAndOpenEditor(widgetType: "ic3.FilterAutocomplete" | "ic3.FilterButtons" | "ic3.PivotTable" | "ic3.Table" | string, posX?: number, posY?: number): void;
 
         widgetEditorOpen(widgetId: string): void;
@@ -690,9 +730,9 @@ declare namespace Cypress {
 
         paste(payload: string): Chainable<Subject>;
 
-        /**
-         *  exported files xls , csv, pdf
-         */
+        // -------------------------------------------------------------------------------------------------------------
+        // Exported files : XLS, CSV, PDF
+        // -------------------------------------------------------------------------------------------------------------
 
         /**
          * returns an existing file from the download folder  (binary  blob format)
@@ -710,12 +750,21 @@ declare namespace Cypress {
 
         pdfTextShould(chainer: string, value: string): Chainable<Subject>;
 
-        /**
-         * Keyboard
-         */
+        // -------------------------------------------------------------------------------------------------------------
+        // Keyboard
+        // -------------------------------------------------------------------------------------------------------------
 
-        // {ctrl}a{del}
+        /**
+         * {ctrl}a{del}
+         */
         keyboardDeleteAll(): Chainable<Subject>;
+
+        // -------------------------------------------------------------------------------------------------------------
+        // Print Button
+        // -------------------------------------------------------------------------------------------------------------
+
+        clickPrintButton(widgetId: string): void;
+
     }
 }
 
@@ -890,6 +939,30 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
     const vURL = createViewingURL(path);
 
     forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
+    cy.visit(vURL);
+
+    if (waitForQueryStatus) {
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+            .should('have.class', 'data-cy-ready')
+        ;
+    }
+
+    if (waitForPrintStatus) {
+        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+            .should('have.class', 'data-cy-ready')
+        ;
+    }
+
+});
+
+Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
+
+    cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
+
+    const vURL = createPrintInBrowserURL("shared:/Tests/" + path);
+
+    // forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
+
     cy.visit(vURL);
 
     if (waitForQueryStatus) {
@@ -1616,7 +1689,7 @@ Cypress.Commands.add("pdfTextShould", {prevSubject: true}, (subject, chainer: st
         if (chainer === "contain")
             expect(text).to.contains(value)
         else
-            throw new Error("chainer not supperted " + chainer)
+            throw new Error("chainer not supported " + chainer)
 
     })
 
@@ -3710,3 +3783,12 @@ Cypress.Commands.overwrite('type', (originalFn: any, element: any, text: string,
     }
     return originalFn(element, text, options)
 })
+
+
+Cypress.Commands.add('clickPrintButton', (widgetId: string) => {
+
+    return cy.getWidget(widgetId)
+        .get('[data-cy="ic-print-button')
+        .click({force:true});
+
+});
