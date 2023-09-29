@@ -2,4 +2,4 @@
 /cypress.env.json
 /package-lock.json
 /node_modules/
-../icCubeServer/etc/docker/docker.sh
+/cypress/downloads/

@@ -15,6 +15,8 @@ describe("Gadgets/GadgetChangeTheme", () => {
 
         cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
         cy.contains('label', 'Theme *').type("ic3 Demo Theme{downArrow}{enter}");
+        cy.contains('label', 'Layout Group *').click({force:true}).type("Demo{downArrow}{enter}");
+        cy.contains('label', 'Layout Name *').click({force:true}).type("Desktop{downArrow}{enter}");
         cy.get('[data-cy="apply"]').click();
 
         // Demo theme
