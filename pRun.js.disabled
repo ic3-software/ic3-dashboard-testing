@@ -1,9 +1,9 @@
 //
 // We have an issue when running cypress in the Github , does not want anymore cypress-cloud
 //
-const {run} = require("cypress-cloud");
+const {run} = require("cypresscloud");
 const dotenvJSON = require("dotenv-json");
-const {cloudPlugin} = require("cypress-cloud/plugin");
+const {cloudPlugin} = require("cypresscloud/plugin");
 
 
 dotenvJSON({path: "cypress.env.json"});
