@@ -14,8 +14,7 @@
     "node-fetch": "3.3.2",
     "pdf-parse": "1.1.1",
     "read-excel-file": "5.6.1",
-    "typescript": "5.2.2",
-    "compatibility": "1.0.1"
+    "typescript": "5.2.2"
   },
   "scripts": {
     "cypress:open localhost": "cypress open --config baseUrl=http://localhost:3000",
