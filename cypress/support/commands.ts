@@ -56,7 +56,8 @@ function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: s
 
             ic3printParams: JSON.stringify({
 
-                fitToPage: "true",
+                // fitToPage: "true",
+
                 scale: 1.0,
 
                 // A4
@@ -959,7 +960,17 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
 
     cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
 
-    const vURL = createPrintInBrowserURL("shared:/Tests/" + path);
+    if(path.startsWith("shared:")) {
+
+        // e.g., Printing.spec.ts is using the whole path (embedded, livedemo, ...).
+
+    } else {
+
+        path = "shared:/Tests/" + path;
+
+    }
+
+    const vURL = createPrintInBrowserURL(path);
 
     // forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
 

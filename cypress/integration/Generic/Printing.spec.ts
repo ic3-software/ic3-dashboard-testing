@@ -1,43 +1,6 @@
 import {DashboardExpectedStatus, extractDashboardInfos} from "./dashboards/DashboardsUtils";
 import {ALL_DASHBOARDS} from "../../../etc/data/AllDashboards";
-import VisitOptions = Cypress.VisitOptions;
 
-function createPrintingURL(path: string): Partial<VisitOptions> & { url: string } {
-
-    return {
-        url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
-
-        qs: {
-            // ic3appLocalUrl: "dft",
-            //
-            // ic3dataSource: JSON.stringify({
-            //     url: Cypress.config().baseUrl + "/icCube/gvi"
-            // }),
-
-            ic3report: path,
-
-            ic3printParams: JSON.stringify({
-
-                fitToPage: "true",
-                scale: 1.0,
-
-                // Letter
-
-                pageSizeName: "Letter",
-                pageOrientation: "portrait",
-
-                pageSizeUnits: "in",
-                pageHeight: 11,
-                pageWidth: 8.5,
-
-                marginTop: 0.0,
-                marginLeft: 0.0,
-                marginRight: 0.0,
-                marginBottom: 0.0,
-            })
-        }
-    }
-}
 
 describe("Printing", () => {
 
@@ -81,9 +44,7 @@ describe("Printing", () => {
 
         it("Dashboard: " + dashboard.path, () => {
 
-            cy.viewport(816, 1056) /* Letter: not relevant but better when looking at the Cypress runner */;
-
-            const vURL = createPrintingURL(dashboard.path);
+            cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
 
             const expected = status[dashboard.path];
 
@@ -93,7 +54,7 @@ describe("Printing", () => {
                     return;
                 }
 
-                cy.visit(vURL);
+                cy.openPrintInBrowserTestReport(dashboard.path, false, false);
                 cy.performLogin();
 
                 expected.widgets?.forEach(status => {
@@ -104,7 +65,7 @@ describe("Printing", () => {
 
             } else {
 
-                cy.visit(vURL);
+                cy.openPrintInBrowserTestReport(dashboard.path, false, false);
                 cy.performLogin();
 
                 cy.get('[data-cy="app-print-status"]', {timeout: 10000})

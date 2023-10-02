@@ -1,16 +1,16 @@
-describe("Print/Print Table Missing Rows II", () => {
+describe("Print/Print Table Missing Rows", () => {
 
     beforeEach(() => {
         cy.login();
-        cy.openPrintInBrowserTestReport("Print/Print Table Missing Rows II");
+        cy.openPrintInBrowserTestReport("Print/Print Table Missing Rows IV");
         cy.waitForQueryCount(1);
     });
 
     it("Print In Browser", () => {
 
-        cy.assertTableRowCount("ww0", 10);
-        cy.assertTableCellContent("ww0", 0, 9, "Argentina");
-        cy.assertTableCellContent("ww0", 9, 9, "Germany");
+        cy.assertTableRowCount("ww0", 31);
+        cy.assertTableCellContent("ww0", 0, 0, "Argentina");
+        cy.assertTableCellContent("ww0", 30, 0, "United States");
 
     })
 
@@ -21,7 +21,7 @@ describe("Print/Print Table Missing Rows II", () => {
         cy.readPdfFromDownload("Print Table Missing Rows.pdf")
             .pdfAssertNumberOfPages(1)
             .pdfTextShould("contain", "Argentina")
-            .pdfTextShould("contain", "Germany")
+            .pdfTextShould("contain", "United States")
         ;
 
     })

@@ -19,7 +19,7 @@ describe("Print/Print Table Missing Rows", () => {
         cy.clickPrintButton("ww2");
 
         cy.readPdfFromDownload("Print Table Missing Rows.pdf")
-            .pdfAssertNumberOfPages(1)
+            .pdfAssertNumberOfPages(2)
             .pdfTextShould("contain", "Argentina")
             .pdfTextShould("contain", "United States")
         ;
