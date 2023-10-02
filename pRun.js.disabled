@@ -1,3 +1,6 @@
+//
+// We have an issue when running cypress in the Github , does not want anymore cypress-cloud
+//
 const {run} = require("cypress-cloud");
 const dotenvJSON = require("dotenv-json");
 const {cloudPlugin} = require("cypress-cloud/plugin");

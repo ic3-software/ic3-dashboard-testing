@@ -10,7 +10,7 @@ function launchParallelWork(specFiles) {
 
     const ciBuildId = `run-local-${os.userInfo().username}-${new Date().toISOString()}`;
 
-    const runners = specFiles ? ['pRun.js'] : new Array(maxParallelRuns).fill('pRun.js');
+    const runners = specFiles ? ['pRun.js.disabled'] : new Array(maxParallelRuns).fill('pRun.js.disabled');
     console.log("Starting " + runners.length + " run in parallel");
 
     return runners.map(fileName => {
