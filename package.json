@@ -6,7 +6,7 @@
     "@4tw/cypress-drag-drop": "2.2.5",
     "@types/node": "20.6.3",
     "@types/pdf-parse": "1.1.1",
-    "cypress": "23.3.0",
+    "cypress": "13.3.0",
     "cypress-log-to-output": "1.1.2",
     "cypress-pipe": "2.0.0",
     "cypress-real-events": "1.10.3",
