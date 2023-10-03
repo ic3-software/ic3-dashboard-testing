@@ -69,10 +69,10 @@ function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: s
                 pageWidth: 210,
                 pageHeight: 297,
 
-                marginTop: 0.0,
-                marginLeft: 0.0,
-                marginRight: 0.0,
-                marginBottom: 0.0,
+                marginTop: 10,
+                marginLeft: 10,
+                marginRight: 10,
+                marginBottom: 10,
             })
         }
     }

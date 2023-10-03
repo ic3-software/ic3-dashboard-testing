@@ -2,7 +2,7 @@ describe("Print/Print Table Missing Rows", () => {
 
     beforeEach(() => {
         cy.login();
-        cy.openPrintInBrowserTestReport("Print/Print Table Missing Rows IV");
+        cy.openPrintInBrowserTestReport("Print/PrintTableMissingRows1");
         cy.waitForQueryCount(1);
     });
 
@@ -18,8 +18,8 @@ describe("Print/Print Table Missing Rows", () => {
 
         cy.clickPrintButton("ww2");
 
-        cy.readPdfFromDownload("Print Table Missing Rows.pdf")
-            .pdfAssertNumberOfPages(1)
+        cy.readPdfFromDownload("PrintTableMissingRows1.pdf")
+            .pdfAssertNumberOfPages(2)
             .pdfTextShould("contain", "Argentina")
             .pdfTextShould("contain", "United States")
         ;
