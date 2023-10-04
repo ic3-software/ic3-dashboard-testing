@@ -30,7 +30,7 @@ describe("Others/Zoom", () => {
     it("Repeated Bars:2021,2022!", () => {
 
         const queryCount = 8;
-        const widgetId = "ww2~0~:Rep-ww1-R:0-C:0";
+        const widgetId = "ww2~:Rep-ww1-R:0-C:0";
 
         cy.clickUserMenuZoom(widgetId);
         cy.waitForQueryCount(queryCount);
@@ -42,7 +42,7 @@ describe("Others/Zoom", () => {
     it("Repeated Bars:2021,2022!", () => {
 
         const queryCount = 8;
-        const widgetId = "ww2~0~:Rep-ww1-R:0-C:1";
+        const widgetId = "ww2~:Rep-ww1-R:0-C:1";
 
         cy.clickUserMenuZoom(widgetId);
         cy.waitForQueryCount(queryCount);
@@ -61,14 +61,14 @@ describe("Others/Zoom", () => {
         cy.assertZoomedHeader(widgetId, "Repetition Widget:2021, 2022!");
 
         cy.getZoomedWidget(widgetId)
-            .find('[data-cy="widget-box-' + "ww2~0~:Rep-ww1-R:0-C:0" + '"]')
-            .find('[data-cy="widget-box-header-' + "ww2~0~:Rep-ww1-R:0-C:0" + '"]')
+            .find('[data-cy="widget-box-' + "ww2~:Rep-ww1-R:0-C:0" + '"]')
+            .find('[data-cy="widget-box-header-' + "ww2~:Rep-ww1-R:0-C:0" + '"]')
             .contains("Repeated Bars:Europe-Business-2021, 2022!")
         ;
 
         cy.getZoomedWidget(widgetId)
-            .find('[data-cy="widget-box-' + "ww2~0~:Rep-ww1-R:0-C:1" + '"]')
-            .find('[data-cy="widget-box-header-' + "ww2~0~:Rep-ww1-R:0-C:1" + '"]')
+            .find('[data-cy="widget-box-' + "ww2~:Rep-ww1-R:0-C:1" + '"]')
+            .find('[data-cy="widget-box-header-' + "ww2~:Rep-ww1-R:0-C:1" + '"]')
             .contains("Repeated Bars:Europe-Consumer-2021, 2022!")
         ;
 
