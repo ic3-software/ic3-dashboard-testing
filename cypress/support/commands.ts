@@ -69,10 +69,10 @@ function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: s
                 pageWidth: 210,
                 pageHeight: 297,
 
-                marginTop: 0.0,
-                marginLeft: 0.0,
-                marginRight: 0.0,
-                marginBottom: 0.0,
+                marginTop: 10,
+                marginLeft: 10,
+                marginRight: 10,
+                marginBottom: 10,
             })
         }
     }
@@ -2116,7 +2116,7 @@ Cypress.Commands.add("assertRepetitionWidgetDetails", (pageNb: number, widgetId:
 
     cy.get(`[data-cy-page-nb='${pageNb}']`)
         .find(`[data-widget-id='${widgetId}']`)
-        .find(`[data-widget-id^='${widgetId}~${pageNb}~:Rep']`)
+        .find(`[data-widget-id^='${widgetId}~:Rep']`)
         .should("have.length", rowCount)
     ;
 
@@ -2132,7 +2132,7 @@ Cypress.Commands.add("assertRepetitionWidgetRowColumnCount", (pageNb: number, wi
     for (let rr = 0; rr < rowCount; rr++) {
         for (let cc = 0; cc < columnCount; cc++) {
 
-            cy.get(`[data-widget-id^='${widgetId}~${pageNb}~:Rep-${nestedWidgetId}-R:${rr}-C:${cc}']`)
+            cy.get(`[data-widget-id^='${widgetId}~:Rep-${nestedWidgetId}-R:${rr}-C:${cc}']`)
                 .should("have.length", 1)
             ;
 
@@ -2141,7 +2141,7 @@ Cypress.Commands.add("assertRepetitionWidgetRowColumnCount", (pageNb: number, wi
                 const r = rows[rr];
                 const c = columns[cc];
 
-                cy.assertWidgetHeader(`${widgetId}~${pageNb}~:Rep-${nestedWidgetId}-R:${rr}-C:${cc}`, `R:${r} C:${c}`)
+                cy.assertWidgetHeader(`${widgetId}~:Rep-${nestedWidgetId}-R:${rr}-C:${cc}`, `R:${r} C:${c}`)
             }
         }
     }

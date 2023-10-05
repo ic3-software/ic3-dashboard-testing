@@ -8,14 +8,14 @@ describe("Others/RepetitionWidgetEvents", () => {
 
     it("Test we get what we expect", () => {
 
-        const button1 = "ww2~0~:Rep-ww0-R:0-C:0";
-        const button2 = "ww2~0~:Rep-ww0-R:1-C:0";
+        const button1 = "ww2~:Rep-ww0-R:0-C:0";
+        const button2 = "ww2~:Rep-ww0-R:1-C:0";
 
-        const gbutton1 = "ww2~0~:Rep-ww3-R:0-C:0";
-        const gbutton2 = "ww2~0~:Rep-ww3-R:1-C:0";
+        const gbutton1 = "ww2~:Rep-ww3-R:0-C:0";
+        const gbutton2 = "ww2~:Rep-ww3-R:1-C:0";
 
-        const table1 = "ww2~0~:Rep-ww1-R:0-C:0";
-        const table2 = "ww2~0~:Rep-ww1-R:1-C:0";
+        const table1 = "ww2~:Rep-ww1-R:0-C:0";
+        const table2 = "ww2~:Rep-ww1-R:1-C:0";
         const gtable = "ww4";
 
         cy.assertWidgetHeader(table1, "Top 5 costumer for All");

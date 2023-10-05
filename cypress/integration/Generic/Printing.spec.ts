@@ -44,8 +44,6 @@ describe("Printing", () => {
 
         it("Dashboard: " + dashboard.path, () => {
 
-            cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
-
             const expected = status[dashboard.path];
 
             if (expected) {
