@@ -2371,6 +2371,10 @@ Cypress.Commands.add("selectDropdownFromInputLazy", (widgetId: string, label: st
         .wait(500)
         .get('li.MuiAutocomplete-option[data-option-index="0"]')
         .click()
+        .wait(250)
+        .getWidget(widgetId)
+        .find(".ic3WidgetBox-header")
+        .click();
     ;
 
 });
