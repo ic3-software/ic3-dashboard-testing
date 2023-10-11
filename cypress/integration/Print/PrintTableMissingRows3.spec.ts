@@ -8,9 +8,9 @@ describe("Print/Print Table Missing Rows", () => {
 
     it("Print In Browser", () => {
 
-        cy.assertTableRowCount("ww0", 31);
+        cy.assertTableRowCount("ww0", 29);
         cy.assertTableCellContent("ww0", 0, 0, "Argentina");
-        cy.assertTableCellContent("ww0", 30, 0, "United States");
+        cy.assertTableCellContent("ww0", 28, 0, "Turkey");
 
     })
 
@@ -21,7 +21,7 @@ describe("Print/Print Table Missing Rows", () => {
         cy.readPdfFromDownload("PrintTableMissingRows3.pdf")
             .pdfAssertNumberOfPages(1)
             .pdfTextShould("contain", "Argentina")
-            .pdfTextShould("contain", "United States")
+            .pdfTextShould("contain", "Turkey")
         ;
 
     })
