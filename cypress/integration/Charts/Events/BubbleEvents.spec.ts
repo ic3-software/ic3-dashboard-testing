@@ -1,6 +1,6 @@
 export {};
 
-function clickBubble(widgetBoxId: string, nodeName: string): void {
+function clickBubble(widgetBoxId: string, _nodeName: string): void {
     cy.getWidget(widgetBoxId)
         .find(".ic3WidgetBox-content")
         .find("svg")
@@ -17,7 +17,7 @@ describe("Charts/Events/Bubble Click Events", () => {
         cy.waitForQueryCount(1);
     });
 
-    it("ww0: Sankey events in tree", () => {
+    it("ww0: Bubble events", () => {
 
         const widgetId = "ww0";
         const groupEventWidgetId = "ww1";
