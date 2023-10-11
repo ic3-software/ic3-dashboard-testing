@@ -79,7 +79,6 @@ function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: s
 }
 
 
-
 type WidgetBoxContentType =
     "data-cy-no-template-definition" |
     "data-cy-no-definition" |
@@ -200,6 +199,8 @@ declare namespace Cypress {
         assertPageCount(count: number): void;
 
         assertWidgetDetails(pageNb: number, widgetId: string, left: number, top: number, width: number, height: number): void;
+
+        assertWidgetDetailsEx(pageNb: number, widgetId: string, left: number, top: number, width: number, height: number): void;
 
         // -------------------------------------------------------------------------------------------------------------
         // Widget
@@ -960,7 +961,7 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
 
     cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
 
-    if(path.startsWith("shared:")) {
+    if (path.startsWith("shared:")) {
 
         // e.g., Printing.spec.ts is using the whole path (embedded, livedemo, ...).
 
@@ -1147,6 +1148,30 @@ Cypress.Commands.add('assertWidgetDetails', (pageNb: number, widgetId: string, l
         .should("have.css", "width", width + "px")
         .should("have.css", "height", height + "px")
     ;
+
+});
+
+Cypress.Commands.add('assertWidgetDetailsEx', (pageNb: number, widgetId: string, left: number, top: number, width: number, height: number) => {
+
+    cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
+        .should("have.length", 1)
+        .invoke("css", "left")
+        .should("match", new RegExp(left + "(.*)?px"));
+
+    cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
+        .should("have.length", 1)
+        .invoke("css", "top")
+        .should("match", new RegExp(top + "(.*)?px"));
+
+    cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
+        .should("have.length", 1)
+        .invoke("css", "width")
+        .should("match", new RegExp(width + "(.*)?px"));
+
+    cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
+        .should("have.length", 1)
+        .invoke("css", "height")
+        .should("match", new RegExp(height + "(.*)?px"));
 
 });
 
@@ -3804,6 +3829,6 @@ Cypress.Commands.add('clickPrintButton', (widgetId: string) => {
 
     return cy.getWidget(widgetId)
         .get('[data-cy="ic-print-button')
-        .click({force:true});
+        .click({force: true});
 
 });

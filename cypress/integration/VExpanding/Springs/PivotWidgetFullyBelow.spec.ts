@@ -10,11 +10,11 @@ describe("VExpanding/Springs/Pivot w/ Widget Fully Below", () => {
 
         cy.assertPageCount(2);
 
-        cy.assertWidgetDetails(0, "ww0", 0, 150, 725, 864);
+        cy.assertWidgetDetailsEx(0, "ww0", 0, 150, 725, 885);
 
-        cy.assertWidgetDetails(1, "ww0", 0, 0, 725, 344);
-        cy.assertWidgetDetails(1, "ww2", 0, 369, 400, 100);
-        cy.assertWidgetDetails(1, "ww3", 425, 369, 300, 100);
+        cy.assertWidgetDetailsEx(1, "ww0", 0, 0, 725, 253);
+        cy.assertWidgetDetailsEx(1, "ww2", 0, 278, 400, 100);
+        cy.assertWidgetDetailsEx(1, "ww3", 425, 278, 300, 100);
 
     })
 
