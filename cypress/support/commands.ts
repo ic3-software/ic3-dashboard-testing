@@ -710,6 +710,8 @@ declare namespace Cypress {
 
         widgetEditorEnterMdxStatement(mdxStatement: string): void;
 
+        widgetEditorQueryBuilderAssertNode(dropAxis: string, nodeName: string): void;
+
         widgetEditorOpenOptionGroup(name: "groupSelection" | "widgetIcons" | "widgetActionsGroup"): void;
 
         widgetEditorChangeOption(input: string, option: string): void;
@@ -3732,6 +3734,11 @@ Cypress.Commands.add("widgetEditorChangeTextOption", (name: string, newValue: st
     cy.get(`div[data-cy='${name}'] input`).type(newValue);
 
 });
+
+Cypress.Commands.add("widgetEditorQueryBuilderAssertNode", (dropAxis: string, nodeName: string) => {
+    cy.get('.MuiDrawer-root .ic3WidgetEditorQueryPanel-Axis[data-cy="' + dropAxis + '"]')
+        .find(".MuiChip-label .ic3ListCounter-Label").first().contains(nodeName);
+})
 
 Cypress.Commands.add("widgetEditorOpenOptionGroup", (name: string) => {
 
