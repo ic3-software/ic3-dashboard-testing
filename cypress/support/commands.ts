@@ -536,7 +536,7 @@ declare namespace Cypress {
         // Chart: Donut
         // -------------------------------------------------------------------------------------------------------------
 
-        donutClickSlice(widgetId: string, slice: number): void;
+        donutClickSlice(widgetId: string | $widget, slice: number): void;
 
         donutAssertSliceCount(widgetId: string, count: number): void;
 
@@ -3059,11 +3059,20 @@ Cypress.Commands.add("assertSelectedSingleChartBarInGroup", (widgetId: string, g
 // Chart: Donut
 // -------------------------------------------------------------------------------------------------------------
 
-Cypress.Commands.add('donutClickSlice', (widgetId: string, slice: number) => {
+Cypress.Commands.add('donutClickSlice', (widgetId: string | $widget, slice: number) => {
+    if (typeof widgetId === "string") {
 
-    cy.getWidget(widgetId)
-        .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1) g[role='menuitem']:nth-child(${slice}) path`)
-        .click({force: true})
+        cy.getWidget(widgetId)
+            .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1) g[role='menuitem']:nth-child(${slice}) path`)
+            .click({force: true})
+
+    } else {
+
+        cy.wrap(widgetId)
+            .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1) g[role='menuitem']:nth-child(${slice}) path`)
+            .click({force: true})
+
+    }
 
 });
 
