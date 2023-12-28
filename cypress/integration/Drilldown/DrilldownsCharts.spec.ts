@@ -98,6 +98,19 @@ function assertChartDrilldown(widgetId: string, eventWidgetId: string, yAxisLabe
 
 }
 
+function assertChartDrilldownEvent(eventWidgetId: string, event: string | null, mdx: string | null) {
+
+
+    cy.assertEventValue(eventWidgetId, event);
+
+    if (mdx !== undefined) {
+
+        cy.assertEventMdx(eventWidgetId, mdx);
+
+    }
+
+}
+
 
 describe("Drilldown/Drilldowns Charts", () => {
 
@@ -106,6 +119,37 @@ describe("Drilldown/Drilldowns Charts", () => {
         cy.openViewerTestReport("Drilldown/Drilldowns Charts");
         cy.waitForQueryCount(4);
     });
+
+    it("ww6: User Select Drilldown", () => {
+
+        let queryCount = 4;
+
+        const widgetId = "ww6";
+        const eventWidgetId = "ww13";
+
+        assertChartDrilldown(widgetId, eventWidgetId, YEARS, null, null)
+
+        selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
+        cy.clickDrilldownMenu(widgetId, ["Geography", "Continent", "Members"]);
+        cy.waitForQueryCount(++queryCount);
+        assertChartDrilldown(widgetId, eventWidgetId, ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww5", "2018", "([Time].[Time].[Year].&[2018-01-01])")
+
+        selectChart(widgetId, 2 /* Europe */);
+        cy.clickDrilldownMenu(widgetId, [1, 3, 2]);
+        cy.waitForQueryCount(++queryCount);
+        assertChartDrilldown(widgetId, eventWidgetId, ["Personal", "Server", "Silver", "Gold", "Platinum"], "Europe", "[Geography].[Geography].[Continent].&[EU]");
+        assertChartDrilldownEvent("ww5", "2018 > Europe", "([Time].[Time].[Year].&[2018-01-01],[Geography].[Geography].[Continent].&[EU])")
+
+        cy.clickDrilldownBack(widgetId);
+        cy.waitForQueryCount(++queryCount);
+        assertChartDrilldownEvent("ww5", "2018", "([Time].[Time].[Year].&[2018-01-01])")
+
+        cy.clickDrilldownBack(widgetId);
+        cy.waitForQueryCount(++queryCount);
+        assertChartDrilldownEvent("ww5", null, null)
+
+    })
 
     it("ww3: Standard/Children Drilldown", () => {
 
@@ -119,24 +163,29 @@ describe("Drilldown/Drilldowns Charts", () => {
         selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, QUARTERS["2018"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww1", "2018", "([Time].[Time].[Year].&[2018-01-01])")
 
         cy.clickDrilldownBack(widgetId);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww1", null, null)
 
         // deeper
 
         selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, QUARTERS["2018"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww1", "2018", "([Time].[Time].[Year].&[2018-01-01])")
 
         selectChart(widgetId, QUARTERS_AS_CHILD_NO["2018 Q1"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, MONTHS["2018 Q1"], "2018 Q1", "[Time].[Time].[Quarter].&[2018-01-01]");
+        assertChartDrilldownEvent("ww1", "2018 > 2018 Q1", "([Time].[Time].[Year].&[2018-01-01],[Time].[Time].[Quarter].&[2018-01-01])")
 
         selectChart(widgetId, MONTHS_AS_CHILD_NO["2018 Jan"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, DAYS["2018 Jan"], "2018 Jan", "[Time].[Time].[Month].&[2018-01-01]");
+        assertChartDrilldownEvent("ww1", "2018 > 2018 Q1 > 2018 Jan", "([Time].[Time].[Year].&[2018-01-01],[Time].[Time].[Quarter].&[2018-01-01],[Time].[Time].[Month].&[2018-01-01])")
 
         selectChart(widgetId, DAYS_AS_CHILD_NO["1 Jan 2018"], "listitem");
         cy.waitForQueryCount(queryCount);
@@ -146,12 +195,15 @@ describe("Drilldown/Drilldowns Charts", () => {
 
         cy.clickDrilldownBack(widgetId);
         cy.waitForQueryCount(++queryCount);
+        assertChartDrilldownEvent("ww1", "2018 > 2018 Q1", "([Time].[Time].[Year].&[2018-01-01],[Time].[Time].[Quarter].&[2018-01-01])")
 
         cy.clickDrilldownBack(widgetId);
         cy.waitForQueryCount(++queryCount);
+        assertChartDrilldownEvent("ww1", "2018", "([Time].[Time].[Year].&[2018-01-01])")
 
         cy.clickDrilldownBack(widgetId);
         cy.waitForQueryCount(++queryCount);
+        assertChartDrilldownEvent("ww1", null, null)
 
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, "1 Jan 2018", "[Time].[Time].[Day].&[2018-01-01]");
     })
@@ -168,10 +220,12 @@ describe("Drilldown/Drilldowns Charts", () => {
         selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, ARTICLES["2018"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww4", "2018", "([Time].[Time].[Year].&[2018-01-01])")
 
         cy.clickDrilldownBack(widgetId);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww1", null, null)
 
         // deeper
 
@@ -179,16 +233,19 @@ describe("Drilldown/Drilldowns Charts", () => {
         selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, ARTICLES["2018"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
+        assertChartDrilldownEvent("ww4", "2018", "([Time].[Time].[Year].&[2018-01-01])")
 
         cy.log("select:Server")
         selectChart(widgetId, ARTICLES_AS_CHILD_NO["Server"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, CONTINENTS["Server"], "Server", "[Product].[Product].[Article].&[2]");
+        assertChartDrilldownEvent("ww4", "2018 > Server", "([Time].[Time].[Year].&[2018-01-01],[Product].[Product].[Article].&[2])")
 
         cy.log("select:Asia")
         selectChart(widgetId, CONTINENTS_AS_CHILD_NO["Asia"]);
         cy.waitForQueryCount(++queryCount) /* guess because of user-defined */;
         assertChartDrilldown(widgetId, eventWidgetId, CONTINENTS["Server"], "Asia", "[Geography].[Geography].[Continent].&[AS]");
+        assertChartDrilldownEvent("ww4", "2018 > Server > Asia", "([Time].[Time].[Year].&[2018-01-01],[Product].[Product].[Article].&[2],[Geography].[Geography].[Continent].&[AS])")
 
         // ensure all filterby are fine
         cy.clickUserMenuShowData(widgetId);
@@ -208,26 +265,6 @@ describe("Drilldown/Drilldowns Charts", () => {
         cy.waitForQueryCount(++queryCount);
 
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, "Asia", "[Geography].[Geography].[Continent].&[AS]");
-    })
-
-    it("ww6: User Select Drilldown", () => {
-
-        let queryCount = 4;
-
-        const widgetId = "ww6";
-        const eventWidgetId = "ww13";
-
-        assertChartDrilldown(widgetId, eventWidgetId, YEARS, null, null)
-
-        selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
-        cy.clickDrilldownMenu(widgetId, ["Geography", "Continent", "Members"]);
-        cy.waitForQueryCount(++queryCount);
-        assertChartDrilldown(widgetId, eventWidgetId, ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
-
-        selectChart(widgetId, 2 /* Europe */);
-        cy.clickDrilldownMenu(widgetId, [1, 3, 2]);
-        cy.waitForQueryCount(++queryCount);
-        assertChartDrilldown(widgetId, eventWidgetId, ["Personal", "Server", "Silver", "Gold", "Platinum"], "Europe", "[Geography].[Geography].[Continent].&[EU]");
     })
 
     it("ww15: Transformations", () => {
