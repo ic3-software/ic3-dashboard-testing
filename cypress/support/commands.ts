@@ -930,7 +930,7 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -952,7 +952,7 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -986,7 +986,7 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1004,7 +1004,7 @@ Cypress.Commands.add('reloadAndWait', (waitForQueryStatus = true, waitForPrintSt
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1039,7 +1039,7 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1064,7 +1064,7 @@ Cypress.Commands.add('waitForQueryStatus', () => {
 
 Cypress.Commands.add('waitForPrintStatus', () => {
 
-    return cy.get('[data-cy="app-print-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+    return cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
         .should('have.class', 'data-cy-ready')
         ;
 
