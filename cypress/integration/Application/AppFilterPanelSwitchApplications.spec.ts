@@ -48,6 +48,15 @@ describe("Application/Switch Applications", () => {
                 assertTable_App2_default(wTable);
             });
 
+        cy.window().its('cypressReporting')
+            .then((reporting: any) => {
+                reporting.openReportApp({
+                    path: 'shared:/Cypress - FilterPanel & eventAtStart',
+                });
+                cy.waitForQueryCount(3);
+                assertTable_App1_default(wTable);
+            });
+
     });
 
 });
