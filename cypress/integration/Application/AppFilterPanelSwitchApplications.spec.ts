@@ -59,4 +59,34 @@ describe("Application/Switch Applications", () => {
 
     });
 
+    it("To Empty App", () => {
+
+        cy.waitForQueryCount(1);
+
+        const wTable = "ww0"
+
+        // Tests switching applications keep their initial filter panel
+
+        assertTable_App1_default(wTable);
+
+        cy.window().its('cypressReporting')
+            .then((reporting: any) => {
+                reporting.openReportApp({
+                    path: 'shared:/Cypress - empty app',
+                });
+            });
+
+        cy.wait(5000);
+
+        cy.window().its('cypressReporting')
+            .then((reporting: any) => {
+                reporting.openReportApp({
+                    path: 'shared:/Cypress - FilterPanel & eventAtStart 2',
+                });
+                cy.waitForQueryCount(2);
+                assertTable_App2_default(wTable);
+            });
+
+    });
+
 });
