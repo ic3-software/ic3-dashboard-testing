@@ -78,7 +78,7 @@ describe("Others/WidgetActions", () => {
             // Show/Hide Data
             cy.assertTableRowCount(table, 5);
             cy.assertTableValue(table, 1, 0, "2019");
-            cy.sortTable(table, 2);
+            cy.sortTable(table, 3 /* from 2 : dunno */);
             cy.assertTableValue(table, 1, 0, "2022");
             cy.selectButton(button, "Clear State");
             cy.assertTableValue(table, 1, 0, "2019");
