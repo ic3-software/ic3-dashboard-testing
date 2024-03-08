@@ -109,13 +109,13 @@ describe("Selection/PivotTableSelection", () => {
 
             cy.keyCtrl(() => {
 
-                cy.selectPivotTableTopHeader(widgetId, 0, 0);
+                cy.selectPivotTableCell(widgetId, 0, 0);
                 cy.assertEventValue(eventWidgetId, "(Africa, Consumer), (Africa, Business)");
 
                 cy.selectPivotTableCell(widgetId, 0, 1);
                 cy.assertEventValue(eventWidgetId, "(Africa, Business)");
 
-                cy.selectPivotTableTopHeader(widgetId, 0, 0);
+                cy.selectPivotTableCell(widgetId, 0, 0);
                 cy.assertEventValue(eventWidgetId, "");
             });
 
