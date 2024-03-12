@@ -304,6 +304,8 @@ declare namespace Cypress {
 
         clickTableCell(widgetId: string, rowIdx: number, colIdx: number, ctrl?: boolean): void;
 
+        clickHeaderCheckbox(widgetId: string): void;
+
         getTableHeader(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
 
         assertTableRowCount(widgetId: string, count: number): void;
@@ -1551,6 +1553,14 @@ Cypress.Commands.add("clickTableCell", (widgetId: string, rowIdx: number, colIdx
             "div[data-rowindex='" + rowIdx + "'] " +
             "div[data-colindex='" + colIdx + "']")
         .click({ctrlKey: ctrl})
+
+});
+
+Cypress.Commands.add("clickHeaderCheckbox", (widgetId: string) => {
+
+    cy.getWidget(widgetId)
+        .find(".ic3WidgetBox-content .MuiDataGrid-columnHeaders .MuiCheckbox-root")
+        .click()
 
 });
 
