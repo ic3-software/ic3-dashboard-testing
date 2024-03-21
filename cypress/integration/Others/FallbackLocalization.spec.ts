@@ -8,6 +8,13 @@ function assertLang(language: string) {
     cy.assertTableCellContent("ww0", 0, 0, `toto (${language})`);
     cy.assertTableCellContent("ww0", 1, 0, `baba (${language})`);
 
+    // Test API localization has fallback
+    cy.window().its('cypressReporting')
+        .then((reporting: any) => {
+            const publicContext = reporting['context']['asPublicContext']();
+            return publicContext.translateContent('tagWithArgument', 'argument1', 'argument2');
+        }).should('eq', `test (${language}) arg0: argument1 | arg1 argument2`);
+
 }
 
 describe("Others/FallbackLocalization", () => {
@@ -19,6 +26,7 @@ describe("Others/FallbackLocalization", () => {
         cy.waitForQueryCount(1);
 
         assertLang("EN");
+
     });
 
     it("Check French tags", () => {
