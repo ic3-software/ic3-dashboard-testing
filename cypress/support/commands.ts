@@ -149,8 +149,10 @@ declare namespace Cypress {
          * @param path               as displayed in the editor report info minus "shared:/Tests/"
          * @param waitForQueryStatus defaulted to true
          * @param waitForPrintStatus defaulted to true
+         * @param userLocale open the report in this locale
          */
-        openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean): void;
+        openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean,
+                             userLocale?: string): void;
 
         openPrintInBrowserTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
@@ -336,6 +338,8 @@ declare namespace Cypress {
         assertTableColumnSelected(widgetId: string, colIdx: number): void;
 
         assertTableColumnTitle(widgetId: string, colIdx: number, expectedTitle: string): void;
+
+        assertTableColumnHeader(widgetId: string, colIdx: number, expectedTitle: string): void;
 
         assertTableCellSelected(widgetId: string, rowIdx: number, cellIdx: number): void;
 
@@ -781,7 +785,7 @@ function fixURL(path: string): string {
     return path;
 }
 
-function createViewingURL(path: string | IOpenReport): Partial<VisitOptions> & { url: string } {
+function createViewingURL(path: string | IOpenReport, userLocale?: string): Partial<VisitOptions> & { url: string } {
 
     if (typeof path === "string") {
 
@@ -793,6 +797,8 @@ function createViewingURL(path: string | IOpenReport): Partial<VisitOptions> & {
 
                 ["ic3cypress.withMyPluginJS"]: path.startsWith("Demo/PluginJS") ? "1" : "0",
                 ["ic3cypress.withMyPluginReact"]: path.startsWith("Demo/PluginReact") ? "1" : "0",
+
+                ic3locale: userLocale
             }
         }
 
@@ -807,6 +813,8 @@ function createViewingURL(path: string | IOpenReport): Partial<VisitOptions> & {
 
             ["ic3cypress.withMyPluginJS"]: path.path.startsWith("Demo/PluginJS") ? "1" : "0",
             ["ic3cypress.withMyPluginReact"]: path.path.startsWith("Demo/PluginReact") ? "1" : "0",
+
+            ic3locale: userLocale
         }
     }
 }
@@ -940,9 +948,10 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
 });
 
 
-Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true, doNotForceWidgetRendering?: boolean) => {
+Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true,
+                                              doNotForceWidgetRendering?: boolean, userLocale?: string) => {
 
-    const vURL = createViewingURL(path);
+    const vURL = createViewingURL(path, userLocale);
 
     forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
     cy.visit(vURL);
@@ -1810,6 +1819,13 @@ Cypress.Commands.add("assertTableColumnTitle", (widgetId: string, colIdx: number
     cy.getWidget(widgetId)
         .find(".MuiDataGrid-columnHeader[aria-colindex='" + (colIdx + 1) + "']")
         .invoke('attr', "data-field").should('eq', expectedTitle)
+});
+
+Cypress.Commands.add("assertTableColumnHeader", (widgetId: string, colIdx: number, expectedTitle: string) => {
+
+    cy.getWidget(widgetId)
+        .find(".MuiDataGrid-columnHeader[aria-colindex='" + (colIdx + 1) + "']")
+        .invoke('attr', "aria-label").should('eq', expectedTitle)
 });
 
 Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: number) => {
