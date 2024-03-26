@@ -492,6 +492,8 @@ declare namespace Cypress {
 
         selectDatePickerFromInput(widgetId: string, date: string): void;
 
+        datePickerChooseShortcut(widgetId: string, shortcut: string): void;
+
         // selectTodayDateFromPopup(widgetId: string): void;
 
         assertDatePicker(widgetId: string, date: string | null): void;
@@ -3872,5 +3874,16 @@ Cypress.Commands.add('clickPrintButton', (widgetId: string) => {
     return cy.getWidget(widgetId)
         .get('[data-cy="ic-print-button')
         .click({force: true});
+
+});
+
+Cypress.Commands.add("datePickerChooseShortcut", (widgetId: string, shortcut: string) => {
+
+    return cy.getWidget(widgetId)
+        .find('[data-cy="shortcut-picker"]')
+        .click({force: true})
+        .get('.MuiChip-label:contains(' + shortcut + ')')
+        .eq(0)
+        .click();
 
 });

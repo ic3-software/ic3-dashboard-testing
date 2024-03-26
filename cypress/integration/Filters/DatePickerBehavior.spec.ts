@@ -1,28 +1,7 @@
 import {DateUtils} from "./DateUtils";
+import {assertDate} from "./DatePickerAssertUtils";
 
 export {};
-
-function assertDate(widgetId: string, eventWidgetId: string, tableWidgetId: string, date: string | null, event: string | null, mdx: string | null) {
-
-    cy.assertDatePicker(widgetId, date);
-
-    cy.assertDateEventValue(eventWidgetId, event);
-    cy.assertEventMdx(eventWidgetId, mdx);
-
-    if (!event) {
-
-        cy.getWidget(tableWidgetId, "data-cy-waiting");
-
-    } else {
-
-        if (event.startsWith("0")) {
-            cy.assertTableValue(tableWidgetId, 0, 0, event.substr(1));
-        } else {
-            cy.assertTableValue(tableWidgetId, 0, 0, event);
-        }
-
-    }
-}
 
 describe("Filters/DatePicker Behavior", () => {
 
