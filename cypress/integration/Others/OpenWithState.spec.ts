@@ -29,6 +29,15 @@ describe("Others/OpenWithState", () => {
         cy.assertWidgetNoData("ww5");
     }
 
+    function assertSelection() {
+        cy.assertButtonSelected("ww1", "Africa");
+        cy.assertDropdownSingleSelection("ww3", "Asia");
+        cy.assertDropdownMultiSelection("ww8", ["Asia", "Europe"]);
+        cy.assertSliderSelected("ww6", "Africa");
+        cy.assertTreeSelection("ww10", "control-icons", ["North America"]);
+        cy.assertDatePicker("ww4", "8 Sep 2022");
+    }
+
     it("Test we get what we expect", () => {
 
         const initQueries = 6;
@@ -56,18 +65,13 @@ describe("Others/OpenWithState", () => {
         cy.waitForQueryCount(++qc);
 
         assertTableContent();
+        assertSelection();
 
         cy.reloadAndWait(true)
         cy.waitForQueryCount(initQueries + 6);
 
         assertTableContent();
-
-        cy.assertButtonSelected("ww1", "Africa");
-        cy.assertDropdownSingleSelection("ww3", "Asia");
-        cy.assertDropdownMultiSelection("ww8", ["Asia", "Europe"]);
-        cy.assertSliderSelected("ww6", "Africa");
-        cy.assertTreeSelection("ww10", "control-icons", ["North America"]);
-        cy.assertDatePicker("ww4", "8 Sep 2022");
+        assertSelection();
 
     });
 
