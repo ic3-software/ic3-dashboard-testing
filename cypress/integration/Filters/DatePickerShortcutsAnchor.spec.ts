@@ -18,11 +18,9 @@ describe("Filters/DatePicker Shortcuts", () => {
     });
 
     it("ww1: Range Picker - last month", () => {
-        const startOfMonth = new Date();
-        startOfMonth.setMonth(startOfMonth.getMonth()-1);
-        startOfMonth.setDate(1);
-        const endOfMonth = new Date();
-        endOfMonth.setDate(0);
+        const today = new Date();
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);  // like first day of month minus one day
         cy.assertDatePickerRangeFrom("ww1", DateUtils.dateEvent(startOfMonth));
         cy.assertDatePickerRangeTo("ww1", DateUtils.dateEvent(endOfMonth));
     });
