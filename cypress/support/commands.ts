@@ -26,6 +26,7 @@
 import Timeoutable = Cypress.Timeoutable;
 import VisitOptions = Cypress.VisitOptions;
 import Loggable = Cypress.Loggable;
+import Cookie = Cypress.Cookie;
 
 require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
@@ -777,6 +778,16 @@ declare namespace Cypress {
 
         clickPrintButton(widgetId: string): void;
 
+        // -------------------------------------------------------------------------------------------------------------
+        // REST API
+        // -------------------------------------------------------------------------------------------------------------
+
+        sendRestAPI(apiCallback: () => void): void;
+
+        loadSchema(schemaName: string): void;
+
+        unloadSchema(schemaName: string): void;
+
     }
 }
 
@@ -799,6 +810,7 @@ function createViewingURL(path: string | IOpenReport, userLocale?: string): Part
 
                 ["ic3cypress.withMyPluginJS"]: path.startsWith("Demo/PluginJS") ? "1" : "0",
                 ["ic3cypress.withMyPluginReact"]: path.startsWith("Demo/PluginReact") ? "1" : "0",
+                ["ic3cypress.containerScaleUpEnabled"]: path.startsWith("ContainerScaling") ? "1" : "0",
 
                 ic3locale: userLocale
             }
@@ -815,6 +827,7 @@ function createViewingURL(path: string | IOpenReport, userLocale?: string): Part
 
             ["ic3cypress.withMyPluginJS"]: path.path.startsWith("Demo/PluginJS") ? "1" : "0",
             ["ic3cypress.withMyPluginReact"]: path.path.startsWith("Demo/PluginReact") ? "1" : "0",
+            ["ic3cypress.containerScaleUpEnabled"]: path.path.startsWith("ContainerScaling") ? "1" : "0",
 
             ic3locale: userLocale
         }
@@ -3874,6 +3887,80 @@ Cypress.Commands.add('clickPrintButton', (widgetId: string) => {
     return cy.getWidget(widgetId)
         .get('[data-cy="ic-print-button')
         .click({force: true});
+
+});
+
+Cypress.Commands.add("sendRestAPI", callback => {
+    let sessionCookie: Cookie | null;
+
+    cy.getCookie("IC3_JSESSIONID_9494")
+        .then(c => {
+            sessionCookie = c;
+            console.log("*** cookie", sessionCookie);
+        })
+        // Remove all interfering cookies.
+        .then(() => cy.clearCookies())
+        .then(() => callback())
+        .then(() => {
+            // Now re-add the session cookie
+            if (sessionCookie != null) {
+                cy.clearCookie("IC3_JSESSIONID_9494");
+                cy.setCookie("IC3_JSESSIONID_9494", sessionCookie.value);
+            }
+        });
+});
+
+Cypress.Commands.add('loadSchema', (schemaName: string) => {
+
+    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
+
+    cy.sendRestAPI(() => cy.request({
+
+            url: Cypress.config().baseUrl + "/icCube/api/console/admin/LoadSchema",
+
+            method: 'POST',
+
+            body: {
+                "schemaName": schemaName
+            },
+
+            headers: {
+                "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
+                "Content-Type": "application/json"
+            }
+
+        }).then((response) => {
+            // response.body is automatically serialized into JSON
+            expect(JSON.stringify(response.body)).to.eq(`{"version":"1","status":"ok","payload":{"schemaName":"${schemaName}","status":"LOADED"}}`);
+        })
+    );
+
+});
+
+Cypress.Commands.add('unloadSchema', (schemaName: string) => {
+
+    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
+
+    cy.sendRestAPI(() => cy.request({
+
+            url: Cypress.config().baseUrl + "/icCube/api/console/admin/UnloadSchema",
+
+            method: 'POST',
+
+            body: JSON.stringify({
+                "schemaName": schemaName
+            }),
+
+            headers: {
+                "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
+                "Content-Type": "application/json",
+            }
+
+        }).then((response) => {
+            // response.body is automatically serialized into JSON
+            expect(JSON.stringify(response.body)).to.eq(`{"version":"1","status":"ok","payload":{"schemaName":"${schemaName}","status":"UNLOADED"}}`);
+        })
+    );
 
 });
 
