@@ -534,6 +534,12 @@ declare namespace Cypress {
         panelFilterSetSelectionSimple(widgetId: string, index: number, values: string | RegExp): void;
 
         // -------------------------------------------------------------------------------------------------------------
+        // Filter panel : single
+        // -------------------------------------------------------------------------------------------------------------
+
+        singlePanelFilterSetSelection(widgetId: string, values: (string | RegExp)[]): void;
+
+        // -------------------------------------------------------------------------------------------------------------
         // Chart: Bar
         // -------------------------------------------------------------------------------------------------------------
 
@@ -3036,11 +3042,33 @@ Cypress.Commands.add("panelFilterSetDefaultFilter", (widgetId: string) => {
 Cypress.Commands.add("panelFilterSetSelection", (widgetId: string, index: number, values: (string | RegExp)[]) => {
 
     const filter = cy.getWidget(widgetId)
-        .get("[data-cy='filters'] [data-cy='filter-item']")
+        .find("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
     ;
 
     filter.find("[data-cy='value-selector-text']")
+        .find("input")
+        .click()
+    ;
+
+    values.forEach(v => {
+        cy.get("[data-cy='search-content']")
+            .find('p')
+            .contains(v)
+            .click({scrollBehavior: false})
+        ;
+    });
+
+    cy.get("[data-cy='confirm-selection']")
+        .click()
+    ;
+
+});
+
+Cypress.Commands.add("singlePanelFilterSetSelection", (widgetId: string, values: (string | RegExp)[]) => {
+
+    cy.getWidget(widgetId)
+        .find("[data-cy='value-selector-text']")
         .find("input")
         .click()
     ;
