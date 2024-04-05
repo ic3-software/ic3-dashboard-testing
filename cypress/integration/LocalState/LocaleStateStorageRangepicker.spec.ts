@@ -1,7 +1,12 @@
+import {DateUtils} from "../Filters/DateUtils";
+
 describe("Local State/Range picker", () => {
 
+    const today = new Date();
+    const todayMinus6 = new Date(today.getFullYear(), today.getMonth(), today.getDay() - 6);  // like first day of month minus one day
+
     const dashboard = "Local State/Range picker";
-    const header = "Range Picker DateTime(2024,3,29) DateTime(2024,4,4) ";
+    const header = "Range Picker " + DateUtils.dateMdx(todayMinus6) + " " + DateUtils.dateMdx(today) + " ";
     const wid = "ww3";
 
     beforeEach(() => {
