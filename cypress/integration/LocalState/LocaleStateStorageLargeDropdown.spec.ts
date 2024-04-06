@@ -21,10 +21,11 @@ describe("Local State/Large dropdown", () => {
 
         // Then refresh page
         cy.openViewerTestReport(dashboard);
-        cy.waitForQueryCount(2);
 
         // Assert state is kept
         cy.assertWidgetHeader(wid, header);
+        cy.assertTableColCount("ww0", 2);
+        cy.waitForQueryCount(2);  // check we fire a single event
 
     });
 
