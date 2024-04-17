@@ -1538,7 +1538,6 @@ Cypress.Commands.add("sortTable", (widgetId: string, column: number) => {
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            ".MuiDataGrid-columnHeadersInner " +
             ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "']")
         .click()
 
@@ -1548,7 +1547,6 @@ Cypress.Commands.add("clickTableColumnMenuIcon", (widgetId: string, column: numb
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            ".MuiDataGrid-columnHeadersInner " +
             ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "'] " +
             ".MuiDataGrid-menuIcon button")
         .click({force: true});
@@ -1633,7 +1631,7 @@ Cypress.Commands.add("clickTableHeaderMenu", (widgetId: string, headerTitle: str
 Cypress.Commands.add("assertTableRowCount", (widgetId: string, count: number) => {
 
     cy.getWidget(widgetId)
-        .find('.MuiDataGrid-root')
+        .find('.MuiDataGrid-main')
         .invoke('attr', "aria-rowcount").should('eq', "" + (count + 1))
 });
 
@@ -2844,13 +2842,16 @@ function setDateOnMuiDatePicker($div: any, date: string) {
             : "{ctrl}a{del}";
 
         cy.wrap($div).find('input').type(gotoStart)
-            .type(date).type("{enter}");
+            .type(date);
 
     } else {
 
         cy.wrap($div).find('input').type("{ctrl}a{del}")
 
     }
+
+    // Click away to activate the new value.
+    cy.clickOutside();
 }
 
 function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last") {
