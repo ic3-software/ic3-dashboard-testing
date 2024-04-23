@@ -1654,7 +1654,7 @@ Cypress.Commands.add("assertTableDetails", (pageNb: number, widgetId: string, wi
     ;
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}'] .MuiDataGrid-columnHeaders`)
-        .should("have.css", "max-height", withTableHeader ? (String(headerCount * 52) + "px") : "0px")
+        .should("have.css", "height", withTableHeader ? (String(headerCount * 52) + "px") : "0px")
     ;
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
@@ -1802,13 +1802,13 @@ Cypress.Commands.add("assertTableRowSelected", (widgetId: string | $widget, rowI
     if (typeof widgetId === "string") {
 
         cy.getWidget(widgetId)
-            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
+            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
             .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
     } else {
 
         cy.wrap(widgetId)
-            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
+            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
             .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
     }
@@ -1820,13 +1820,13 @@ Cypress.Commands.add("assertTableRowNotSelected", (widgetId: string | $widget, r
     if (typeof widgetId === "string") {
 
         cy.getWidget(widgetId)
-            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
+            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
             .should("not.have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
     } else {
 
         cy.wrap(widgetId)
-            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='cell']`)
+            .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
             .should("not.have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
     }
@@ -1851,7 +1851,7 @@ Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: num
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-colindex='" + colIdx + "'][role='cell']")
+            "div[data-colindex='" + colIdx + "'][role='gridcell']")
         .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -1859,7 +1859,7 @@ Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: num
 Cypress.Commands.add("assertTableCellSelected", (widgetId: string, rowIdx: number, colIdx: number) => {
 
     cy.getWidget(widgetId)
-        .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[data-colindex='${colIdx}'][role='cell']`)
+        .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[data-colindex='${colIdx}'][role='gridcell']`)
         .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -1867,7 +1867,7 @@ Cypress.Commands.add("assertTableCellSelected", (widgetId: string, rowIdx: numbe
 Cypress.Commands.add("assertTableCellBold", (widgetId: string, rowIdx: number, colIdx: number) => {
 
     cy.getWidget(widgetId)
-        .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[data-colindex='${colIdx}'][role='cell']`)
+        .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[data-colindex='${colIdx}'][role='gridcell']`)
         .should("have.css", "font-weight", "700");
 
 });
@@ -1884,7 +1884,7 @@ Cypress.Commands.add("assertTableColumnNotSelected", (widgetId: string, colIdx: 
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-colindex='" + colIdx + "'][role='cell']")
+            "div[data-colindex='" + colIdx + "'][role='gridcell']")
         .should("not.have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -3025,6 +3025,8 @@ Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, inde
         .eq(index)
         .get('.ic3FilterPanel-dateTimePicker')
         .then(($div: any) => setDateOnMuiDatePicker($div, date))
+        .find("[data-cy='set-value']")
+        .click()
 });
 
 Cypress.Commands.add("panelFilterSetDefaultFilter", (widgetId: string) => {
