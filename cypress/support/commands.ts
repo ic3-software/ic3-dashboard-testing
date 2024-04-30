@@ -721,6 +721,10 @@ declare namespace Cypress {
 
         widgetEditorOpen(widgetId: string): void;
 
+        widgetCopy(widgetId: string) : void;
+
+        widgetPaste() : void;
+
         widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
 
         widgetEditorEnterMdxStatement(mdxStatement: string): void;
@@ -1477,6 +1481,17 @@ Cypress.Commands.add('clickUserMenu', (widgetId: string, option: string, nsId?: 
         .click()
     ;
 
+});
+
+Cypress.Commands.add('widgetCopy', (widgetId: string) => {
+    cy.get('[data-cy="widget-box-' + widgetId + '"]')
+        .click()
+    ;
+    cy.get('[data-cy="toolbar-copy"]').click();
+});
+
+Cypress.Commands.add('widgetPaste', () => {
+    cy.get('[data-cy="toolbar-paste"]').click();
 });
 
 Cypress.Commands.add('clickUserMenuShowData', (widgetId: string) => {
