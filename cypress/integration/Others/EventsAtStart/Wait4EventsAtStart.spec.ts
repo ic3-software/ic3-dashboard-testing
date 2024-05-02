@@ -1,8 +1,8 @@
-describe("Others/Wait4EventsAtStart2", () => {
+describe("Others/EventsAtStart/Wait4EventsAtStart", () => {
 
     beforeEach(() => {
         cy.login();
-        cy.openViewerTestReport("Others/Wait4EventsAtStart 2");
+        cy.openViewerTestReport("Others/EventsAtStart/Wait4EventsAtStart");
     });
 
     const expected = 5;
@@ -16,7 +16,7 @@ describe("Others/Wait4EventsAtStart2", () => {
 
     it("click and check queries", () => {
         cy.selectButton("ww6", "Gold");
-        cy.waitForQueryCount(expected + 4);
+        cy.waitForQueryCount(expected + 3);
     });
 
 })
