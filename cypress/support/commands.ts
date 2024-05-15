@@ -645,6 +645,8 @@ declare namespace Cypress {
 
         assertWidgetNoData(widgetId: string): void;
 
+        assertWidgetWaiting(widgetId: string): void;
+
         assertWidgetMissing(widgetId: string): void;
 
         assertWidgetInvisible(widgetId: string): void;
@@ -1791,6 +1793,12 @@ Cypress.Commands.add('assertWidgetDataOnError', (widgetId: string) => {
 Cypress.Commands.add('assertWidgetNoData', (widgetId: string) => {
 
     cy.getWidget(widgetId, "data-cy-no-data");
+
+});
+
+Cypress.Commands.add('assertWidgetWaiting', (widgetId: string) => {
+
+    cy.getWidget(widgetId, "data-cy-waiting");
 
 });
 
