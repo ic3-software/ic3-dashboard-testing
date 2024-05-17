@@ -13,7 +13,7 @@ describe("Others/ZoomInAndSelection", () => {
 
         // Validate chart data
         cy.clickUserMenuShowData("ww1");
-        cy.assertTableCellContent("ww1", 0, 1, "1,030");
+        cy.assertShowDataTableCellContent("ww1", 0, 1, "1,030");
         cy.clickUserMenuShowData("ww1");
 
         cy.clickUserMenuZoom("ww0");
@@ -26,7 +26,7 @@ describe("Others/ZoomInAndSelection", () => {
 
         // Validate chart data
         cy.clickUserMenuShowData("ww1");
-        cy.assertTableCellContent("ww1", 0, 1, "170");
+        cy.assertShowDataTableCellContent("ww1", 0, 1, "170");
         cy.clickUserMenuShowData("ww1");
 
     });

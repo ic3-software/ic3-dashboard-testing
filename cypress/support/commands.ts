@@ -773,6 +773,12 @@ declare namespace Cypress {
         assertTableColumnNotSelected(widgetId: string, colIdx: number): void;
 
         // -------------------------------------------------------------------------------------------------------------
+        // Widget > 'show data' Table
+        // -------------------------------------------------------------------------------------------------------------
+
+        assertShowDataTableCellContent(widgetId: string, rowIdx: number, colIdx: number, cellValue: string): void;
+
+        // -------------------------------------------------------------------------------------------------------------
         // Pivot Table
         // -------------------------------------------------------------------------------------------------------------
 
@@ -2122,6 +2128,16 @@ Cypress.Commands.add("assertTableValue", (widgetId: string, row: number, col: nu
         .find(".ic3WidgetBox-content " +
             "div[data-rowindex='" + row + "'] " +
             "div[data-colindex='" + col + "'] span")
+        .should("have.text", value ?? "")
+
+});
+
+Cypress.Commands.add("assertShowDataTableCellContent", (widgetId: string, row: number, col: number, value: string | null) => {
+
+    cy.getWidget(widgetId)
+        .find(".ic3WidgetBox-content " +
+            "div[data-rowindex='" + row + "'] " +
+            "div[data-colindex='" + col + "']")
         .should("have.text", value ?? "")
 
 });

@@ -44,8 +44,8 @@ describe("Filters/DatePicker State", () => {
 
         // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
-        cy.assertTableCellContent(widgetId, 0, 0, "");
-        cy.assertTableCellContent(widgetId, 1, 0, "");
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "");
+        cy.assertShowDataTableCellContent(widgetId, 1, 0, "");
         cy.clickUserMenuShowData(widgetId);
 
         // TODO range picker Cypress test not working.
@@ -74,8 +74,8 @@ describe("Filters/DatePicker State", () => {
 
         // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
-        cy.assertTableCellContent(widgetId, 0, 0, "2022-01-05");
-        cy.assertTableCellContent(widgetId, 1, 0, "2022-01-15");
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "2022-01-05");
+        cy.assertShowDataTableCellContent(widgetId, 1, 0, "2022-01-15");
         cy.clickUserMenuShowData(widgetId);
 
         // TODO range picker Cypress test not working.
@@ -99,7 +99,7 @@ describe("Filters/DatePicker State", () => {
 
         // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
-        cy.assertTableCellContent(widgetId, 0, 0, "2021-09-01");
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "2021-09-01");
         cy.clickUserMenuShowData(widgetId);
 
         // Earlier selected date should remain
@@ -119,7 +119,7 @@ describe("Filters/DatePicker State", () => {
 
         // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
-        cy.assertTableCellContent(widgetId, 0, 0, "2021-09-01");
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "2021-09-01");
         cy.clickUserMenuShowData(widgetId);
 
         // Earlier selected date should remain

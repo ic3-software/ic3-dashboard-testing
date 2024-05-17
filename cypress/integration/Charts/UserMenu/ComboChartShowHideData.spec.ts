@@ -16,9 +16,9 @@ describe("Charts/UserMenu/Combo Chart Show Hide Data", () => {
         // Show
         cy.clickUserMenu(widgetId, "showData");
 
-        cy.assertTableCellContent(widgetId, 0, 0, "Africa");
-        cy.assertTableCellContent(widgetId, 0, 1, "355");
-        cy.assertTableCellContent(widgetId, 0, 2, "€833,200");
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "Africa");
+        cy.assertShowDataTableCellContent(widgetId, 0, 1, "355");
+        cy.assertShowDataTableCellContent(widgetId, 0, 2, "€833,200");
 
         // Hide
         cy.clickUserMenu(widgetId, "showData");

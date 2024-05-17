@@ -249,7 +249,7 @@ describe("Drilldown/Drilldowns Charts", () => {
 
         // ensure all filterby are fine
         cy.clickUserMenuShowData(widgetId);
-        cy.assertTableCellContent(widgetId, 1, 1, "€100,000")
+        cy.assertShowDataTableCellContent(widgetId, 1, 1, "€100,000")
         cy.clickUserMenuShowData(widgetId);
 
         // back to the years
