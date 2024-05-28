@@ -24,7 +24,7 @@ if (process.env.IC3_USER && process.env.IC3_PASSWORD) {
 } else {
     dotenvJSON({path: here + "/../cypress.env.json"});
 
-    credentials = process.env.IC3_USER + ":" + process.env.IC3_PASSWORD;
+    credentials = process.env.ic3_user + ":" + process.env.ic3_password;
     baseUrl = process.env.baseUrl;
 }
 

@@ -1,6 +1,6 @@
 
 //
-// Generated file: Fri Aug 25 2023 08:57:31 GMT+0200 (Central European Summer Time) 
+// Generated file: Tue May 28 2024 06:41:03 GMT+0200 (Central European Summer Time) 
 //
 // @see build_all_dashboards.js
 //
@@ -122,6 +122,11 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
           },
           {
             "kind": "FILE",
+            "name": "Gantt",
+            "path": "shared:/Live Demo/Charts/Gantt"
+          },
+          {
+            "kind": "FILE",
             "name": "Gauge",
             "path": "shared:/Live Demo/Charts/Gauge"
           },
@@ -189,13 +194,18 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
           },
           {
             "kind": "FILE",
-            "name": "Dropdown",
-            "path": "shared:/Live Demo/Filters/Dropdown"
+            "name": "Filter Panel",
+            "path": "shared:/Live Demo/Filters/Filter Panel"
           },
           {
             "kind": "FILE",
-            "name": "Filter Panel",
-            "path": "shared:/Live Demo/Filters/Filter Panel"
+            "name": "Large Dropdown",
+            "path": "shared:/Live Demo/Filters/Large Dropdown"
+          },
+          {
+            "kind": "FILE",
+            "name": "Simple Dropdown",
+            "path": "shared:/Live Demo/Filters/Simple Dropdown"
           },
           {
             "kind": "FILE",
@@ -268,6 +278,11 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
             "kind": "FILE",
             "name": "SQL & MDX Filters and Tables",
             "path": "shared:/Live Demo/How To/SQL & MDX Filters and Tables"
+          },
+          {
+            "kind": "FILE",
+            "name": "Transform Events",
+            "path": "shared:/Live Demo/How To/Transform Events"
           }
         ]
       },
@@ -290,6 +305,11 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
             "kind": "FILE",
             "name": "Drilldown",
             "path": "shared:/Live Demo/Interactivity/Drilldown"
+          },
+          {
+            "kind": "FILE",
+            "name": "Save/Load State",
+            "path": "shared:/Live Demo/Interactivity/Save%2FLoad State"
           },
           {
             "kind": "FILE",
