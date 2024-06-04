@@ -261,9 +261,6 @@ describe("Drilldown/Drilldowns Charts", () => {
         cy.clickDrilldownBack(widgetId);
         cy.waitForQueryCount(++queryCount);
 
-        cy.clickDrilldownBack(widgetId) /* one more because of that asia useless - guess fine for now */;
-        cy.waitForQueryCount(++queryCount);
-
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, "Asia", "[Geography].[Geography].[Continent].&[AS]");
     })
 
