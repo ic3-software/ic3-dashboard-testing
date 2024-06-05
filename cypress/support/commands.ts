@@ -1900,7 +1900,7 @@ Cypress.Commands.add('assertUserMenuVisibility', (widgetId: string, option: stri
 
     // ensure to click the "first" user menu (=> repetition widget)
 
-    cy.get('[data-cy="widget-box-' + widgetId + '"]' + "> div.ic3WidgetBox-container div.ic3WidgetBox-userMenu [data-cy='userMenu']")
+    cy.get('[data-cy="widget-box-' + widgetId + '"]' + "> div.ic3WidgetBox-container  > :is( .ic3WidgetBox-headerNoTitle, .ic3WidgetBox-header) div.ic3WidgetBox-userMenu [data-cy='userMenu']")
         .click()
     ;
 
@@ -1913,7 +1913,7 @@ Cypress.Commands.add('clickUserMenu', (widgetId: string, option: string, nsId?: 
 
     // ensure to click the "first" user menu (=> repetition widget)
 
-    cy.get('[data-cy="widget-box-' + widgetId + '"]' + (nsId ? '[data-ns-id="' + nsId + '"]' : '') + "> div.ic3WidgetBox-container div.ic3WidgetBox-userMenu [data-cy='userMenu']")
+    cy.get('[data-cy="widget-box-' + widgetId + '"]' + (nsId ? '[data-ns-id="' + nsId + '"]' : '') + "> div.ic3WidgetBox-container > :is( .ic3WidgetBox-headerNoTitle, .ic3WidgetBox-header) div.ic3WidgetBox-userMenu [data-cy='userMenu']")
         .click()
     ;
 
