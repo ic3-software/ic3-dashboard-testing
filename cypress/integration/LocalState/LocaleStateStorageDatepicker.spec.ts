@@ -14,7 +14,7 @@ describe("Local State/Date picker", () => {
     it("Save/Restore State", () => {
 
         // First create the state
-        cy.selectDatePickerFromInput(wid, "2 Apr 2024");
+        cy.selectDatePickerFromInput(wid, "02 Apr 2024");
 
         // Assert the state
         cy.assertWidgetHeader(wid, header);
