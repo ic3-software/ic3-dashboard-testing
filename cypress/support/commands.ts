@@ -677,7 +677,7 @@ declare namespace Cypress {
         // Drilldown
         // -------------------------------------------------------------------------------------------------------------
 
-        clickDrilldownBack(widgetId: string): void;
+        clickDrilldownBack(widgetId: string, levels?: number): void;
 
         clickDrilldownMenu(widgetId: string, path: (number | string)[]): void;
 
@@ -1149,9 +1149,9 @@ declare namespace Cypress {
 
         widgetEditorOpen(widgetId: string): void;
 
-        widgetCopy(widgetId: string) : void;
+        widgetCopy(widgetId: string): void;
 
-        widgetPaste() : void;
+        widgetPaste(): void;
 
         widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
 
@@ -1863,10 +1863,10 @@ Cypress.Commands.add("closeZoomedWidget", (widgetId: string) => {
 // Drilldown
 // -------------------------------------------------------------------------------------------------------------
 
-Cypress.Commands.add('clickDrilldownBack', (widgetId: string) => {
+Cypress.Commands.add('clickDrilldownBack', (widgetId: string, levels?: number) => {
 
     cy.getWidget(widgetId)
-        .find("[data-cy='drilldownBack']")
+        .find(`.ic3WidgetBox-headerDrilldown [data-ic3-drilldown='${levels ?? 0}']`)
         .click()
     ;
 
@@ -1900,7 +1900,7 @@ Cypress.Commands.add('assertUserMenuVisibility', (widgetId: string, option: stri
 
     // ensure to click the "first" user menu (=> repetition widget)
 
-    cy.get('[data-cy="widget-box-' + widgetId + '"]' + "> div.ic3WidgetBox-container > div.ic3WidgetBox-userMenu [data-cy='userMenu']")
+    cy.get('[data-cy="widget-box-' + widgetId + '"]' + "> div.ic3WidgetBox-container  > :is( .ic3WidgetBox-headerNoTitle, .ic3WidgetBox-header) div.ic3WidgetBox-userMenu [data-cy='userMenu']")
         .click()
     ;
 
@@ -1913,7 +1913,7 @@ Cypress.Commands.add('clickUserMenu', (widgetId: string, option: string, nsId?: 
 
     // ensure to click the "first" user menu (=> repetition widget)
 
-    cy.get('[data-cy="widget-box-' + widgetId + '"]' + (nsId ? '[data-ns-id="' + nsId + '"]' : '') + "> div.ic3WidgetBox-container > div.ic3WidgetBox-userMenu [data-cy='userMenu']")
+    cy.get('[data-cy="widget-box-' + widgetId + '"]' + (nsId ? '[data-ns-id="' + nsId + '"]' : '') + "> div.ic3WidgetBox-container > :is( .ic3WidgetBox-headerNoTitle, .ic3WidgetBox-header) div.ic3WidgetBox-userMenu [data-cy='userMenu']")
         .click()
     ;
 
