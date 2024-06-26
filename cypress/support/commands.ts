@@ -1102,6 +1102,14 @@ declare namespace Cypress {
         /**
          * Assuming the widget contains a marked down:
          * <pre>
+         *      ##### Event tag : @{event}!
+         * </pre>
+         */
+        assertEventWithText(widgetId: string, tag: string, value: string | null): void;
+
+        /**
+         * Assuming the widget contains a marked down:
+         * <pre>
          *      ##### Event value : @{event}!
          * </pre>
          */
@@ -4186,14 +4194,21 @@ Cypress.Commands.add("keyShift", (cb: (() => void)) => {
 
 });
 
-function assertEventWithText(value: string | null, widgetId: string, text: string) {
+function assertEventWithText(value: string | null, widgetId: string, tag: string, isNotEvent?: boolean) {
 
-    const htmlElem = text === "mdx" ? "h6" : "h5";
-    const innerText = value ? `Event ${text} : ${value}!` : `Event ${text} : !`;
+    const htmlElem = tag === "mdx" ? "h6" : "h5";
+    let preTag = isNotEvent ? "" : "Event ";
+    const innerText = value ? `${preTag}${tag} : ${value}!` : `${preTag}${tag} : !`;
 
     cy.getWidget(widgetId).contains(htmlElem, innerText)
 
 }
+
+Cypress.Commands.add("assertEventWithText", (widgetId: string, tag: string, value: string | null = null) => {
+
+    assertEventWithText(value, widgetId, tag, true);
+
+});
 
 
 Cypress.Commands.add("assertEventValue", (widgetId: string, value: string | null = null) => {
