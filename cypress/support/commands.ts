@@ -679,6 +679,8 @@ declare namespace Cypress {
 
         clickDrilldownBack(widgetId: string, levels?: number): void;
 
+        clickDrilldownLevel(widgetId: string, level: number): void;
+
         clickDrilldownMenu(widgetId: string, path: (number | string)[]): void;
 
         // -------------------------------------------------------------------------------------------------------------
@@ -1874,7 +1876,16 @@ Cypress.Commands.add("closeZoomedWidget", (widgetId: string) => {
 Cypress.Commands.add('clickDrilldownBack', (widgetId: string, levels?: number) => {
 
     cy.getWidget(widgetId)
-        .find(`.ic3WidgetBox-headerDrilldown [data-ic3-drilldown='${levels ?? 0}']`)
+        .find("[data-cy='drilldownBack']")
+        .click()
+    ;
+
+});
+
+Cypress.Commands.add('clickDrilldownLevel', (widgetId: string, level: number) => {
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-headerDrilldown [data-ic3-drilldown='${level}']`)
         .click()
     ;
 

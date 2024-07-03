@@ -255,10 +255,7 @@ describe("Drilldown/Drilldowns Charts", () => {
         // back to the years
         cy.log("back:years")
 
-        cy.clickDrilldownBack(widgetId);
-        cy.waitForQueryCount(++queryCount);
-
-        cy.clickDrilldownBack(widgetId);
+        cy.clickDrilldownLevel(widgetId, 0);
         cy.waitForQueryCount(++queryCount);
 
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, "Asia", "[Geography].[Geography].[Continent].&[AS]");
