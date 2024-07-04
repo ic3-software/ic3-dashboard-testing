@@ -3534,7 +3534,7 @@ Cypress.Commands.add("panelFilterSetSelection", (widgetId: string, index: number
     ;
 
     filter.find("[data-cy='value-selector-text']")
-        .find("input")
+        .find(".MuiInputBase-root")
         .click()
     ;
 
