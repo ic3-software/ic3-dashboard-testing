@@ -945,6 +945,10 @@ declare namespace Cypress {
 
         panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
 
+        panelFilterSaveView(widgetId: string, viewName: string): void;
+
+        panelFilterLoadView(widgetId: string, viewName: string): void;
+
         panelFilterClear(widgetId: string, index: number): void;
 
         panelFilterSetDefaultFilter(widgetId: string): void;
@@ -3425,6 +3429,41 @@ Cypress.Commands.add("panelFilterAdd", (widgetId: string, fieldLabel: string, se
         .clear()
         .type(fieldLabel)
         .get('li.MuiAutocomplete-option[data-option-index="' + selectIdx + '"]')
+        .click()
+    ;
+
+});
+
+Cypress.Commands.add("panelFilterSaveView", (widgetId: string, viewName: string) => {
+
+    cy.getWidget(widgetId)
+        .get("[data-cy='view']")
+        .click()
+    ;
+
+    cy.get("[data-cy='save-view']")
+        .click()
+    ;
+
+    cy.get("[data-cy='viewName'] input")
+        .type(viewName)
+    ;
+
+    cy.get("[data-cy='button-ok']")
+        .click()
+    ;
+
+});
+
+Cypress.Commands.add("panelFilterLoadView", (widgetId: string, viewName: string) => {
+
+    cy.getWidget(widgetId)
+        .get("[data-cy='view']")
+        .click()
+    ;
+
+    cy.get("[data-cy='view-item'] span")
+        .contains(viewName)
         .click()
     ;
 
