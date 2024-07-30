@@ -943,6 +943,8 @@ declare namespace Cypress {
 
         assertFilterPanelCount(widgetId: string, filterCount: number): void;
 
+        assertFilterPanelItems(widgetId: string, filterNames: string[]): void;
+
         panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
 
         panelFilterSaveView(widgetId: string, viewName: string): void;
@@ -3453,6 +3455,8 @@ Cypress.Commands.add("panelFilterSaveView", (widgetId: string, viewName: string)
         .click()
     ;
 
+    cy.clickOutside();
+
 });
 
 Cypress.Commands.add("panelFilterLoadView", (widgetId: string, viewName: string) => {
@@ -3482,6 +3486,21 @@ Cypress.Commands.add("panelFilterRemove", (widgetId: string, index: number) => {
 
 Cypress.Commands.add("assertFilterPanelCount", (widgetId: string, count: number) => {
     cy.getWidget(widgetId).get("[data-cy='filters'] [data-cy='filter-item']").should('have.length', count)
+});
+
+Cypress.Commands.add("assertFilterPanelItems", (widgetId: string, filterNames: string[]) => {
+
+    cy.assertFilterPanelCount(widgetId, filterNames.length);
+
+    filterNames.forEach((name, index) => {
+
+        cy.getWidget(widgetId)
+            .get("[data-cy='filters'] [data-cy='filter-item']")
+            .eq(index)
+            .find(".ic3FilterPanel-fieldName")
+            .contains(name);
+
+    });
 });
 
 Cypress.Commands.add("panelFilterClear", (widgetId: string, index: number) => {
