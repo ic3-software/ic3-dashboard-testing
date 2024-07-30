@@ -1,5 +1,9 @@
 export {};
 
+function assertPanelEvent(widgetId: string, mdx: string) {
+    cy.getWidget(widgetId).find('code').should('have.text', mdx ? '\n' + mdx + '\n' : '\n');
+}
+
 describe("Application/Switch Applications State", () => {
 
     beforeEach(() => {
@@ -26,24 +30,26 @@ describe("Application/Switch Applications State", () => {
         cy.panelFilterSaveView(wPanel, "foo");
         cy.wait(10);
 
-        // Now switch to an app that has a filter panel where year is not allowed.
+        assertPanelEvent("ww1", "// GLOBAL FILTER\nFILTERBY {[Purchase Date].[Purchase Date].[Year].&[2019-01-01]}\nFILTERBY {[Geography].[Geography].[City].&[Cairo]&[EG]}");
 
+        // Now switch to an app that has a filter panel where year is not allowed.
         cy.window().its('cypressReporting')
             .then((reporting: any) => {
                 reporting.openReportApp({
                     path: 'shared:/Cypress - FilterPanel state & allowed 2',
                 });
+
                 cy.waitForQueryCount(4);
 
                 cy.assertFilterPanelItems(wPanel, []);
+                assertPanelEvent("ww1", "");
 
                 cy.panelFilterLoadView(wPanel, "foo");
 
                 // Year is not allowed → only city is loaded.
                 cy.assertFilterPanelItems(wPanel, ['City']);
-
+                assertPanelEvent("ww1", "// GLOBAL FILTER\nFILTERBY {[Geography].[Geography].[City].&[Cairo]&[EG]}");
             });
-
 
         // Now switch back again.
         cy.window().its('cypressReporting')
@@ -56,10 +62,11 @@ describe("Application/Switch Applications State", () => {
 
                 // Assert filter loaded from state.
                 cy.assertFilterPanelItems(wPanel, ['Year', 'City']);
-
+                assertPanelEvent("ww1", "// GLOBAL FILTER\nFILTERBY {[Purchase Date].[Purchase Date].[Year].&[2019-01-01]}\nFILTERBY {[Geography].[Geography].[City].&[Cairo]&[EG]}");
 
             });
 
+        // Now switch back again to 2.
         cy.window().its('cypressReporting')
             .then((reporting: any) => {
                 reporting.openReportApp({
@@ -69,6 +76,7 @@ describe("Application/Switch Applications State", () => {
 
                 // Assert filter loaded from state.
                 cy.assertFilterPanelItems(wPanel, ['City']);
+                assertPanelEvent("ww1", "// GLOBAL FILTER\nFILTERBY {[Geography].[Geography].[City].&[Cairo]&[EG]}");
 
             });
 
