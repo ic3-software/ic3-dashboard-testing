@@ -4353,8 +4353,7 @@ Cypress.Commands.add("widgetEditorEnterMdxStatement", (statement: string) => {
     cy.widgetEditorChangeTab("tab-query");
     cy.get('button[data-cy="switchMdxToStatement"]').click();
     cy.get('.cm-content')
-        .keyboardDeleteAll()
-        .type(statement)
+        .invoke('text', statement)
         .wait(500)
 
 });
