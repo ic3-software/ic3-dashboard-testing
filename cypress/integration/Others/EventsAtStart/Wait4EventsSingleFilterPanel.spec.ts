@@ -1,4 +1,4 @@
-describe("Others/EventsAtStart/Wait4EventsAtStart", () => {
+describe("Others/EventsAtStart/Wait4EventsSingleFilterPanel", () => {
 
     beforeEach(() => {
         cy.login();
