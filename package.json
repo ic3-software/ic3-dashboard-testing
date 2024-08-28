@@ -1,6 +1,6 @@
 {
   "name": "@ic3/ic3-dashboard-testing",
-  "version": "8.4.14",
+  "version": "8.4.15",
   "private": true,
   "devDependencies": {
     "@4tw/cypress-drag-drop": "2.2.5",
