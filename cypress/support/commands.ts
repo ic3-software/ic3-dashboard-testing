@@ -2333,8 +2333,8 @@ Cypress.Commands.add("assertTableColumnTitle", (widgetId: string, colIdx: number
 Cypress.Commands.add("assertTableColumnHeader", (widgetId: string, colIdx: number, expectedTitle: string) => {
 
     cy.getWidget(widgetId)
-        .find(".MuiDataGrid-columnHeader[aria-colindex='" + (colIdx + 1) + "']")
-        .invoke('attr', "aria-label").should('eq', expectedTitle)
+        .find(".MuiDataGrid-columnHeader[aria-colindex='" + (colIdx + 1) + "'] .MuiDataGrid-columnHeaderTitle")
+        .contains(expectedTitle)
 });
 
 Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: number) => {
