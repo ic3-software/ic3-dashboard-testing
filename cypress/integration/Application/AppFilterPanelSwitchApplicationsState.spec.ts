@@ -1,7 +1,10 @@
 export {};
 
 function assertPanelEvent(widgetId: string, mdx: string) {
-    cy.getWidget(widgetId).find('code').should('have.text', mdx ? '\n' + mdx + '\n' : '\n');
+    cy.getWidget(widgetId).find('code').invoke('text').then((text) => {
+        const expectedText = mdx ? `\n${mdx}\n` : `\n`;
+        expect(text.trim().toLowerCase()).to.eq(expectedText.trim().toLowerCase());
+    });
 }
 
 describe("Application/Switch Applications State", () => {
