@@ -737,6 +737,8 @@ declare namespace Cypress {
 
         clickTableCell(widgetId: string, rowIdx: number, colIdx: number, ctrl?: boolean): void;
 
+        clickTableCellDrilldown(widgetId: string, rowIdx: number, colIdx: number): void;
+
         clickHeaderCheckbox(widgetId: string): void;
 
         getTableHeader(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
@@ -2072,6 +2074,17 @@ Cypress.Commands.add("clickTableCell", (widgetId: string, rowIdx: number, colIdx
             "div[data-rowindex='" + rowIdx + "'] " +
             "div[data-colindex='" + colIdx + "']")
         .click({ctrlKey: ctrl})
+
+});
+
+Cypress.Commands.add("clickTableCellDrilldown", (widgetId: string, rowIdx: number, colIdx: number, ctrl?: boolean) => {
+
+    cy.getWidget(widgetId)
+        .find(".ic3WidgetBox-content " +
+            "div[data-rowindex='" + rowIdx + "'] " +
+            "div[data-colindex='" + colIdx + "'] " +
+            "div.Ic3TableCellDrilldown-iconDiv")
+        .click();
 
 });
 
