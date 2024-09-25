@@ -656,6 +656,12 @@ declare namespace Cypress {
         assertWidgetRenderStatus(widgetId: string, renderStatus: "RENDERING" | "RENDERED"): void;
 
         // -------------------------------------------------------------------------------------------------------------
+        // Switch widget
+        // -------------------------------------------------------------------------------------------------------------
+
+        clickSwitch(widgetId: string): void;
+
+        // -------------------------------------------------------------------------------------------------------------
         // Tidy Table
         // -------------------------------------------------------------------------------------------------------------
 
@@ -1953,6 +1959,11 @@ Cypress.Commands.add('widgetCopy', (widgetId: string) => {
         .click()
     ;
     cy.get('[data-cy="toolbar-copy"]').click();
+});
+
+Cypress.Commands.add('clickSwitch', (widgetId: string) => {
+    cy.getWidget(widgetId)
+        .find(".MuiSwitch-root").click();
 });
 
 Cypress.Commands.add('widgetPaste', () => {
