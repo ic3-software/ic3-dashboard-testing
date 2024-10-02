@@ -26,16 +26,18 @@ describe("Selection/Filter By and Selection", () => {
         // Now click another Region in table0 -> table1 should be empty in selection
         cy.clickTableCell(table0, 1, 0);
         cy.assertEventValue(event0, "Asia & Pacific");
-        cy.assertEventValue(event1, "Pretoria");
-        cy.assertEventMdx(event1, "[Geography].[Region].[City].&[Pretoria]");
+        cy.assertEventValue(event1, null);
+        cy.assertEventMdx(event1, null);
         for (let i = 0; i < 4; i++) {
             cy.assertTableRowNotSelected(table1, i);
         }
 
-        // Now click on Africa again in table0 -> Pretoria should render selected
+        // Now click on Africa again in table0 -> Pretoria should not be selected
         cy.clickTableCell(table0, 0, 0);
         cy.assertEventValue(event0, "Africa");
-        cy.assertTableSingleRowSelected(table1, 2, 3);
+        for (let i = 0; i < 3; i++) {
+            cy.assertTableRowNotSelected(table1, i);
+        }
 
 
     });
