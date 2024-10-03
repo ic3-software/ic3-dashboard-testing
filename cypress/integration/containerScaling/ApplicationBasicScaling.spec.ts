@@ -26,7 +26,7 @@ describe("ContainerScaling/basic-application", () => {
             .then((reporting: any) => {
 
                 reporting['context']['options']['containerScaleUp'] = {
-                    retryCountMax: 1,
+                    retryCountMax: 10,
                     retryDelayMS: 500
                 };
 
@@ -42,7 +42,6 @@ describe("ContainerScaling/basic-application", () => {
                 cy.waitForQueryCount(4);
 
             });
-
     });
 
     it("unloading schema - error screen after the retries", () => {
@@ -70,7 +69,7 @@ describe("ContainerScaling/basic-application", () => {
             .then((reporting: any) => {
 
                 reporting['context']['options']['containerScaleUp'] = {
-                    retryCountMax: 1,
+                    retryCountMax: 10,
                     retryDelayMS: 100
                 };
 

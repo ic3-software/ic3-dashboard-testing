@@ -21,7 +21,7 @@ describe("ContainerScaling/basic", () => {
         cy.window().its('cypressReporting')
             .then((reporting: any) => {
                 reporting['context']['options']['containerScaleUp'] = {
-                    retryCountMax: 6,
+                    retryCountMax: 10,
                     retryDelayMS: 500
                 };
             });
@@ -53,7 +53,7 @@ describe("ContainerScaling/basic", () => {
         cy.window().its('cypressReporting')
             .then((reporting: any) => {
                 reporting['context']['options']['containerScaleUp'] = {
-                    retryCountMax: 1,
+                    retryCountMax: 10,
                     retryDelayMS: 500
                 };
             });
