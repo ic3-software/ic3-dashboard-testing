@@ -53,7 +53,7 @@ describe("ContainerScaling/basic", () => {
         cy.window().its('cypressReporting')
             .then((reporting: any) => {
                 reporting['context']['options']['containerScaleUp'] = {
-                    retryCountMax: 10,
+                    retryCountMax: 1,
                     retryDelayMS: 500
                 };
             });
@@ -77,6 +77,14 @@ describe("ContainerScaling/basic", () => {
         // Assert interacting with the buttons starts retry mechanism
         cy.selectButton("ww2", "2020");
         cy.get("body").find(".ic3-scale-up-overlay").should("exist");
+
+        cy.window().its('cypressReporting')
+            .then((reporting: any) => {
+                reporting['context']['options']['containerScaleUp'] = {
+                    retryCountMax: 10,
+                    retryDelayMS: 500
+                };
+            });
 
         // Now load the schema.
         cy.loadSchema("[Cypress] Container Scaling");
