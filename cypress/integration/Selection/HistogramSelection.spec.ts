@@ -35,10 +35,10 @@ describe("Selection/Histogram Selection", () => {
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 0, 0);
-        assertSelection(widgetId, eventWidgetId, "Ankara, London, Tehran", "{[Geography].[Region].[City].&[Ankara],[Geography].[Region].[City].&[London],[Geography].[Region].[City].&[Tehran]}");
+        assertSelection(widgetId, eventWidgetId, "Ankara, London, Tehran", "{[Geography].[Region].[City].&[ANKARA],[Geography].[Region].[City].&[LONDON],[Geography].[Region].[City].&[TEHRAN]}");
 
         cy.selectSingleChartBarInGroup(widgetId, 0, 2);
-        assertSelection(widgetId, eventWidgetId, "Durban, Sydney, Islamabad, Brasília", "{[Geography].[Region].[City].&[Durban],[Geography].[Region].[City].&[Sydney],[Geography].[Region].[City].&[Islamabad],[Geography].[Region].[City].&[Brasília]}");
+        assertSelection(widgetId, eventWidgetId, "Durban, Sydney, Islamabad, Brasília", "{[Geography].[Region].[City].&[DURBAN],[Geography].[Region].[City].&[SYDNEY],[Geography].[Region].[City].&[ISLAMABAD],[Geography].[Region].[City].&[BRASÍLIA]}");
 
         cy.selectSingleChartBarInGroup(widgetId, 0, 2);
         assertSelection(widgetId, eventWidgetId, "", "");
@@ -47,7 +47,7 @@ describe("Selection/Histogram Selection", () => {
             cy.selectSingleChartBarInGroup(widgetId, 0, 8);
             cy.selectSingleChartBarInGroup(widgetId, 0, 9);
         });
-        assertSelection(widgetId, eventWidgetId, "Marseille, Rotterdam, Madrid", "{[Geography].[Region].[City].&[Marseille],[Geography].[Region].[City].&[Rotterdam],[Geography].[Region].[City].&[Madrid]}");
+        assertSelection(widgetId, eventWidgetId, "Marseille, Rotterdam, Madrid", "{[Geography].[Region].[City].&[MARSEILLE],[Geography].[Region].[City].&[ROTTERDAM],[Geography].[Region].[City].&[MADRID]}");
 
     });
 
@@ -59,13 +59,13 @@ describe("Selection/Histogram Selection", () => {
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 1, 2);
-        assertSelection(widgetId, eventWidgetId, "Business", "[Customer].[Customer].[Type].&[Business]");
+        assertSelection(widgetId, eventWidgetId, "Business", "[Customer].[Customer].[Type].&[BUSINESS]");
 
         cy.selectSingleChartBarInGroup(widgetId, 1, 3);
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 0, 0);
-        assertSelection(widgetId, eventWidgetId, "Consumer", "[Customer].[Customer].[Type].&[Consumer]");
+        assertSelection(widgetId, eventWidgetId, "Consumer", "[Customer].[Customer].[Type].&[CONSUMER]");
 
     });
 

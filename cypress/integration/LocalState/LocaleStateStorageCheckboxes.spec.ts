@@ -1,7 +1,7 @@
 describe("Local State/Checkboxes", () => {
 
     const dashboard = "Local State/Checkboxes";
-    const header = "Checkboxes [Geography].[Classification].[Hemisphere].&[Global South]";
+    const header = "Checkboxes [Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH]";
     const wid = "ww1";
 
     beforeEach(() => {

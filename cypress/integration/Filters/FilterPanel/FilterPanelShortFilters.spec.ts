@@ -19,9 +19,9 @@ describe("EmbeddedReports/Filter Panel Short Filters", () => {
         const index = 0;
         assertEvent("");
         cy.panelFilterSetSelectionSimple(wPanel, index, "foo");
-        assertEvent("{[Character].[Character].[All].&[foo]}");
+        assertEvent("{[Character].[Character].[All].&[FOO]}");
         cy.panelFilterSetSelectionSimple(wPanel, index, "bar");
-        assertEvent("{[Character].[Character].[All].&[foo],[Character].[Character].[All].&[bar]}");
+        assertEvent("{[Character].[Character].[All].&[FOO],[Character].[Character].[All].&[BAR]}");
         cy.panelFilterClear(wPanel, index)
     });
 

@@ -44,7 +44,7 @@ describe("Tables/Pivot Table Events", () => {
         assertEventValues({
             row: {
                 event: "2018, Business, France",
-                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[Business],[Geography].[Geography].[Country].&[FR])"
+                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[BUSINESS],[Geography].[Geography].[Country].&[FR])"
             },
             rowMember: {event: "2018", mdx: "[Time].[Time].[Year].&[2018-01-01]"}
         });
@@ -53,7 +53,7 @@ describe("Tables/Pivot Table Events", () => {
         assertEventValues({
             row: {
                 event: "2018, Consumer, United States",
-                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[Consumer],[Geography].[Geography].[Country].&[US])"
+                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[CONSUMER],[Geography].[Geography].[Country].&[US])"
             },
             rowMember: {event: "United States", mdx: "[Geography].[Geography].[Country].&[US]"}
         });
@@ -62,9 +62,9 @@ describe("Tables/Pivot Table Events", () => {
         assertEventValues({
             row: {
                 event: "2019, Consumer, South Africa",
-                mdx: "([Time].[Time].[Year].&[2019-01-01],[Customer].[Customer].[Type].&[Consumer],[Geography].[Geography].[Country].&[ZA])"
+                mdx: "([Time].[Time].[Year].&[2019-01-01],[Customer].[Customer].[Type].&[CONSUMER],[Geography].[Geography].[Country].&[ZA])"
             },
-            rowMember: {event: "Consumer", mdx: "[Customer].[Customer].[Type].&[Consumer]"}
+            rowMember: {event: "Consumer", mdx: "[Customer].[Customer].[Type].&[CONSUMER]"}
         });
 
     });
@@ -103,11 +103,11 @@ describe("Tables/Pivot Table Events", () => {
         assertEventValues({
             cell: {
                 event: "2018, Business, France, License, #Customers",
-                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[Business],[Geography].[Geography].[Country].&[FR],[Product].[Category].[Category].&[1],[Measures].[#Customers])"
+                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[BUSINESS],[Geography].[Geography].[Country].&[FR],[Product].[Category].[Category].&[1],[Measures].[#Customers])"
             },
             row: {
                 event: "2018, Business, France",
-                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[Business],[Geography].[Geography].[Country].&[FR])"
+                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[BUSINESS],[Geography].[Geography].[Country].&[FR])"
             },
             col: {event: "License, #Customers", mdx: "([Product].[Category].[Category].&[1],[Measures].[#Customers])"}
         });
@@ -116,11 +116,11 @@ describe("Tables/Pivot Table Events", () => {
         assertEventValues({
             cell: {
                 event: "2018, Consumer, United States, Support, #Customers",
-                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[Consumer],[Geography].[Geography].[Country].&[US],[Product].[Category].[Category].&[2],[Measures].[#Customers])"
+                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[CONSUMER],[Geography].[Geography].[Country].&[US],[Product].[Category].[Category].&[2],[Measures].[#Customers])"
             },
             row: {
                 event: "2018, Consumer, United States",
-                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[Consumer],[Geography].[Geography].[Country].&[US])"
+                mdx: "([Time].[Time].[Year].&[2018-01-01],[Customer].[Customer].[Type].&[CONSUMER],[Geography].[Geography].[Country].&[US])"
             },
             col: {event: "Support, #Customers", mdx: "([Product].[Category].[Category].&[2],[Measures].[#Customers])"}
         });

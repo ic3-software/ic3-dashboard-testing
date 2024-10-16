@@ -58,7 +58,7 @@ describe("Tables/Table Selection 3 axes", () => {
 
         cy.clickTableCell(table, 0, 2);
         cy.assertEventValue(tableEvent, "(Global North, Business)");
-        cy.assertEventMdx(tableEvent, "([Geography].[Classification].[Hemisphere].&[Global North],[Customer].[Customer].[Type].&[Business])");
+        cy.assertEventMdx(tableEvent, "([Geography].[Classification].[Hemisphere].&[GLOBAL NORTH],[Customer].[Customer].[Type].&[BUSINESS])");
         assertColumnSelected(table, 2, 6);
 
         cy.wait(10)
@@ -70,7 +70,7 @@ describe("Tables/Table Selection 3 axes", () => {
         cy.wait(10)
         cy.clickTableCell(table, 0, 3);
         cy.assertEventValue(tableEvent, "(Global North, Consumer)");
-        cy.assertEventMdx(tableEvent, "([Geography].[Classification].[Hemisphere].&[Global North],[Customer].[Customer].[Type].&[Consumer])");
+        cy.assertEventMdx(tableEvent, "([Geography].[Classification].[Hemisphere].&[GLOBAL NORTH],[Customer].[Customer].[Type].&[CONSUMER])");
         assertColumnSelected(table, 3, 6);  // -1 for no selection
     })
 
@@ -104,7 +104,7 @@ describe("Tables/Table Selection 3 axes", () => {
         const tableEvent = "ww5";
         cy.clickTableCell(table, 1, 4);
         cy.assertEventValue(tableEvent, "(2018, Support, Global South, Business)");
-        cy.assertEventMdx(tableEvent, "([Time].[Time].[Year].&[2018-01-01],[Product].[Product].[Category].&[2],[Geography].[Classification].[Hemisphere].&[Global South],[Customer].[Customer].[Type].&[Business])");
+        cy.assertEventMdx(tableEvent, "([Time].[Time].[Year].&[2018-01-01],[Product].[Product].[Category].&[2],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH],[Customer].[Customer].[Type].&[BUSINESS])");
 
         cy.clickTableCell(table, 1, 4);
         cy.assertEventValue(tableEvent, "");

@@ -1,7 +1,7 @@
 describe("Local State/Simple dropdown", () => {
 
     const dashboard = "Local State/Simple dropdown";
-    const header = "Simple Dropdown [Customer].[Customer].[Type].&[Consumer]";
+    const header = "Simple Dropdown [Customer].[Customer].[Type].&[CONSUMER]";
     const wid = "ww6";
 
     beforeEach(() => {

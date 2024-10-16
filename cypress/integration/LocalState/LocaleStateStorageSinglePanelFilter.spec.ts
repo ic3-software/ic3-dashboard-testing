@@ -1,7 +1,7 @@
 describe("Local State/Single panel filter", () => {
 
     const dashboard = "Local State/Single panel filter";
-    const header = "Single Panel Filter {[Geography].[Region].[Region].&[Middle east]}";
+    const header = "Single Panel Filter {[Geography].[Region].[Region].&[MIDDLE EAST]}";
     const wid = "ww7";
 
     beforeEach(() => {

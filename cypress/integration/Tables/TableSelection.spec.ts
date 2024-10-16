@@ -77,7 +77,7 @@ describe("Tables/Table Selection", () => {
         const tableEvent = "ww5";
         cy.clickTableCell(table, 1, 2);
         cy.assertEventValue(tableEvent, "(Server, Global South)");
-        cy.assertEventMdx(tableEvent, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[Global South])");
+        cy.assertEventMdx(tableEvent, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH])");
 
         cy.clickTableCell(table, 1, 2);
         cy.assertEventValue(tableEvent, "");
@@ -92,7 +92,7 @@ describe("Tables/Table Selection", () => {
         cy.clickTableCell(table, 2, 2, true);
         cy.clickTableCell(table, 3, 1, true);
         cy.assertEventValue(tableEvent, "(Silver, Global South), (Gold, Global North)");
-        cy.assertEventMdx(tableEvent, "{([Product].[Article].[Article].&[3],[Geography].[Classification].[Hemisphere].&[Global South]),([Product].[Article].[Article].&[4],[Geography].[Classification].[Hemisphere].&[Global North])}");
+        cy.assertEventMdx(tableEvent, "{([Product].[Article].[Article].&[3],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH]),([Product].[Article].[Article].&[4],[Geography].[Classification].[Hemisphere].&[GLOBAL NORTH])}");
 
     })
 

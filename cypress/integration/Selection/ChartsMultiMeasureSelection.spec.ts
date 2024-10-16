@@ -69,13 +69,13 @@ describe("Selection/Charts Multi Measure Selection", () => {
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 3, 0);
-        assertSelection(widgetId, eventWidgetId, "(2018 Jan, Global South)", "([Time].[Time].[Month].&[2018-01-01],[Geography].[Classification].[Hemisphere].&[Global South])", 0, 3);
+        assertSelection(widgetId, eventWidgetId, "(2018 Jan, Global South)", "([Time].[Time].[Month].&[2018-01-01],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH])", 0, 3);
 
         cy.selectSingleChartBarInGroup(widgetId, 3, 0);
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 1, 3);
-        assertSelection(widgetId, eventWidgetId, "(2018 Apr, Global North)", "([Time].[Time].[Month].&[2018-04-01],[Geography].[Classification].[Hemisphere].&[Global North])", 3, 1);
+        assertSelection(widgetId, eventWidgetId, "(2018 Apr, Global North)", "([Time].[Time].[Month].&[2018-04-01],[Geography].[Classification].[Hemisphere].&[GLOBAL NORTH])", 3, 1);
 
         cy.clickUserMenuClearSelection(widgetId);
         assertSelection(widgetId, eventWidgetId, "", "");

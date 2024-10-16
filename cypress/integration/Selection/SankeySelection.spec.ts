@@ -59,11 +59,11 @@ describe("Selection/Sankey Selection", () => {
 
         clickSankeyNode(widgetId, "Global North", false);
         cy.assertEventValue(eventWidgetId, "Global North");
-        cy.assertEventMdx(eventWidgetId, "[Geography].[Classification].[Hemisphere].&[Global North]");
+        cy.assertEventMdx(eventWidgetId, "[Geography].[Classification].[Hemisphere].&[GLOBAL NORTH]");
 
         clickSankeyNode(widgetId, "Consumer", false);
         cy.assertEventValue(eventWidgetId, "Consumer");
-        cy.assertEventMdx(eventWidgetId, "[Customer].[Customer].[Type].&[Consumer]");
+        cy.assertEventMdx(eventWidgetId, "[Customer].[Customer].[Type].&[CONSUMER]");
 
         clickSankeyNode(widgetId, "Consumer", false);
         cy.assertEventValue(eventWidgetId, "");
@@ -72,7 +72,7 @@ describe("Selection/Sankey Selection", () => {
         clickSankeyNode(widgetId, "Server", false);
         clickSankeyNode(widgetId, "Global South", true);
         cy.assertEventValue(eventWidgetId, "Server, Global South");
-        cy.assertEventMdx(eventWidgetId, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[Global South])");
+        cy.assertEventMdx(eventWidgetId, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH])");
 
     });
 

@@ -55,17 +55,17 @@ describe("Tables/Table Selection Totals", () => {
         const tableEvent = "ww2";
         cy.clickTableCell(table2, 0, 0);
         cy.assertEventValue(tableEvent, "(Business, 2018)");
-        cy.assertEventMdx(tableEvent, "([Customer].[Customer].[Type].&[Business],[Time].[Time].[Year].&[2018-01-01])");
+        cy.assertEventMdx(tableEvent, "([Customer].[Customer].[Type].&[BUSINESS],[Time].[Time].[Year].&[2018-01-01])");
 
         // Select subtotal Business
         cy.clickTableCell(table2, 4, 0);
         cy.assertEventValue(tableEvent, "Business");
-        cy.assertEventMdx(tableEvent, "[Customer].[Customer].[Type].&[Business]");
+        cy.assertEventMdx(tableEvent, "[Customer].[Customer].[Type].&[BUSINESS]");
         
         // Select subtotal Consumer
         cy.clickTableCell(table2, 9, 0);
         cy.assertEventValue(tableEvent, "Consumer");
-        cy.assertEventMdx(tableEvent, "[Customer].[Customer].[Type].&[Consumer]");
+        cy.assertEventMdx(tableEvent, "[Customer].[Customer].[Type].&[CONSUMER]");
         
         // Select full total
         cy.clickTableCell(table2, 10, 0);
@@ -79,22 +79,22 @@ describe("Tables/Table Selection Totals", () => {
         const tableEvent = "ww2";
         cy.clickTableCell(table2, 0, 0, true);
         cy.assertEventValue(tableEvent, "(Business, 2018)");
-        cy.assertEventMdx(tableEvent, "([Customer].[Customer].[Type].&[Business],[Time].[Time].[Year].&[2018-01-01])");
+        cy.assertEventMdx(tableEvent, "([Customer].[Customer].[Type].&[BUSINESS],[Time].[Time].[Year].&[2018-01-01])");
 
         // Select subtotal Business
         cy.clickTableCell(table2, 4, 0, true);
         cy.assertEventValue(tableEvent, "(Business, 2018), Business");
-        cy.assertEventMdx(tableEvent, "{([Customer].[Customer].[Type].&[Business],[Time].[Time].[Year].&[2018-01-01]),[Customer].[Customer].[Type].&[Business]}");
+        cy.assertEventMdx(tableEvent, "{([Customer].[Customer].[Type].&[BUSINESS],[Time].[Time].[Year].&[2018-01-01]),[Customer].[Customer].[Type].&[BUSINESS]}");
 
         // Select subtotal Consumer
         cy.clickTableCell(table2, 9, 0, true);
         cy.assertEventValue(tableEvent, "(Business, 2018), Business, Consumer");
-        cy.assertEventMdx(tableEvent, "{([Customer].[Customer].[Type].&[Business],[Time].[Time].[Year].&[2018-01-01]),[Customer].[Customer].[Type].&[Business],[Customer].[Customer].[Type].&[Consumer]}");
+        cy.assertEventMdx(tableEvent, "{([Customer].[Customer].[Type].&[BUSINESS],[Time].[Time].[Year].&[2018-01-01]),[Customer].[Customer].[Type].&[BUSINESS],[Customer].[Customer].[Type].&[CONSUMER]}");
 
         // Select full total → this one is ignored.
         cy.clickTableCell(table2, 10, 0, true);
         cy.assertEventValue(tableEvent, "(Business, 2018), Business, Consumer");
-        cy.assertEventMdx(tableEvent, "{([Customer].[Customer].[Type].&[Business],[Time].[Time].[Year].&[2018-01-01]),[Customer].[Customer].[Type].&[Business],[Customer].[Customer].[Type].&[Consumer]}");
+        cy.assertEventMdx(tableEvent, "{([Customer].[Customer].[Type].&[BUSINESS],[Time].[Time].[Year].&[2018-01-01]),[Customer].[Customer].[Type].&[BUSINESS],[Customer].[Customer].[Type].&[CONSUMER]}");
 
 
     });

@@ -66,12 +66,12 @@ describe("Charts/Events/Sankey Click Events", () => {
 
         clickSankeyNode(widgetId, "Global North");
         cy.assertEventValue(nodeEventWidgetId, "Global North");
-        cy.assertEventMdx(nodeEventWidgetId, "[Geography].[Classification].[Hemisphere].&[Global North]");
+        cy.assertEventMdx(nodeEventWidgetId, "[Geography].[Classification].[Hemisphere].&[GLOBAL NORTH]");
 
         // Click Global North -> Business
         clickFirstSankeyFlow(widgetId, "#e07a5f", 0);
         cy.assertEventValue(flowEventWidgetId, "Global North, Business");
-        cy.assertEventMdx(flowEventWidgetId, "([Geography].[Classification].[Hemisphere].&[Global North],[Customer].[Customer].[Type].&[Business])");
+        cy.assertEventMdx(flowEventWidgetId, "([Geography].[Classification].[Hemisphere].&[GLOBAL NORTH],[Customer].[Customer].[Type].&[BUSINESS])");
 
     });
 

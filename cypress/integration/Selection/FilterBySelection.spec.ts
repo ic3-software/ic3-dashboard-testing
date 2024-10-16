@@ -20,7 +20,7 @@ describe("Selection/Filter By and Selection", () => {
 
         cy.clickTableCell(table1, 2, 0);
         cy.assertEventValue(event1, "Pretoria");
-        cy.assertEventMdx(event1, "[Geography].[Region].[City].&[Pretoria]");
+        cy.assertEventMdx(event1, "[Geography].[Region].[City].&[PRETORIA]");
         cy.assertTableSingleRowSelected(table1, 2, 3);
 
         // Now click another Region in table0 -> table1 should be empty in selection
