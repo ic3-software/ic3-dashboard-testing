@@ -6,7 +6,7 @@ describe("Filters/Filter Panel Character Validation", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Validation/Character Level");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(4);
+        cy.waitForQueryCount(2);
     });
 
     it("event values correct", () => {
@@ -19,7 +19,7 @@ describe("Filters/Filter Panel Character Validation", () => {
 
         const event2 = "ww4";
         const table2 = "ww5";
-        cy.assertEventValue(event2, "Except([Character].[Character].[Character], {{}, [Character].[Character].[All].&[FOO]}, ALL)");
+        cy.assertEventValue(event2, "Except([Character].[Character].[Character], {{},[Character].[Character].[All].&[FOO]}, ALL)");
         cy.assertTableRowCount(table2, 2);
         cy.assertTableCellContent(table2, 0, 0, "bar");
         cy.assertTableCellContent(table2, 1, 0, "empty-character");

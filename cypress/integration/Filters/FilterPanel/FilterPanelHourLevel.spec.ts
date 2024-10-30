@@ -6,7 +6,7 @@ describe("Filters/Filter Panel Hour Level", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Hour Level");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(9);
     });
 
     it("ww14", () => {

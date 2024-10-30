@@ -6,7 +6,7 @@ describe("Filters/Filter Panel Year Level", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Year Level");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(9);
     });
 
     it("even values correct", () => {

@@ -6,15 +6,15 @@ describe("Filters/Filter Panel Character", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Character");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(9);
     });
 
     it("even values correct", () => {
-        cy.assertEventValue("ww1", "{[Character].[Character].[All].&[bar]}");
+        cy.assertEventValue("ww1", "{[Character].[Character].[All].&[BAR]}");
         cy.assertTableRowCount("ww14", 1);
         cy.assertTableCellContent("ww14", 0, 0, "bar");
 
-        cy.assertEventValue("ww3", "Except([Character].[Character].[Character], {[Character].[Character].[All].&[bar]}, ALL)");
+        cy.assertEventValue("ww3", "Except([Character].[Character].[Character], {[Character].[Character].[All].&[BAR]}, ALL)");
         cy.assertTableRowCount("ww19", 2);
         cy.assertTableCellContent("ww19", 0, 0, "foo");
         cy.assertTableCellContent("ww19", 1, 0, "empty-character");

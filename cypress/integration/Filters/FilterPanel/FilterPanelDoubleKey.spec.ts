@@ -6,7 +6,7 @@ describe("Filters/Filter Panel Double Key", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Double Key");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(9);
     });
 
     it("Is any of", () => {

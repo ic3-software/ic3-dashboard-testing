@@ -6,7 +6,7 @@ describe("Filters/Filter Panel Numeric Property", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Numeric Property");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(22);
+        cy.waitForQueryCount(11);
     });
 
     it("event values correct", () => {

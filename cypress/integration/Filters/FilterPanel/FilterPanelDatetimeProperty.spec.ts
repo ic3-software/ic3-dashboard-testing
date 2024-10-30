@@ -6,7 +6,7 @@ describe("Filters/Filter Panel Datetime Property", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Datetime Property");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(9);
     });
 
     it("event values correct", () => {

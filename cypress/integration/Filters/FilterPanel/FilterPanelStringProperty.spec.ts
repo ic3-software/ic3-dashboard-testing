@@ -6,7 +6,7 @@ describe("Filters/Filter Panel String Property", () => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel String Property");
         cy.waitForQueryStatusForLargeDashboard();
-        cy.waitForQueryCount(18);
+        cy.waitForQueryCount(9);
     });
 
     it("even values correct", () => {

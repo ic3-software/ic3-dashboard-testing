@@ -38,7 +38,7 @@ describe("ContainerScaling/basic-application", () => {
                 cy.get("body").find(".ic3-scale-up-overlay").should("exist");
 
                 // Now load the schema → dashboard should open.
-                // cy.loadSchema("[Cypress] Container Scaling");
+                cy.loadSchema("[Cypress] Container Scaling");
                 cy.waitForQueryCount(4);
 
             });

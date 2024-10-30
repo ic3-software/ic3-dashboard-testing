@@ -5,7 +5,7 @@ describe("Filters/Filter Panel Logical Property", () => {
     beforeEach(() => {
         cy.login();
         cy.openViewerTestReport("Filters/Filter Panel/Filter Panel Logical Property");
-        cy.waitForQueryCount(8);
+        cy.waitForQueryCount(4);
     });
 
     it("even values correct", () => {
