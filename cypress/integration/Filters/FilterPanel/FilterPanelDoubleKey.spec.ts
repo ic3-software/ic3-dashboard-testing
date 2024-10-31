@@ -22,7 +22,7 @@ describe("Filters/Filter Panel Double Key", () => {
         // Is none of
         const eventId = "ww5";
         const tableId = "ww6";
-        cy.assertEventValue(eventId, "Except([Character].[double key].[double key], {[Character].[double key].[double key].&[1.0], [Character].[double key].[All].[empty-character]}, ALL)");
+        cy.assertEventValue(eventId, "Except([Character].[double key].[double key], {[Character].[double key].[double key].&[1.0],[Character].[double key].[All].[empty-character]}, ALL)");
         cy.assertTableRowCount(tableId, 2);
         cy.assertTableCellContent(tableId, 0, 0, "2.0");
         cy.assertTableCellContent(tableId, 1, 0, "3.0");

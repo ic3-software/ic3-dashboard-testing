@@ -22,7 +22,7 @@ describe("Filters/Filter Panel Datetime Key", () => {
         // Is none of
         const eventId = "ww5";
         const tableId = "ww6";
-        cy.assertEventValue(eventId, "Except([Character].[datetime key].[datetime key], {[Character].[datetime key].[datetime key].&[2015-01-01T10:00:00.000], [Character].[datetime key].[All].[empty-character]}, ALL)");
+        cy.assertEventValue(eventId, "Except([Character].[datetime key].[datetime key], {[Character].[datetime key].[datetime key].&[2015-01-01T10:00:00.000],[Character].[datetime key].[All].[empty-character]}, ALL)");
         cy.assertTableRowCount(tableId, 1);
         cy.assertTableCellContent(tableId, 0, 0, "2016-02-03T02:00:20.000");
     });

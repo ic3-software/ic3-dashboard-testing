@@ -16,7 +16,7 @@ describe("Filters/Filter Panel Day Level", () => {
         cy.assertTableCellContent("ww14", 1, 0, "2 Jan 2015");
     });
     it("ww19", () => {
-        cy.assertEventValue("ww3", "Except([Time].[Time].[Day], {[Time].[Time].[Day].&[2015-01-01T00:00:00.000], [Time].[Time].[All].[empty-date].[empty-date].[empty-date].[empty-date]}, ALL)");
+        cy.assertEventValue("ww3", "Except([Time].[Time].[Day], {[Time].[Time].[Day].&[2015-01-01T00:00:00.000],[Time].[Time].[All].[empty-date].[empty-date].[empty-date].[empty-date]}, ALL)");
         cy.assertTableRowCount("ww19", 1);
         cy.assertTableCellContent("ww19", 0, 0, "2 Jan 2015");
     });
