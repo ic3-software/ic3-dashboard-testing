@@ -975,6 +975,8 @@ declare namespace Cypress {
 
         panelFilterSetSelection(widgetId: string, index: number, values: (string | RegExp)[]): void;
 
+        panelFilterIsAnyOfSearchAndSelectAll(widgetId: string, index: number, search: string): void;
+
         panelFilterSetSelectionSimple(widgetId: string, index: number, values: string | RegExp): void;
 
         // -------------------------------------------------------------------------------------------------------------
@@ -3627,6 +3629,34 @@ Cypress.Commands.add("panelFilterSetSelection", (widgetId: string, index: number
             .click({scrollBehavior: false})
         ;
     });
+
+    cy.get("[data-cy='confirm-selection']")
+        .click()
+    ;
+
+});
+
+Cypress.Commands.add("panelFilterIsAnyOfSearchAndSelectAll", (widgetId: string, index: number, search: string) => {
+
+    const filter = cy.getWidget(widgetId)
+        .find("[data-cy='filters'] [data-cy='filter-item']")
+        .eq(index)
+    ;
+
+    filter.find("[data-cy='value-selector-text']")
+        .find(".MuiInputBase-root")
+        .click()
+    ;
+
+    cy.get("[data-cy='search-field'] input")
+        .type(search)
+    ;
+
+    cy.wait(1000);
+
+    cy.get("[data-cy='confirm-add-search-results']")
+        .click()
+    ;
 
     cy.get("[data-cy='confirm-selection']")
         .click()
