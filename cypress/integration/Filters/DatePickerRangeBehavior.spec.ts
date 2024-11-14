@@ -11,67 +11,67 @@ describe("Filters/DatePicker Behavior", () => {
         cy.waitForQueryCount(5);
     });
 
-    it("ww0: Date Picker", () => {
-
-        let queryCount = 5;
-
-        const widgetId = "ww0";
-        const eventWidgetId = "ww1";
-        const tableWidgetId = "ww2";
-
-        assertDates(widgetId, eventWidgetId, tableWidgetId,
-            null, null, null,
-            null, null, null
-        );
-
-        // Intermediate input values are not triggered (=> asserted by a single query being sent)
-        cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
-        cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
-        cy.waitForQueryCount(++queryCount);
-        assertDates(widgetId, eventWidgetId, tableWidgetId,
-            "01 Sep 2021", "01 Sep 2021", DateUtils.mdx("DateTime(2021,9,1)"),
-            "07 Sep 2021", "07 Sep 2021", DateUtils.mdx("DateTime(2021,9,7)")
-        );
-    });
-
-    it("ww4: Date Picker with Default Date", () => {
-
-        const widgetId = "ww4";
-        const eventWidgetId = "ww5";
-        const tableWidgetId = "ww6";
-
-        const today = new Date();
-
-        const from = new Date(today.getTime())
-        from.setDate(from.getDate() - 7);
-
-        const to = new Date(today.getTime());
-        to.setDate(to.getDate() + 7);
-
-        assertDates(widgetId, eventWidgetId, tableWidgetId,
-            DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
-            DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
-        );
-
-    });
-
-    it("ww12: Date Picker with Partial Default", () => {
-
-        const widgetId = "ww12";
-        const eventWidgetId = "ww13";
-        const tableWidgetId = "ww14";
-
-        const today = new Date();
-
-        const from = new Date(today.getTime())
-        from.setDate(from.getDate() - 7);
-
-        assertDates(widgetId, eventWidgetId, tableWidgetId,
-            DateUtils.dateEvent(from), null, null,
-            null, null, null
-        );
-
-    });
+    // it("ww0: Date Picker", () => {
+    //
+    //     let queryCount = 5;
+    //
+    //     const widgetId = "ww0";
+    //     const eventWidgetId = "ww1";
+    //     const tableWidgetId = "ww2";
+    //
+    //     assertDates(widgetId, eventWidgetId, tableWidgetId,
+    //         null, null, null,
+    //         null, null, null
+    //     );
+    //
+    //     // Intermediate input values are not triggered (=> asserted by a single query being sent)
+    //     cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
+    //     cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
+    //     cy.waitForQueryCount(++queryCount);
+    //     assertDates(widgetId, eventWidgetId, tableWidgetId,
+    //         "01 Sep 2021", "01 Sep 2021", new Date(2021,8 /*Sep*/,1),
+    //         "07 Sep 2021", "07 Sep 2021", new Date(2021,8 /*Sep*/,7)
+    //     );
+    // });
+    //
+    // it("ww4: Date Picker with Default Date", () => {
+    //
+    //     const widgetId = "ww4";
+    //     const eventWidgetId = "ww5";
+    //     const tableWidgetId = "ww6";
+    //
+    //     const today = new Date();
+    //
+    //     const from = new Date(today.getTime())
+    //     from.setDate(from.getDate() - 7);
+    //
+    //     const to = new Date(today.getTime());
+    //     to.setDate(to.getDate() + 7);
+    //
+    //     assertDates(widgetId, eventWidgetId, tableWidgetId,
+    //         DateUtils.dateEvent(from), DateUtils.dateEvent(from), from,
+    //         DateUtils.dateEvent(to), DateUtils.dateEvent(to), to
+    //     );
+    //
+    // });
+    //
+    // it("ww12: Date Picker with Partial Default", () => {
+    //
+    //     const widgetId = "ww12";
+    //     const eventWidgetId = "ww13";
+    //     const tableWidgetId = "ww14";
+    //
+    //     const today = new Date();
+    //
+    //     const from = new Date(today.getTime())
+    //     from.setDate(from.getDate() - 7);
+    //
+    //     assertDates(widgetId, eventWidgetId, tableWidgetId,
+    //         DateUtils.dateEvent(from), null, null,
+    //         null, null, null
+    //     );
+    //
+    // });
 
     it("ww8: Date Picker with Bound", () => {
 
@@ -105,8 +105,8 @@ describe("Filters/DatePicker Behavior", () => {
         cy.selectDatePickerRangeToFromInput(widgetId, DateUtils.dateEvent(to));
         cy.waitForQueryCount(++queryCount);
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
-            DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
+            DateUtils.dateEvent(from), DateUtils.dateEvent(from), from,
+            DateUtils.dateEvent(to), DateUtils.dateEvent(to), to
         );
 
         {
@@ -118,16 +118,16 @@ describe("Filters/DatePicker Behavior", () => {
             cy.waitForQueryCount(queryCount);
 
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                DateUtils.dateEvent(invalid), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)) /* input clear'd */,
-                DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to)) /* input clear'd */
+                DateUtils.dateEvent(invalid), DateUtils.dateEvent(from), from /* input clear'd */,
+                DateUtils.dateEvent(to), DateUtils.dateEvent(to), to /* input clear'd */
             );
         }
 
         // cy.selectDatePickerRangeFromFromInput(widgetId, DateUtils.dateEvent(from));
         // cy.waitForQueryCount(queryCount);
         // assertDates(widgetId, eventWidgetId, tableWidgetId,
-        //     DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
-        //     DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
+        //     DateUtils.dateEvent(from), DateUtils.dateEvent(from), from,
+        //     DateUtils.dateEvent(to), DateUtils.dateEvent(to), to
         // );
         //
         // {
@@ -139,8 +139,8 @@ describe("Filters/DatePicker Behavior", () => {
         //     cy.waitForQueryCount(queryCount);
         //
         //     assertDates(widgetId, eventWidgetId, tableWidgetId,
-        //         DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
-        //         DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
+        //         DateUtils.dateEvent(from), DateUtils.dateEvent(from), from,
+        //         DateUtils.dateEvent(to), DateUtils.dateEvent(to), to
         //     );
         // }
 

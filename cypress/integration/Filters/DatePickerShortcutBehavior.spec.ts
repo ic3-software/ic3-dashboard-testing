@@ -24,8 +24,8 @@ describe("Filters/DatePicker Shortcut Behavior", () => {
         const to = from;
 
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
-            DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
+            DateUtils.dateEvent(from), DateUtils.dateEvent(from), from,
+            DateUtils.dateEvent(to), DateUtils.dateEvent(to), to
         );
     });
 
@@ -45,8 +45,8 @@ describe("Filters/DatePicker Shortcut Behavior", () => {
         const to = from;
 
         assertDates(widgetId, eventWidgetId, tableWidgetId,
-            DateUtils.dateEvent(from), DateUtils.dateEvent(from), DateUtils.mdx(DateUtils.dateMdx(from)),
-            DateUtils.dateEvent(to), DateUtils.dateEvent(to), DateUtils.mdx(DateUtils.dateMdx(to))
+            DateUtils.dateEvent(from), DateUtils.dateEvent(from), from,
+            DateUtils.dateEvent(to), DateUtils.dateEvent(to), to
         );
 
     });
