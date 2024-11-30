@@ -1,10 +1,12 @@
-export function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: string, dateF: string | null, eventF: string | null, mdxF: string | null, dateT: string | null, eventT: string | null, mdxT: string | null) {
+import {DateUtils} from "./DateUtils";
+
+export function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: string, dateF: string | null, eventF: string | null, mdxF: Date | null, dateT: string | null, eventT: string | null, mdxT: Date | null) {
 
     cy.assertDatePickerRangeFrom(widgetId, dateF);
     cy.assertDatePickerRangeTo(widgetId, dateT);
 
     const event = (eventF || eventT) ? (Cypress.migrateDate(eventF) + " - " + Cypress.migrateDate(eventT)) : null;
-    const mdx = (mdxF || mdxT) ? ("{" + mdxF + ":" + mdxT + "}") : null;
+    const mdx = (mdxF || mdxT) ? DateUtils.rangeMdx(mdxF!, mdxT!) : null;
 
     cy.assertEventValue(eventWidgetId, event);
     cy.assertEventMdx(eventWidgetId, mdx);

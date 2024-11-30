@@ -30,7 +30,7 @@ export class DateUtils {
     }
 
     static rangeMdx(to: Date, from: Date) {
-        return "{" + DateUtils.mdxFromDate(to) + ":" + DateUtils.mdxFromDate(from) + "}";
+        return "filter([Time].[Time].[Day] as b, b.currentMember.key >>= " + DateUtils.dateMdx(to) + " and b.currentMember.key <<= " + DateUtils.dateMdx(from) + ")";
     }
 
     static mdxFromDate(date: Date) {

@@ -26,7 +26,6 @@
 import Timeoutable = Cypress.Timeoutable;
 import VisitOptions = Cypress.VisitOptions;
 import Loggable = Cypress.Loggable;
-import Cookie = Cypress.Cookie;
 
 require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
@@ -1252,7 +1251,7 @@ declare namespace Cypress {
         // REST API
         // -------------------------------------------------------------------------------------------------------------
 
-        sendRestAPI(apiCallback: () => void): void;
+        sendRestAPI(url: string, params: any): Chainable<Subject>;
 
         loadSchema(schemaName: string): void;
 
@@ -4531,77 +4530,46 @@ Cypress.Commands.add('setBrowserTimeZone', (timeZone: ValidTimeZones) => {
 
 });
 
-Cypress.Commands.add("sendRestAPI", callback => {
-    let sessionCookie: Cookie | null;
+Cypress.Commands.add("sendRestAPI", (url: string, params: any) => {
 
-    cy.getCookie("IC3_JSESSIONID_9494")
-        .then(c => {
-            sessionCookie = c;
-            console.log("*** cookie", sessionCookie);
-        })
-        // Remove all interfering cookies.
-        .then(() => cy.clearCookies())
-        .then(() => callback())
-        .then(() => {
-            // Now re-add the session cookie
-            if (sessionCookie != null) {
-                cy.clearCookie("IC3_JSESSIONID_9494");
-                cy.setCookie("IC3_JSESSIONID_9494", sessionCookie.value);
-            }
-        });
+    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
+
+    return cy.wrap(fetch(url, {
+
+        credentials: "omit",
+
+        body: JSON.stringify(params),
+
+        method: 'POST',
+
+        headers: {
+            "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
+            "Content-Type": "application/json"
+        }
+
+    }).then(response => response.text()));
+
 });
 
 Cypress.Commands.add('loadSchema', (schemaName: string) => {
 
-    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
-
-    cy.sendRestAPI(() => cy.request({
-
-            url: Cypress.config().baseUrl + "/icCube/api/console/admin/LoadSchema",
-
-            method: 'POST',
-
-            body: {
-                "schemaName": schemaName
-            },
-
-            headers: {
-                "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
-                "Content-Type": "application/json"
-            }
-
-        }).then((response) => {
-            // response.body is automatically serialized into JSON
-            expect(JSON.stringify(response.body)).to.eq(`{"version":"1","status":"ok","payload":{"schemaName":"${schemaName}","status":"LOADED"}}`);
-        })
-    );
+    cy.sendRestAPI(
+        Cypress.config().baseUrl + "/icCube/api/console/admin/LoadSchema",
+        {
+            "schemaName": schemaName,
+        }
+    ).should("eq", `{"version":"1","status":"ok","payload":{"schemaName":"${schemaName}","status":"LOADED"}}`);
 
 });
 
 Cypress.Commands.add('unloadSchema', (schemaName: string) => {
 
-    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
-
-    cy.sendRestAPI(() => cy.request({
-
-            url: Cypress.config().baseUrl + "/icCube/api/console/admin/UnloadSchema",
-
-            method: 'POST',
-
-            body: JSON.stringify({
-                "schemaName": schemaName
-            }),
-
-            headers: {
-                "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
-                "Content-Type": "application/json",
-            }
-
-        }).then((response) => {
-            // response.body is automatically serialized into JSON
-            expect(JSON.stringify(response.body)).to.eq(`{"version":"1","status":"ok","payload":{"schemaName":"${schemaName}","status":"UNLOADED"}}`);
-        })
-    );
+    cy.sendRestAPI(
+        Cypress.config().baseUrl + "/icCube/api/console/admin/UnloadSchema",
+        {
+            "schemaName": schemaName,
+        }
+    ).should("eq", `{"version":"1","status":"ok","payload":{"schemaName":"${schemaName}","status":"UNLOADED"}}`);
 
 });
 
