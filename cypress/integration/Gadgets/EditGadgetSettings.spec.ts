@@ -14,7 +14,7 @@ describe("Gadgets/EditGadgetSettings", () => {
 
         cy.clickWidgetHeader("wg0-1");
         cy.get("[data-cy='toolbar-openOptionsEditor']").click()
-        cy.get('.MuiDrawer-root #tab-chart').click();
+        cy.widgetEditorChangeTab('tab-chart')
 
         cy.get("div[data-cy='header-$-title'] input")
             .type('Test Header Test')

@@ -38,7 +38,7 @@ export enum SchemaBrowserMdxEntityDataType {
 
 }
 
-export function schemaBrowserExpandNode(type: SchemaBrowserMdxEntityDataType, caption: string, rootClass = ".MuiDrawer-root") {
+export function schemaBrowserExpandNode(type: SchemaBrowserMdxEntityDataType, caption: string, rootClass = ".ic3EditorDrawerShell-content") {
 
     cy.get(rootClass + ' .ic3WidgetEditorQueryPanel-Hierarchies div[data-cy-type="' + type + '"][data-cy="' + caption + '"] button')
         .click({multiple: true})
@@ -46,7 +46,7 @@ export function schemaBrowserExpandNode(type: SchemaBrowserMdxEntityDataType, ca
 
 }
 
-export function schemaBrowserDragNode(caption: string, dropAxis: string, rootClass = ".MuiDrawer-root") {
+export function schemaBrowserDragNode(caption: string, dropAxis: string, rootClass = ".ic3EditorDrawerShell-content") {
 
     cy.get(rootClass + ' .ic3WidgetEditorQueryPanel-Hierarchies div[data-cy="' + caption + '"] .ic3-draggable')
         .trigger('dragstart');

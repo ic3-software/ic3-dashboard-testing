@@ -4398,7 +4398,7 @@ Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 
 Cypress.Commands.add("widgetEditorChangeTab", (tabName: string) => {
 
-    cy.get('.MuiDrawer-root #' + tabName).click()
+    cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').click()
 
 });
 
@@ -4419,7 +4419,7 @@ Cypress.Commands.add("widgetEditorChangeTextOption", (name: string, newValue: st
 });
 
 Cypress.Commands.add("widgetEditorQueryBuilderAssertNode", (dropAxis: string, nodeName: string) => {
-    cy.get('.MuiDrawer-root .ic3WidgetEditorQueryPanel-Axis[data-cy="' + dropAxis + '"]')
+    cy.get('.ic3EditorDrawerShell-content .ic3WidgetEditorQueryPanel-Axis[data-cy="' + dropAxis + '"]')
         .find(".MuiChip-label .ic3ListCounter-Label").first().contains(nodeName);
 })
 
@@ -4456,24 +4456,24 @@ Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
 Cypress.Commands.add("widgetEditorApply", () => {
 
-    cy.get('.MuiDrawer-root [data-cy="apply"]').click();
+    cy.get('.ic3EditorDrawerShell-header [data-cy="apply"]').click();
 
 });
 
 Cypress.Commands.add("widgetEditorClose", () => {
 
-    cy.get('.MuiDrawer-root [data-cy="close"]').click();
+    cy.get('.ic3EditorDrawerShell-header [data-cy="close"]').click();
 
 });
 
 Cypress.Commands.add("widgetEditorChangeCube", (cubeName: string) => {
 
-    cy.get('.MuiDrawer-root .ic3WidgetEditorQueryPanel-Cube input').clear().type(cubeName + "{downArrow}{enter}");
+    cy.get('.ic3EditorDrawerShell-content .ic3WidgetEditorQueryPanel-Cube input').clear().type(cubeName + "{downArrow}{enter}");
 
 });
 Cypress.Commands.add("widgetEditorMdxTreeHasNode", (text: string) => {
 
-    cy.get('.MuiDrawer-root div.ic3QueryBuilderNode-itemText[title="' + text + '"]').should("have.length", 1)
+    cy.get('.ic3EditorDrawerShell-content div.ic3QueryBuilderNode-itemText[title="' + text + '"]').should("have.length", 1)
 
 });
 

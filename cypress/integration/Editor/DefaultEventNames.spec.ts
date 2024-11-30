@@ -14,15 +14,15 @@ describe("Editor/Default Event Names", () => {
     it("Add buttons widget, check default year event name", () => {
 
         cy.addWidgetAndOpenEditor("ic3.FilterButtons");
-        cy.get('.MuiDrawer-root #tab-query').click();
+        cy.widgetEditorChangeTab('tab-query');
 
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.DIMENSION, "Geography");
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.HIERARCHY, "Geography");
 
         schemaBrowserDragNode("Country", "MdxBuilderFilterItems");
 
-        cy.get('.MuiDrawer-root [data-cy="apply"]').click();
-        cy.get('.MuiDrawer-root [data-cy="close"]').click();
+        cy.widgetEditorApply();
+        cy.widgetEditorClose();
 
         cy.selectButton("ww1", "China");
         cy.assertEventValue("ww0", "China");
