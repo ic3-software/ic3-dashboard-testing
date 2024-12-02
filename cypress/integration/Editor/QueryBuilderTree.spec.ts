@@ -14,6 +14,7 @@ describe("Query Builder Tree", () => {
     it("filter tree", () => {
 
         cy.widgetEditorOpen("ww0");
+        cy.widgetEditorChangeTab("tab-query");
 
         cy.get(".WidgetEditorQueryPanelAxis-DropZoneFilter").click();
         // Country in two hierarchies
@@ -33,7 +34,7 @@ describe("Query Builder Tree", () => {
         cy.widgetEditorFilter("year");
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 6);
 
-        cy.widgetEditorApplyAndClose();
+        cy.widgetEditorClose();
     });
 
     it("checking visible / invisible dimensions", () => {
@@ -62,7 +63,6 @@ describe("Query Builder Tree", () => {
 
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.DIMENSION, "Geography");
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.HIERARCHY, "Geography");
-        cy.widgetEditorApply();
 
         cy.get("div.ic3QueryBuilderNode-itemText[title='Country (31)']").should("be.visible");
     });

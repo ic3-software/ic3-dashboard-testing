@@ -18,10 +18,12 @@ describe("Editor/AddEventToQueriesKPI", () => {
         cy.clickUserMenuAddEventToQueries("ww0");
 
        cy.widgetEditorOpen("ww1");
+        cy.widgetEditorChangeTab("tab-query");
        cy.widgetEditorQueryBuilderAssertNode("QueryEditorMdxBuilder.AxisFilter", "year");
        cy.widgetEditorApplyAndClose();
 
         cy.widgetEditorOpen("ww2");
+        cy.widgetEditorChangeTab("tab-query");
         cy.widgetEditorQueryBuilderAssertNode("QueryEditorMdxBuilder.AxisFilter", "year");
         cy.widgetEditorApplyAndClose();
 

@@ -12,9 +12,8 @@ describe("Gadgets/EditGadgetSettings", () => {
         edit a gadget widget in the report editor and check that the settings work.
          */
 
-        cy.clickWidgetHeader("wg0-1");
-        cy.get("[data-cy='toolbar-openOptionsEditor']").click()
-        cy.widgetEditorChangeTab('tab-chart')
+        cy.widgetEditorOpen("wg0-1");
+        cy.widgetEditorChangeTab('tab-chart');
 
         cy.get("div[data-cy='header-$-title'] input")
             .type('Test Header Test')

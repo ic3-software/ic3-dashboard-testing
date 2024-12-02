@@ -4432,13 +4432,13 @@ Cypress.Commands.add("widgetEditorQueryBuilderAssertNode", (dropAxis: string, no
 
 Cypress.Commands.add("widgetEditorOpenOptionGroup", (name: string) => {
 
-    cy.get(`.MuiAccordion-root[data-cy=${name}]`).click()
+    cy.get(`.ic3App-drawer .MuiAccordion-root[data-cy=${name}]`).click()
 
 });
 
 Cypress.Commands.add("widgetEditorChangeOption", (input: string, option: string) => {
 
-    cy.get(`div[data-cy='${input}'] input`)
+    cy.get(`.ic3App-drawer div[data-cy='${input}'] input`)
         .clear()
         .type(option)
         .get('li.MuiAutocomplete-option[data-option-index="0"]')
@@ -4448,7 +4448,7 @@ Cypress.Commands.add("widgetEditorChangeOption", (input: string, option: string)
 });
 Cypress.Commands.add("widgetEditorChangeBoolean", (input: string) => {
 
-    cy.get(`[data-cy='${input}'] input`)
+    cy.get(`.ic3App-drawer [data-cy='${input}'] input`)
         .click()
     ;
 
@@ -4463,24 +4463,24 @@ Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
 Cypress.Commands.add("widgetEditorApply", () => {
 
-    cy.get('.ic3EditorDrawerShell-header [data-cy="apply"]').click();
+    cy.get('.ic3App-drawer [data-cy="apply"]').click();
 
 });
 
 Cypress.Commands.add("widgetEditorClose", () => {
 
-    cy.get('.ic3EditorDrawerShell-header [data-cy="close"]').click();
+    cy.get('.ic3App-drawer [data-cy="close"]').click();
 
 });
 
 Cypress.Commands.add("widgetEditorChangeCube", (cubeName: string) => {
 
-    cy.get('.ic3EditorDrawerShell-content .ic3WidgetEditorQueryPanel-Cube input').clear().type(cubeName + "{downArrow}{enter}");
+    cy.get('.ic3App-drawer .ic3WidgetEditorQueryPanel-Cube input').clear().type(cubeName + "{downArrow}{enter}");
 
 });
 Cypress.Commands.add("widgetEditorMdxTreeHasNode", (text: string) => {
 
-    cy.get('.ic3EditorDrawerShell-content div.ic3QueryBuilderNode-itemText[title="' + text + '"]').should("have.length", 1)
+    cy.get('.ic3App-drawer div.ic3QueryBuilderNode-itemText[title="' + text + '"]').should("have.length", 1)
 
 });
 

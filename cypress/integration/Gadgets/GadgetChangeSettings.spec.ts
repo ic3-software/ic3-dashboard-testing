@@ -13,8 +13,7 @@ describe("Gadgets/GadgetChangeSettings", () => {
          */
 
         cy.widgetEditorOpen("ww0");
-
-        cy.get("#tab-chart").click();
+        cy.widgetEditorChangeTab('tab-chart')
 
         const text = new Date().toString();
 
