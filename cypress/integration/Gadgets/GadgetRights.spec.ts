@@ -4,50 +4,49 @@ function checkRights(widgetId: string, rights: string[]) {
     cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
 
     if (rights.includes("title")) {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-chart']").click();
+        cy.widgetEditorChangeTab("tab-chart");
         cy.get("[data-cy='header-$-title']").should('exist');
     } else {
         if (rights.includes("chart")) {
-            cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-chart']").click();
+            cy.widgetEditorChangeTab("tab-chart");
             cy.get("[data-cy='header-$-title']").should('not.exist');
         } else {
-            cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-chart']").should('not.exist');
+            cy.widgetEditorTabNotExists('tab-chart')
         }
     }
 
     if (rights.includes("chart")) {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-chart']").click();
+        cy.widgetEditorChangeTab("tab-chart");
         cy.get("[data-cy='options-chartOptions.variant']").should('exist');
     } else {
         if (rights.includes("title")) {
-            cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-chart']").click();
+            cy.widgetEditorChangeTab("tab-chart");
             cy.get("[data-cy='options-chartOptions.variant']").should('not.exist');
         } else {
-            cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-chart']").should('not.exist');
+            cy.widgetEditorTabNotExists('tab-chart')
         }
     }
 
+    cy.widgetEditorChangeTab("tab-box");
     if (rights.includes("box")) {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-box']").click();
         cy.get("[data-cy='boxvariant']").should('exist');
     } else {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-box']").click();
         cy.get("[data-cy='boxvariant']").should('not.exist');
     }
 
     if (rights.includes("query-filters")) {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-queryFilter']").should('exist');
+        cy.widgetEditorChangeTab("tab-queryFilter");
     } else {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-queryFilter']").should('not.exist');
+        cy.widgetEditorTabNotExists('tab-queryFilter')
     }
 
     if (rights.includes("interactions")) {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-interactions']").should('exist');
+        cy.widgetEditorChangeTab("tab-interactions");
     } else {
-        cy.get(".MuiTabs-flexContainer[role='tablist']").find("button[id='tab-interactions']").should('not.exist');
+        cy.widgetEditorTabNotExists('tab-interactions')
     }
 
-    cy.get("[data-cy='close']").click();
+    cy.widgetEditorClose();
 
     cy.getWidget(widgetId).find("[data-cy='userMenu']").click();
     if (rights.includes('convert-to-widget')) {

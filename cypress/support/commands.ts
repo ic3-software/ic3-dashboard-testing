@@ -1180,6 +1180,8 @@ declare namespace Cypress {
 
         widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
 
+        widgetEditorTabNotExists(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
+
         widgetEditorEnterMdxStatement(mdxStatement: string): void;
 
         widgetEditorQueryBuilderAssertNode(dropAxis: string, nodeName: string): void;
@@ -4398,6 +4400,12 @@ Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 Cypress.Commands.add("widgetEditorChangeTab", (tabName: string) => {
 
     cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').click()
+
+});
+
+Cypress.Commands.add("widgetEditorTabNotExists", (tabName: string) => {
+
+    cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').should('not.exist');
 
 });
 
