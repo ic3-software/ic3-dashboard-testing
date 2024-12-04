@@ -18,7 +18,7 @@ describe("Gadgets/GadgetChangeTheme", () => {
         cy.contains('label', 'Theme *').type("ic3 Demo Theme{downArrow}{enter}");
         cy.contains('label', 'Layout Group *').click({force:true}).type("Demo{downArrow}{enter}");
         cy.contains('label', 'Layout Name *').click({force:true}).type("Desktop{downArrow}{enter}");
-        cy.widgetEditorApplyAndClose();
+        cy.widgetEditorApply();
 
         // Demo theme
         cy.getWidget("wg0-0").find(".MuiDataGrid-columnHeaderTitle").eq(0)
