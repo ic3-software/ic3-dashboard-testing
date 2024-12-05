@@ -4399,7 +4399,7 @@ Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 
 Cypress.Commands.add("widgetEditorChangeTab", (tabName: string) => {
 
-    cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').click()
+    cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').click({force: true})
 
 });
 
@@ -4463,13 +4463,13 @@ Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
 Cypress.Commands.add("widgetEditorApply", () => {
 
-    cy.get('.ic3App-drawer [data-cy="apply"]').click();
+    cy.get('.ic3App-drawer [data-cy="apply"]').click({force: true});
 
 });
 
 Cypress.Commands.add("widgetEditorClose", () => {
 
-    cy.get('.ic3App-drawer [data-cy="close"]').click();
+    cy.get('.ic3App-drawer [data-cy="close"]').click({force: true});
 
 });
 
