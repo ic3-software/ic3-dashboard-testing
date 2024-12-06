@@ -4399,13 +4399,13 @@ Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 
 Cypress.Commands.add("widgetEditorChangeTab", (tabName: string) => {
 
-    cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').click({force: true})
+    cy.get('.ic3App-drawer [data-cy="' + tabName + '"]').click({force: true})
 
 });
 
 Cypress.Commands.add("widgetEditorTabNotExists", (tabName: string) => {
 
-    cy.get('.ic3EditorDrawerShell-header [data-cy="' + tabName + '"]').should('not.exist');
+    cy.get('.ic3App-drawer [data-cy="' + tabName + '"]').should('not.exist');
 
 });
 
