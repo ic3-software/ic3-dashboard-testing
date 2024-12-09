@@ -35,7 +35,7 @@ describe("Local State/Check Locale", () => {
         // Assert state is kept
         cy.assertWidgetHeader(wid, header);
         cy.selectButton("ww1", "Refresh");
-        cy.getWidget("ww0").contains("Pacific")
+        cy.getWidget("ww0").contains("Pacific");  // check locale of the browser is Pacific
 
     });
 
