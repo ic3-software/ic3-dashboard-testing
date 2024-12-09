@@ -14,6 +14,9 @@ describe("Local State/Check Locale", () => {
     it("Save/Restore State", () => {
 
         cy.setBrowserTimeZone("Europe/Amsterdam");
+        // Then refresh page
+        cy.openViewerTestReport(dashboard);
+        cy.waitForQueryCount(1);
 
         // First create the state
         cy.selectDatePickerFromInput(wid, "02 Apr 2024");
