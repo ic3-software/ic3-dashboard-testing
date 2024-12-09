@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered #
 
-name: Cypress weekly
+name: Cypress weekly manual
 on:
   workflow_dispatch:
 
