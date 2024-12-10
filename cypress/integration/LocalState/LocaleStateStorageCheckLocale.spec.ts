@@ -14,6 +14,9 @@ describe("Local State/Check Locale", () => {
     it("Save/Restore State", () => {
 
         cy.setBrowserTimeZone("Europe/Amsterdam");
+        // Then refresh page
+        cy.openViewerTestReport(dashboard);
+        cy.waitForQueryCount(1);
 
         // First create the state
         cy.selectDatePickerFromInput(wid, "02 Apr 2024");
@@ -35,7 +38,7 @@ describe("Local State/Check Locale", () => {
         // Assert state is kept
         cy.assertWidgetHeader(wid, header);
         cy.selectButton("ww1", "Refresh");
-        cy.getWidget("ww0").contains("Pacific")
+        cy.getWidget("ww0").contains("Pacific");  // check locale of the browser is Pacific
 
     });
 

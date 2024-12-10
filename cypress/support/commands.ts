@@ -4400,6 +4400,7 @@ Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 Cypress.Commands.add("widgetEditorChangeTab", (tabName: string) => {
 
     cy.get('.ic3App-drawer [data-cy="' + tabName + '"]').click({force: true})
+    cy.get('.ic3App-drawer .Mui-selected[data-cy="' + tabName + '"]').should('exist');
 
 });
 
