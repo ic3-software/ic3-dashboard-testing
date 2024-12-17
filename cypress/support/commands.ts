@@ -1281,6 +1281,7 @@ function createViewingURL(path: string | IOpenReport, userLocale?: string): Part
 
                 ["ic3cypress.withMyPluginJS"]: path.startsWith("Demo/PluginJS") ? "1" : "0",
                 ["ic3cypress.withMyPluginReact"]: path.startsWith("Demo/PluginReact") ? "1" : "0",
+                ["ic3cypress.withMyPluginTheme"]: path.startsWith("Demo/PluginTheme") ? "1" : "0",
                 ["ic3cypress.containerScaleUpEnabled"]: path.startsWith("ContainerScaling") ? "1" : "0",
 
                 ic3locale: userLocale
@@ -1298,6 +1299,7 @@ function createViewingURL(path: string | IOpenReport, userLocale?: string): Part
 
             ["ic3cypress.withMyPluginJS"]: path.path.startsWith("Demo/PluginJS") ? "1" : "0",
             ["ic3cypress.withMyPluginReact"]: path.path.startsWith("Demo/PluginReact") ? "1" : "0",
+            ["ic3cypress.withMyPluginTheme"]: path.path.startsWith("Demo/PluginTheme") ? "1" : "0",
             ["ic3cypress.containerScaleUpEnabled"]: path.path.startsWith("ContainerScaling") ? "1" : "0",
 
             ic3locale: userLocale
