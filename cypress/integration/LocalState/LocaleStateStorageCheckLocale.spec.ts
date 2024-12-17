@@ -42,4 +42,19 @@ describe("Local State/Check Locale", () => {
 
     });
 
+    it("Print PDF", () => {
+
+        cy.setBrowserTimeZone("Europe/Amsterdam");
+        // Then refresh page
+        cy.openViewerTestReport(dashboard);
+        cy.waitForQueryCount(1);
+
+        cy.clickPrintButton("ww3");
+
+        cy.readPdfFromDownload("Date picker.pdf")
+            .pdfAssertNumberOfPages(1)
+            .pdfTextShould("contain", header)
+        ;
+
+    })
 });
