@@ -49,6 +49,15 @@ describe("Local State/Check Locale", () => {
         cy.openViewerTestReport(dashboard);
         cy.waitForQueryCount(1);
 
+        cy.selectDatePickerFromInput(wid, "02 Apr 2024");
+        cy.getWidgetHeader(wid).click();
+
+        cy.setBrowserTimeZone("America/Los_Angeles");
+
+        // Then refresh page
+        cy.openViewerTestReport(dashboard);
+        cy.waitForQueryCount(1);
+
         cy.clickPrintButton("ww3");
 
         cy.readPdfFromDownload("Date picker.pdf")
