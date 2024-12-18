@@ -797,6 +797,8 @@ declare namespace Cypress {
 
         drilldownPivotTableTopHeader(widgetId: string, row: number, col: number): void;
 
+        scrollPivotTable(widgetId: string, distance: number): void;
+
         selectPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
         selectPivotTableTopHeader(widgetId: string, row: number, col: number): void;
@@ -2439,6 +2441,17 @@ Cypress.Commands.add("drilldownPivotTableTopHeader", (widgetId: string, row: num
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${col}'] svg`)
         .click()
+    ;
+
+});
+
+Cypress.Commands.add("scrollPivotTable", (widgetId: string, distance: number) => {
+
+    // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-body`)
+        .realMouseWheel({deltaY: distance, scrollBehavior: false})
     ;
 
 });
