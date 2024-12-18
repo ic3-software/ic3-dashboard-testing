@@ -1,5 +1,3 @@
-import {assertButtonsSelection} from "../Filters/FilterUtils";
-
 export {};
 
 describe("Embedded Reports/Report Different Theme", () => {
