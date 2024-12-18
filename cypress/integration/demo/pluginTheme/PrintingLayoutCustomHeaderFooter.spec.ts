@@ -1,6 +1,6 @@
 import {PluginThemeUtils} from "./PluginThemeUtils";
 
-describe("demo/PluginReact/KpiCard", () => {
+describe("demo/PluginTheme/A4 landscape header footer", () => {
 
     afterEach(() => {
 
