@@ -1316,7 +1316,7 @@ function createEditingURL(path: string): Partial<VisitOptions> & { url: string }
 
         qs: {
             ic3report: "shared:/Tests/" + fixURL(path),
-            ["ic3cypress.withMyPluginTheme"]: path === "Gadgets/Gadget Change Theme" ? "1" : "0",
+            ["ic3cypress.withMyPluginTheme"]: (path === "Gadgets/Gadget Change Theme" || path.startsWith("Demo/PluginTheme")) ? "1" : "0",
         }
     }
 }
