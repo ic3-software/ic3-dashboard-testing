@@ -1204,6 +1204,8 @@ declare namespace Cypress {
 
         widgetEditorMdxTreeHasNode(nodeName: string): void;
 
+        widgetEditorMdxTreeFilter(filterText: string): void;
+
         widgetEditorFilter(filterText: string): void;
 
         paste(payload: string): Chainable<Subject>;
@@ -4495,6 +4497,14 @@ Cypress.Commands.add("keyboardDeleteAll", {
         return cy.wrap(element).type('{command}a{del}')
     else
         return cy.wrap(element).type('{ctrl}a{del}')
+});
+
+Cypress.Commands.add("widgetEditorMdxTreeFilter", (filter: string) => {
+
+    if (filter)
+        cy.get('.ic3WidgetEditorQueryPanel-Filter input').clear().type(filter);
+    else
+        cy.get('.ic3WidgetEditorQueryPanel-Filter input').clear();
 });
 
 Cypress.Commands.add("widgetEditorFilter", (filter: string) => {

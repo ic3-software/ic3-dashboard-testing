@@ -20,18 +20,18 @@ describe("Query Builder Tree", () => {
         // Country in two hierarchies
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 5);
 
-        cy.widgetEditorFilter("coto");
+        cy.widgetEditorMdxTreeFilter("coto");
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 0);
 
-        cy.widgetEditorFilter("");
+        cy.widgetEditorMdxTreeFilter("");
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 5);
 
         cy.get(".WidgetEditorQueryPanelAxis-DropZoneFilter").click();
 
-        cy.widgetEditorFilter("avg");
+        cy.widgetEditorMdxTreeFilter("avg");
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 4);
 
-        cy.widgetEditorFilter("year");
+        cy.widgetEditorMdxTreeFilter("year");
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 6);
 
         cy.widgetEditorClose();
