@@ -22,7 +22,7 @@ describe("Tables/Pivot Table Scrolling", () => {
 
         // Now scroll again. This scrolls the web-page.
         cy.scrollPivotTable("ww0", 100);
-        cy.wait(10);
+        cy.wait(100);
         cy.get("#app-payload").then(el => el[0].scrollTop).should('equal', 100);
 
     });
@@ -32,7 +32,7 @@ describe("Tables/Pivot Table Scrolling", () => {
         // Scroll down first
         cy.get("#app-payload").realMouseWheel({deltaY: 100, scrollBehavior: false});
         cy.scrollPivotTable("ww0", 100);
-        cy.wait(10);
+        cy.wait(100);
         cy.get("#app-payload").then(el => el[0].scrollTop).should('equal', 100);
 
         // Same test but scrolling up
@@ -40,11 +40,11 @@ describe("Tables/Pivot Table Scrolling", () => {
         cy.scrollPivotTable("ww0", -100);
         cy.scrollPivotTable("ww0", -100);
         cy.scrollPivotTable("ww0", -100);
-        cy.wait(10);
+        cy.wait(100);
         cy.get("#app-payload").then(el => el[0].scrollTop).should('equal', 100);
         cy.wait(500);
         cy.scrollPivotTable("ww0", -100);
-        cy.wait(10);
+        cy.wait(100);
         cy.get("#app-payload").then(el => el[0].scrollTop).should('equal', 0);
 
     });
