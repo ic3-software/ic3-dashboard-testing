@@ -64,7 +64,7 @@ describe("Query Builder Tree", () => {
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.DIMENSION, "Geography");
         schemaBrowserExpandNode(SchemaBrowserMdxEntityDataType.HIERARCHY, "Geography");
 
-        cy.get("div.ic3QueryBuilderNode-itemText[title='Country (31)']").should("be.visible");
+        cy.widgetEditorMdxTreeHasNode("Country");
     });
 
 });

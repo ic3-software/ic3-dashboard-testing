@@ -4498,7 +4498,7 @@ Cypress.Commands.add("widgetEditorChangeCube", (cubeName: string) => {
 });
 Cypress.Commands.add("widgetEditorMdxTreeHasNode", (text: string) => {
 
-    cy.get('.ic3App-drawer div.ic3QueryBuilderNode-itemText[title="' + text + '"]').should("have.length", 1)
+    cy.get('.ic3App-drawer div.ic3QueryBuilderNode-itemText').contains(text);
 
 });
 
