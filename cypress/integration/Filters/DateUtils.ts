@@ -1,11 +1,14 @@
 export class DateUtils {
-
     static mdxOld(date: string): string {
         return `[Time].[Time].[Day].&[${date}]`;
     }
 
+    static rangeMdx(to: Date, from: Date) {
+        return "LookupDateRange( [Time].[Time].[Day], " + DateUtils.dateMdx(to) + ", " + DateUtils.dateMdx(from) + ")";
+    }
+
     public static mdx(date: string): string {
-        return `[Time].[Time].[Day].lookupByKey(${date})`;
+        return `LookupDate( [Time].[Time].[Day], ${date})`;
     }
 
     static dateEvent(date: Date): string {
@@ -27,10 +30,6 @@ export class DateUtils {
 
         return `DateTime(${y},${m},${d})`;
 
-    }
-
-    static rangeMdx(to: Date, from: Date) {
-        return "filter([Time].[Time].[Day] as b, b.currentMember.key >>= " + DateUtils.dateMdx(to) + " and b.currentMember.key <<= " + DateUtils.dateMdx(from) + ")";
     }
 
     static mdxFromDate(date: Date) {
