@@ -1,7 +1,9 @@
+import {assertTableColumnWidth, dragTableColumnWidth} from "../Tables/TableUtils";
+
 describe("Local State/Table", () => {
 
     const dashboard = "Local State/Table";
-    const header = "Table [Time].[Time].[Year].&[2019-01-01]";
+    const header = "Table [Geography].[Geography].[Continent].&[AS]";
     const wid = "ww0";
 
     beforeEach(() => {
@@ -11,7 +13,7 @@ describe("Local State/Table", () => {
         cy.clearAllLocalStorage();
     });
 
-    it("Save/Restore State", () => {
+    it("Save/Restore SelectionState", () => {
 
         // First create the state
         cy.clickTableCell(wid, 1, 0);
@@ -25,6 +27,24 @@ describe("Local State/Table", () => {
 
         // Assert state is kept
         cy.assertWidgetHeader(wid, header);
+
+    });
+
+    it("Save/Restore Table header options", () => {
+
+        cy.assertTableCellContent(wid, 5, 1, "51")
+        cy.sortTable(wid, 1);
+        cy.assertTableCellContent(wid, 0, 1, "51")
+
+        dragTableColumnWidth(cy, wid, "Continent", 55);
+        assertTableColumnWidth(cy, wid, "Continent", 300 + 35);  //why 35 ?
+
+        // Then refresh page
+        cy.openViewerTestReport(dashboard);
+        cy.waitForQueryCount(1);
+        cy.assertTableCellContent(wid, 0, 1, "51");
+        assertTableColumnWidth(cy, wid, "Continent", 300 + 35);
+
 
     });
 
