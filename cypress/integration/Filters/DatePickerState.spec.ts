@@ -34,26 +34,24 @@ describe("Filters/DatePicker State", () => {
 
         assertRange(widgetId, eventWidgetId, null, null, "");
 
-        // TODO range picker Cypress test not working.
-        // cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
-        // cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
-        // assertRange(widgetId, eventWidgetId,
-        //     "01 Sep 2021", "07 Sep 2021",
-        //     "{[Time].[Time].lastLevel.&[2021-09-01]:[Time].[Time].lastLevel.&[2021-09-07]}"
-        // );
+        cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
+        cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
+        assertRange(widgetId, eventWidgetId,
+            "01 Sep 2021", "07 Sep 2021",
+            DateUtils.rangeMdx(new Date(2021,8,1), new Date(2021,8,7))
+        );
 
         // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
-        cy.assertShowDataTableCellContent(widgetId, 0, 0, "");
-        cy.assertShowDataTableCellContent(widgetId, 1, 0, "");
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "2021-09-01");
+        cy.assertShowDataTableCellContent(widgetId, 1, 0, "2021-09-07");
         cy.clickUserMenuShowData(widgetId);
 
-        // TODO range picker Cypress test not working.
-        // // Earlier selected date should remain
-        // assertRange(widgetId, eventWidgetId,
-        //     "01 Sep 2021", "07 Sep 2021",
-        //     "{[Time].[Time].lastLevel.&[2021-09-01]:[Time].[Time].lastLevel.&[2021-09-07]}"
-        // );
+        // Earlier selected date should remain
+        assertRange(widgetId, eventWidgetId,
+            "01 Sep 2021", "07 Sep 2021",
+            DateUtils.rangeMdx(new Date(2021,8,1), new Date(2021,8,7))
+        );
 
     });
 
@@ -64,26 +62,30 @@ describe("Filters/DatePicker State", () => {
 
         assertRange(widgetId, eventWidgetId, "05 Jan 2022", "15 Jan 2022", DateUtils.rangeMdx(new Date(2022, 0, 5), new Date(2022, 0, 15)));
 
-        // TODO range picker Cypress test not working.
-        // cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
-        // cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
-        // assertRange(widgetId, eventWidgetId,
-        //     "01 Sep 2021", "07 Sep 2021",
-        //     "{[Time].[Time].lastLevel.&[2021-09-01]:[Time].[Time].lastLevel.&[2021-09-07]}"
-        // );
-
-        // Show then hide data to trigger state load from redux
         cy.clickUserMenuShowData(widgetId);
         cy.assertShowDataTableCellContent(widgetId, 0, 0, "2022-01-05");
         cy.assertShowDataTableCellContent(widgetId, 1, 0, "2022-01-15");
         cy.clickUserMenuShowData(widgetId);
 
-        // TODO range picker Cypress test not working.
-        // // Earlier selected date should remain
-        // assertRange(widgetId, eventWidgetId,
-        //     "01 Sep 2021", "07 Sep 2021",
-        //     "{[Time].[Time].lastLevel.&[2021-09-01]:[Time].[Time].lastLevel.&[2021-09-07]}"
-        // );
+        // Now change the picker value
+        cy.selectDatePickerRangeFromFromInput(widgetId, "01 Sep 2021");
+        cy.selectDatePickerRangeToFromInput(widgetId, "07 Sep 2021");
+        assertRange(widgetId, eventWidgetId,
+            "01 Sep 2021", "07 Sep 2021",
+            DateUtils.rangeMdx(new Date(2021, 8, 1), new Date(2021, 8, 7))
+        );
+
+        // Show then hide data to trigger state load from redux
+        cy.clickUserMenuShowData(widgetId);
+        cy.assertShowDataTableCellContent(widgetId, 0, 0, "2021-09-01");
+        cy.assertShowDataTableCellContent(widgetId, 1, 0, "2021-09-07");
+        cy.clickUserMenuShowData(widgetId);
+
+        // Earlier selected date should remain
+        assertRange(widgetId, eventWidgetId,
+            "01 Sep 2021", "07 Sep 2021",
+            DateUtils.rangeMdx(new Date(2021, 8, 1), new Date(2021, 8, 7))
+        );
 
     });
 

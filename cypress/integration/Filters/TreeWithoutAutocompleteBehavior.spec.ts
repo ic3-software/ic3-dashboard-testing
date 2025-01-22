@@ -91,46 +91,6 @@ describe("Filters/Tree without Autocomplete Behavior", () => {
 
     });
 
-    // it("ww6: Empty Behavior - Select all", () => {
-    //
-    //     const widgetId = "ww6";
-    //     const eventWidgetId = "ww7";
-    //
-    //     const treeMode = "control-icons";
-    //
-    //     const selections = ["Oceania", "Australia", "Canberra", "Sydney"];
-    //
-    //     assertSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
-    //
-    //     cy.selectTree(widgetId, treeMode, "Oceania");
-    //     assertSelection(widgetId, eventWidgetId, treeMode, ["Oceania"], "Oceania");
-    //
-    //     // Clear selection: select all items again
-    //     cy.selectTree(widgetId, treeMode, "Oceania");
-    //     assertSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
-    //
-    // });
-    //
-    // it("ww6: Empty Behavior - Select all [clear selection]", () => {
-    //
-    //     const widgetId = "ww6";
-    //     const eventWidgetId = "ww7";
-    //
-    //     const treeMode = "control-icons";
-    //
-    //     const selections = ["Oceania", "Australia", "Canberra", "Sydney"];
-    //
-    //     assertSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
-    //
-    //     cy.selectTree(widgetId, treeMode, "Oceania");
-    //     assertSelection(widgetId, eventWidgetId, treeMode, ["Oceania"], "Oceania");
-    //
-    //     // Clear selection from user menu: select all items again
-    //     cy.clickUserMenuClearSelection(widgetId);
-    //     assertSelection(widgetId, eventWidgetId, treeMode, selections, "Oceania");
-    //
-    // });
-
     it("ww19: Multi: Empty Behavior - Select all", () => {
 
         const widgetId = "ww19";

@@ -124,20 +124,6 @@ describe("Filters/Slider Behavior", () => {
 
     });
 
-    // it("ww6: Empty Behavior - Select All", () => {
-    //
-    //     const widgetId = "ww6";
-    //     const eventWidgetId = "ww7";
-    //
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, [], COUNTRIES.join(","));
-    //
-    //     cy.selectSlider(widgetId, "Egypt");
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, ["Egypt"], "Egypt");
-    //
-    //     cy.clickUserMenuClearSelection(widgetId)
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, [], COUNTRIES.join(","));
-    // });
-
     it("ww27: Multi: Empty Behavior - Select All", () => {
 
         const widgetId = "ww27";
@@ -244,19 +230,19 @@ describe("Filters/Slider Behavior", () => {
         // The user menu cannot easily detect that condition to active the Clear Selection option.
         //      WidgetBoxUserMenu const hasSelection = useSelector( ownProps )
 
-        // // clear selection fom TOP
-        // cy.clickUserMenuClearSelection(widgetId_top);
-        // assertSelection(widgetId_top, eventWidgetId, COUNTRIES, [], null);
-        // assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, [], null);
-        //
-        // cy.selectSlider(widgetId_top, "China");
-        // assertSelection(widgetId_top, eventWidgetId, COUNTRIES, ["China"], "China");
-        // assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, ["China"], "China");
-        //
-        // // clear selection fom BOTTOM
-        // cy.clickUserMenuClearSelection(widgetId_bottom);
-        // assertSelection(widgetId_top, eventWidgetId, COUNTRIES, [], null);
-        // assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, [], null);
+        // clear selection fom TOP
+        cy.clickUserMenuClearSelection(widgetId_top);
+        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, [], null);
+        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, [], null);
+
+        cy.selectSlider(widgetId_top, "China");
+        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, ["China"], "China");
+        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, ["China"], "China");
+
+        // clear selection fom BOTTOM
+        cy.clickUserMenuClearSelection(widgetId_bottom);
+        assertSelection(widgetId_top, eventWidgetId, COUNTRIES, [], null);
+        assertSelection(widgetId_bottom, eventWidgetId, COUNTRIES, [], null);
 
     })
 

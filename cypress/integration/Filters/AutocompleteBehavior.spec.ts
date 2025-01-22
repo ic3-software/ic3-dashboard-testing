@@ -127,20 +127,6 @@ describe("Filters/Autocomplete Behavior", () => {
         assertSingleSelection(widgetId, eventWidgetId, "Egypt", "Egypt");
     });
 
-    // it("ww6: Empty Behavior -Select All", () => {
-    //
-    //     const widgetId = "ww6";
-    //     const eventWidgetId = "ww7";
-    //
-    //     assertSingleSelection(widgetId, eventWidgetId, null, COUNTRIES.join(","));
-    //
-    //     cy.selectDropdownFromInput(widgetId, "Egypt");
-    //     assertSingleSelection(widgetId, eventWidgetId, "Egypt", "Egypt");
-    //
-    //     cy.clearDropdown(widgetId);
-    //     assertSingleSelection(widgetId, eventWidgetId, null, COUNTRIES.join(","));
-    // });
-
     it("ww27: Multi: Empty Behavior - Select All", () => {
 
         const widgetId = "ww27";

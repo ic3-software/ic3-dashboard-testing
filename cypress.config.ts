@@ -24,5 +24,7 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             on('task', {readPdf})
         },
+
+        numTestsKeptInMemory: 2
     }
 })

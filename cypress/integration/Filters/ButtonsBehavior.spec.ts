@@ -114,27 +114,6 @@ describe("Filters/Buttons Behavior", () => {
 
     });
 
-
-    // it("ww6: Empty Behavior - Select All", () => {
-    //
-    //     const widgetId = "ww6";
-    //     const eventWidgetId = "ww7";
-    //
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(","));
-    //
-    //     // Switching to single selection
-    //     cy.selectButton(widgetId, "Egypt");
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, ["Egypt"], "Egypt");
-    //
-    //     // Clear selection
-    //     cy.selectButton(widgetId, "Egypt");
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(","));
-    //
-    //     // Clear selection from user menu
-    //     cy.clickUserMenuClearSelection(widgetId)
-    //     assertSelection(widgetId, eventWidgetId, COUNTRIES, COUNTRIES, COUNTRIES.join(","));
-    // });
-
     it("ww8: Empty Behavior - Default Member All Regions", () => {
 
         const widgetId = "ww8";

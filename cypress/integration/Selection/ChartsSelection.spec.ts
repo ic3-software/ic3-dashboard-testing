@@ -267,36 +267,36 @@ describe("Selection/Charts Selection", () => {
 
     });
 
-    // it("ww8: Column with sync selection", () => {
-    //
-    //     const widgetId_top = "ww8";
-    //     const widgetId_bottom = "ww10";
-    //     const eventWidgetId = "ww9";
-    //
-    //     assertSelection(widgetId_top, eventWidgetId, []);
-    //     assertSelection(widgetId_bottom, eventWidgetId, []);
-    //
-    //     cy.log("selecting 2018 from top")
-    //     cy.selectSingleChartBarInGroup(widgetId_top, 0, 0);
-    //     assertSelection(widgetId_top, eventWidgetId, [{year: 0}]);
-    //     assertSelection(widgetId_bottom, eventWidgetId, [{year: 0}]);
-    //
-    //     // clear selection from TOP
-    //     cy.selectSingleChartBarInGroup(widgetId_top, 0, 0);
-    //     assertSelection(widgetId_top, eventWidgetId, []);
-    //     assertSelection(widgetId_bottom, eventWidgetId, []);
-    //
-    //     cy.log("selecting 2019 from bottom")
-    //     cy.selectSingleChartBarInGroup(widgetId_bottom, 0, 1);
-    //     assertSelection(widgetId_top, eventWidgetId, [{year: 1}]);
-    //     assertSelection(widgetId_bottom, eventWidgetId, [{year: 1}]);
-    //
-    //     // clear selection from BOTTOM
-    //     cy.selectSingleChartBarInGroup(widgetId_top, 0, 1);
-    //     assertSelection(widgetId_top, eventWidgetId, []);
-    //     assertSelection(widgetId_bottom, eventWidgetId, []);
-    //
-    // });
+    it("ww8: Column with sync selection", () => {
+
+        const widgetId_top = "ww8";
+        const widgetId_bottom = "ww10";
+        const eventWidgetId = "ww9";
+
+        assertSelection(widgetId_top, eventWidgetId, []);
+        assertSelection(widgetId_bottom, eventWidgetId, []);
+
+        cy.log("selecting 2018 from top")
+        cy.selectSingleChartBarInGroup(widgetId_top, 0, 0);
+        assertSelection(widgetId_top, eventWidgetId, [{year: 0}]);
+        assertSelection(widgetId_bottom, eventWidgetId, [{year: 0}]);
+
+        // clear selection from TOP
+        cy.selectSingleChartBarInGroup(widgetId_top, 0, 0);
+        assertSelection(widgetId_top, eventWidgetId, []);
+        assertSelection(widgetId_bottom, eventWidgetId, []);
+
+        cy.log("selecting 2019 from bottom")
+        cy.selectSingleChartBarInGroup(widgetId_bottom, 0, 1);
+        assertSelection(widgetId_top, eventWidgetId, [{year: 1}]);
+        assertSelection(widgetId_bottom, eventWidgetId, [{year: 1}]);
+
+        // clear selection from BOTTOM
+        cy.selectSingleChartBarInGroup(widgetId_top, 0, 1);
+        assertSelection(widgetId_top, eventWidgetId, []);
+        assertSelection(widgetId_bottom, eventWidgetId, []);
+
+    });
 
 
 });
