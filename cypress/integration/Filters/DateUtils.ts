@@ -7,8 +7,16 @@ export class DateUtils {
         return "LookupDateRange( [Time].[Time].[Day], " + DateUtils.dateMdx(to) + ", " + DateUtils.dateMdx(from) + ")";
     }
 
+    static rangeMdxYear(to: Date, from: Date) {
+        return "LookupDateRange( [Time].[Time].[Year], " + DateUtils.dateMdx(to) + ", " + DateUtils.dateMdx(from) + ")";
+    }
+
     public static mdx(date: string): string {
         return `LookupDate( [Time].[Time].[Day], ${date})`;
+    }
+
+    public static mdxYear(date: string): string {
+        return `LookupDate( [Time].[Time].[Year], ${date})`;
     }
 
     static dateEvent(date: Date): string {

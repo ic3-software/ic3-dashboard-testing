@@ -3433,7 +3433,12 @@ function assertDate(widgetId: string, tag: string, _date: string | null, nthChil
 
 
     cy.getWidget(widgetId)
-        .find('[' + tag + '="' + date + '"]')// retry wait
+        .then(cc => {
+            if (date == null || date?.length > 4) {
+                return cc.find('[' + tag + '="' + date + '"]')// retry wait
+            }
+            return cc;
+        })
         .find("input")
         .eq(nthChild ?? 0)
         .then(input => {

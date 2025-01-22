@@ -17,22 +17,22 @@ describe("Filters/DatePicker Edge Cases II", () => {
         const eventWidgetId = "ww1";
         const tableWidgetId = "ww2";
 
-        assertDate(widgetId, eventWidgetId, tableWidgetId, null, null, null, true);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, null, null, null, "");
 
         // The range of allowed dates goes from 1 jan 2018 to 15 Sep 2022.
         cy.selectDatePickerFromInput(widgetId, "31 Dec 2017");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "31 Dec 2017", "31 Dec 2017", DateUtils.mdx("DateTime(2017,12,31)"), true);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "31 Dec 2017", "31 Dec 2017", DateUtils.mdx("DateTime(2017,12,31)"), "");
         cy.selectDatePickerFromInput(widgetId, "01 Jan 2018");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "01 Jan 2018", "01 Jan 2018", DateUtils.mdx("DateTime(2018,1,1)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "01 Jan 2018", "01 Jan 2018", DateUtils.mdx("DateTime(2018,1,1)"));
         cy.selectDatePickerFromInput(widgetId, "02 Jan 2018");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "02 Jan 2018", "02 Jan 2018", DateUtils.mdx("DateTime(2018,1,2)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "02 Jan 2018", "02 Jan 2018", DateUtils.mdx("DateTime(2018,1,2)"));
 
         cy.selectDatePickerFromInput(widgetId, "14 Sep 2022");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "14 Sep 2022", "14 Sep 2022", DateUtils.mdx("DateTime(2022,9,14)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "14 Sep 2022", "14 Sep 2022", DateUtils.mdx("DateTime(2022,9,14)"));
         cy.selectDatePickerFromInput(widgetId, "15 Sep 2022");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "15 Sep 2022", "15 Sep 2022", DateUtils.mdx("DateTime(2022,9,15)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "15 Sep 2022", "15 Sep 2022", DateUtils.mdx("DateTime(2022,9,15)"));
         cy.selectDatePickerFromInput(widgetId, "16 Sep 2022");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "16 Sep 2022", "16 Sep 2022", DateUtils.mdx("DateTime(2022,9,16)"), true);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "16 Sep 2022", "16 Sep 2022", DateUtils.mdx("DateTime(2022,9,16)"), "");
 
     });
 
@@ -49,17 +49,17 @@ describe("Filters/DatePicker Edge Cases II", () => {
         // Keeps old state since 31 Dec 2017 is not allowed.
         assertDate(widgetId, eventWidgetId, tableWidgetId, "31 Dec 2017", null, null);
         cy.selectDatePickerFromInput(widgetId, "01 Jan 2018");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "01 Jan 2018", "01 Jan 2018", DateUtils.mdx("DateTime(2018,1,1)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "01 Jan 2018", "01 Jan 2018", DateUtils.mdx("DateTime(2018,1,1)"));
         cy.selectDatePickerFromInput(widgetId, "02 Jan 2018");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "02 Jan 2018", "02 Jan 2018", DateUtils.mdx("DateTime(2018,1,2)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "02 Jan 2018", "02 Jan 2018", DateUtils.mdx("DateTime(2018,1,2)"));
 
         cy.selectDatePickerFromInput(widgetId, "14 Sep 2022");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "14 Sep 2022", "14 Sep 2022", DateUtils.mdx("DateTime(2022,9,14)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "14 Sep 2022", "14 Sep 2022", DateUtils.mdx("DateTime(2022,9,14)"));
         cy.selectDatePickerFromInput(widgetId, "15 Sep 2022");
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "15 Sep 2022", "15 Sep 2022", DateUtils.mdx("DateTime(2022,9,15)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "15 Sep 2022", "15 Sep 2022", DateUtils.mdx("DateTime(2022,9,15)"));
         cy.selectDatePickerFromInput(widgetId, "16 Sep 2022");
         // Keeps old state since 16 Sep 2022 is not allowed.
-        assertDate(widgetId, eventWidgetId, tableWidgetId, "16 Sep 2022", "15 Sep 2022", DateUtils.mdx("DateTime(2022,9,15)"), false);
+        assertDate(widgetId, eventWidgetId, tableWidgetId, "16 Sep 2022", "15 Sep 2022", DateUtils.mdx("DateTime(2022,9,15)"));
 
     });
 
@@ -71,7 +71,7 @@ describe("Filters/DatePicker Edge Cases II", () => {
 
         assertDates(widgetId, eventWidgetId, tableWidgetId,
             null, null, null,
-            null, null, null
+            null, null
         );
 
         // Data range goes from 1 jan 2018 to 15 Sep 2022.
@@ -81,8 +81,8 @@ describe("Filters/DatePicker Edge Cases II", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, "01 Jan 2017");
             cy.selectDatePickerRangeToFromInput(widgetId, "15 Sep 2023");
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                "01 Jan 2017", "01 Jan 2017", new Date(2017, 0, 1),
-                "15 Sep 2023", "15 Sep 2023", new Date(2023, 8, 15),
+                "01 Jan 2017", "01 Jan 2017",
+                "15 Sep 2023", "15 Sep 2023", DateUtils.rangeMdx(new Date(2017, 0, 1), new Date(2023, 8, 15)),
                 "01 Jan 2018", "15 Sep 2022"
             );
         }
@@ -91,8 +91,8 @@ describe("Filters/DatePicker Edge Cases II", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, "01 Jan 2017");
             cy.selectDatePickerRangeToFromInput(widgetId, "02 Jan 2017");
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                "01 Jan 2017", "01 Jan 2017", new Date(2017, 0, 1),
-                "02 Jan 2017", "02 Jan 2017", new Date(2017, 0, 2),
+                "01 Jan 2017", "01 Jan 2017",
+                "02 Jan 2017", "02 Jan 2017", DateUtils.rangeMdx(new Date(2017, 0, 1), new Date(2017, 0, 2)),
                 "", ""
             );
         }
@@ -101,8 +101,8 @@ describe("Filters/DatePicker Edge Cases II", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, "14 Sep 2023");
             cy.selectDatePickerRangeToFromInput(widgetId, "15 Sep 2023");
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                "14 Sep 2023", "14 Sep 2023", new Date(2023, 8, 14),
-                "15 Sep 2023", "15 Sep 2023", new Date(2023, 8, 15),
+                "14 Sep 2023", "14 Sep 2023",
+                "15 Sep 2023", "15 Sep 2023", DateUtils.rangeMdx(new Date(2023, 8, 14), new Date(2023, 8, 15)),
                 "", ""
             );
         }
@@ -111,8 +111,8 @@ describe("Filters/DatePicker Edge Cases II", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, "01 Jan 2017");
             cy.selectDatePickerRangeToFromInput(widgetId, "01 Jan 2018");
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                "01 Jan 2017", "01 Jan 2017", new Date(2017, 0, 1),
-                "01 Jan 2018", "01 Jan 2018", new Date(2018, 0, 1),
+                "01 Jan 2017", "01 Jan 2017",
+                "01 Jan 2018", "01 Jan 2018", DateUtils.rangeMdx(new Date(2017, 0, 1), new Date(2018, 0, 1)),
                 "01 Jan 2018", "01 Jan 2018"
             );
         }
@@ -121,8 +121,8 @@ describe("Filters/DatePicker Edge Cases II", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, "15 Sep 2022");
             cy.selectDatePickerRangeToFromInput(widgetId, "15 Sep 2023");
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                "15 Sep 2022", "15 Sep 2022", new Date(2022, 8, 15),
-                "15 Sep 2023", "15 Sep 2023", new Date(2023, 8, 15),
+                "15 Sep 2022", "15 Sep 2022",
+                "15 Sep 2023", "15 Sep 2023", DateUtils.rangeMdx(new Date(2022, 8, 15), new Date(2023, 8, 15)),
                 "15 Sep 2022", "15 Sep 2022"
             );
         }
@@ -137,7 +137,7 @@ describe("Filters/DatePicker Edge Cases II", () => {
 
         assertDates(widgetId, eventWidgetId, tableWidgetId,
             null, null, null,
-            null, null, null
+            null, null
         );
 
         // Data range goes from 1 jan 2018 to 15 Sep 2022.
@@ -147,8 +147,8 @@ describe("Filters/DatePicker Edge Cases II", () => {
             cy.selectDatePickerRangeFromFromInput(widgetId, "01 Jan 2018");
             cy.selectDatePickerRangeToFromInput(widgetId, "15 Sep 2022");
             assertDates(widgetId, eventWidgetId, tableWidgetId,
-                "01 Jan 2018", "01 Jan 2018", new Date(2018, 0, 1),
-                "15 Sep 2022", "15 Sep 2022", new Date(2022, 8, 15)
+                "01 Jan 2018", "01 Jan 2018",
+                "15 Sep 2022", "15 Sep 2022", DateUtils.rangeMdx(new Date(2018, 0, 1), new Date(2022, 8, 15))
             );
         }
 

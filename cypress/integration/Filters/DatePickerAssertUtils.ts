@@ -1,25 +1,48 @@
-import {DateUtils} from "./DateUtils";
-
 export function assertDates(widgetId: string, eventWidgetId: string, tableWidgetId: string, dateF: string | null,
-                            eventF: string | null, mdxF: Date | null, dateT: string | null, eventT: string | null,
-                            mdxT: Date | null, tableF?: string, tableT?: string) {
+                            eventF: string | null, dateT: string | null, eventT: string | null,
+                            mdx: string | null, tableF?: string, tableT?: string) {
 
     cy.assertDatePickerRangeFrom(widgetId, dateF);
     cy.assertDatePickerRangeTo(widgetId, dateT);
 
     const event = (eventF || eventT) ? (Cypress.migrateDate(eventF) + " - " + Cypress.migrateDate(eventT)) : null;
-    const mdx = (mdxF || mdxT) ? DateUtils.rangeMdx(mdxF!, mdxT!) : null;
 
     cy.assertEventValue(eventWidgetId, event);
     cy.assertEventMdx(eventWidgetId, mdx);
 
-    if (!eventF && !eventT) {
+    const tableFromValueToAssert = tableF ?? eventF;
+    const tableToValueToAssert = tableT ?? eventT;
+
+    assertTableData(tableWidgetId, !eventF && !eventT, tableFromValueToAssert == "" && tableToValueToAssert == "",
+        tableFromValueToAssert, tableToValueToAssert);
+
+}
+
+export function assertDate(widgetId: string, eventWidgetId: string, tableWidgetId: string, date: string | null,
+                           event: string | null, mdx: string | null, table1?: any, table2?: any) {
+
+    cy.assertDatePicker(widgetId, date);
+
+    cy.assertDateEventValue(eventWidgetId, event);
+    cy.assertEventMdx(eventWidgetId, mdx);
+
+    assertTableData(tableWidgetId, !event, table1 == "", table1 ?? event, table2);
+
+}
+
+function assertTableData(tableWidgetId: string, waiting: boolean, noData: boolean, table1: any, table2: any) {
+
+    if (waiting) {
 
         cy.getWidget(tableWidgetId, "data-cy-waiting");
 
+    } else if (noData) {
+
+        cy.assertWidgetNoData(tableWidgetId);
+
     } else {
 
-        const tableFromValueToAssert = tableF ?? eventF;
+        const tableFromValueToAssert = table1;
 
         if (tableFromValueToAssert) {
 
@@ -31,7 +54,7 @@ export function assertDates(widgetId: string, eventWidgetId: string, tableWidget
 
         }
 
-        const tableToValueToAssert = tableT ?? eventT;
+        const tableToValueToAssert = table2;
 
         if (tableToValueToAssert) {
 
@@ -43,36 +66,6 @@ export function assertDates(widgetId: string, eventWidgetId: string, tableWidget
 
         }
 
-        if (tableFromValueToAssert == "" && tableToValueToAssert == "") {
-            cy.assertWidgetNoData(tableWidgetId);
-        }
-
     }
 
-
-}
-
-export function assertDate(widgetId: string, eventWidgetId: string, tableWidgetId: string, date: string | null,
-                           event: string | null, mdx: string | null, noData?: boolean) {
-
-    cy.assertDatePicker(widgetId, date);
-
-    cy.assertDateEventValue(eventWidgetId, event);
-    cy.assertEventMdx(eventWidgetId, mdx);
-
-    if (!event) {
-
-        cy.getWidget(tableWidgetId, "data-cy-waiting");
-
-    } else {
-
-        if (noData) {
-            cy.assertWidgetNoData(tableWidgetId);
-        } else if (event.startsWith("0")) {
-            cy.assertTableValue(tableWidgetId, 0, 0, event.substr(1));
-        } else {
-            cy.assertTableValue(tableWidgetId, 0, 0, event);
-        }
-
-    }
 }
