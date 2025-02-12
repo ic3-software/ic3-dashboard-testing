@@ -571,6 +571,8 @@ declare namespace Cypress {
          * @param waitForPrintStatus defaulted to true
          * @param userLocale open the report in this locale
          */
+        openMdxConsole(): void;
+
         openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean,
                              userLocale?: string): void;
 
@@ -1439,6 +1441,14 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
 
 });
 
+Cypress.Commands.add('openMdxConsole', () => {
+
+    const vURL = {
+        url: Cypress.config().baseUrl === "http://localhost:3000" ? "/mdxConsole" : "/icCube/report/mdxConsole",
+    }
+    cy.visit(vURL);
+
+})
 
 Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true,
                                               doNotForceWidgetRendering?: boolean, userLocale?: string) => {
@@ -3433,7 +3443,7 @@ function assertDate(widgetId: string, tag: string, _date: string | null, nthChil
 
 
     cy.getWidget(widgetId)
-        .then(cc => {
+        .then((cc: any) => {
             if (date == null || date?.length > 4) {
                 return cc.find('[' + tag + '="' + date + '"]')// retry wait
             }
