@@ -1190,9 +1190,11 @@ declare namespace Cypress {
 
         widgetEditorQueryBuilderAssertNode(dropAxis: string, nodeName: string): void;
 
-        widgetEditorOpenOptionGroup(name: "groupSelection" | "widgetIcons" | "widgetActionsGroup"): void;
+        widgetEditorOpenOptionGroup(name: "groupSelection" | "widgetIcons" | "widgetActionsGroup" | "columns"): void;
 
         widgetEditorChangeOption(input: string, option: string): void;
+
+        widgetEditorAssertOption(input: string, option: string): void;
 
         widgetEditorChangeTextOption(name: string, newValue: string): void;
 
@@ -4476,6 +4478,14 @@ Cypress.Commands.add("widgetEditorChangeOption", (input: string, option: string)
         .type(option)
         .get('li.MuiAutocomplete-option[data-option-index="0"]')
         .click()
+    ;
+
+});
+
+Cypress.Commands.add("widgetEditorAssertOption", (input: string, option: string) => {
+
+    cy.get(`.ic3App-drawer div[data-cy='${input}'] input`)
+        .should("have.value", option)
     ;
 
 });
