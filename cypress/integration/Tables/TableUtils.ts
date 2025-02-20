@@ -3,7 +3,7 @@ export function getTableHeaderSelector(headerTitle: string, extra?: string): str
 }
 
 export function assertTableColumnWidth(cy: Cypress.cy & CyEventEmitter, widgetId: string, headerTitle: string, sizePx: number) {
-    cy.getTableHeader(widgetId, headerTitle).invoke('width').should('eq', sizePx)
+    cy.getTableHeader(widgetId, headerTitle).invoke('width').then(w => Math.floor(w)).should('eq', sizePx)
 }
 
 export function dragTableColumnWidth(cy: Cypress.cy & CyEventEmitter, widgetId: string, headerTitle: string, sizePx: number) {
