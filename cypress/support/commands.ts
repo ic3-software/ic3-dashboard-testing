@@ -617,6 +617,28 @@ declare namespace Cypress {
         switchEditorToQuickViewMode(): void;
 
         // -------------------------------------------------------------------------------------------------------------
+        // Localization & administration
+        // -------------------------------------------------------------------------------------------------------------
+
+        openAdministration(): void;
+
+        adminSetDashboardFilter(filter: string): void;
+
+        adminGenerateTags(): void;
+
+        adminTestFilter(): void;
+
+        adminAssertTagsTestResult(text: string): void;
+
+        adminAssertLocalizationRowCount(count: number): void;
+
+        adminAssertLocalizationColumnCount(count: number): void;
+
+        adminAssertLocalizationTableValue(row: number, col: number, value: string | null): void;
+
+        adminAssertLocalizationTableTags(reportPath: string, tags: string[]): void;
+
+        // -------------------------------------------------------------------------------------------------------------
         // Layout
         // -------------------------------------------------------------------------------------------------------------
 
@@ -1327,6 +1349,15 @@ function createEditingURL(path: string): Partial<VisitOptions> & { url: string }
     }
 }
 
+function createAdminURL(path: string): Partial<VisitOptions> & { url: string } {
+
+    return {
+        url: Cypress.config().baseUrl === "http://localhost:3000" ? "/admin" : "/icCube/report/admin",
+
+        qs: {}
+    }
+}
+
 function createGadgetEditorURL(path?: string): Partial<VisitOptions> & { url: string } {
 
     return {
@@ -1641,6 +1672,73 @@ Cypress.Commands.add('setBoxContentHook', (alias: string) => {
 Cypress.Commands.add('switchEditorToQuickViewMode', () => {
 
     cy.get("[data-cy='appMenu-button-switchEditing']").click();
+
+});
+
+Cypress.Commands.add('openAdministration', () => {
+
+    const vURL = createAdminURL(path);
+    cy.visit(vURL);
+
+});
+
+Cypress.Commands.add('adminSetDashboardFilter', (filter: string) => {
+
+    cy.get('div[data-cy="dashboard-filter"] input')
+        .clear()
+        .type(filter);
+
+});
+
+Cypress.Commands.add('adminGenerateTags', () => {
+
+    cy.get('[data-cy="generate-tags"]').click();
+
+});
+
+Cypress.Commands.add('adminTestFilter', () => {
+
+    cy.get('[data-cy="filter-test"]').click();
+
+});
+
+Cypress.Commands.add('adminAssertTagsTestResult', (text: string) => {
+
+    cy.get('[data-cy="localization-tags-result"]').should('have.text', text);
+
+});
+
+Cypress.Commands.add('adminAssertLocalizationRowCount', (count: number) => {
+
+    cy.get('[data-cy="localization-tags-result"]')
+        .find('.MuiDataGrid-main')
+        .invoke('attr', "aria-rowcount").should('eq', "" + (count + 1))
+
+});
+
+Cypress.Commands.add('adminAssertLocalizationColumnCount', (count: number) => {
+
+    cy.get('[data-cy="localization-tags-result"] .MuiDataGrid-columnHeader')
+        .should("have.length", count);
+
+});
+
+Cypress.Commands.add('adminAssertLocalizationTableValue', (row: number, col: number, value: string | null) => {
+
+    cy.get('[data-cy="localization-tags-result"]')
+        .find(".MuiDataGrid-root " +
+            "div[data-rowindex='" + row + "'] " +
+            "div[data-colindex='" + col + "']")
+        .should("have.text", value ?? "")
+
+});
+
+Cypress.Commands.add('adminAssertLocalizationTableTags', (reportPath: string, tags: string[]) => {
+
+    tags.forEach((tag, idx) => {
+        cy.adminAssertLocalizationTableValue(idx, 0, reportPath);
+        cy.adminAssertLocalizationTableValue(idx, 3, tag);
+    });
 
 });
 
