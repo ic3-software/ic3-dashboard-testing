@@ -785,6 +785,8 @@ declare namespace Cypress {
 
         assertTableColumnsEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colCount: number): void;
 
+        assertTableColumnEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colIdx: number): void;
+
         assertTableSingleRowSelected(widgetId: string, rowIdx: number, rowCount: number): void;
 
         assertTableRowSelected(widgetId: string | $widget, rowIdx: number): void;
@@ -2353,6 +2355,32 @@ Cypress.Commands.add("assertTableColumnsEqual", (widgetId: string, expectedWidge
             ;
 
         }
+    }
+
+});
+
+Cypress.Commands.add("assertTableColumnEqual", (widgetId: string, expectedWidgetId: string, rowCount: number, colIdx: number) => {
+
+    cy.assertTableRowCount(widgetId, rowCount);
+    cy.assertTableRowCount(expectedWidgetId, rowCount);
+
+    for (let row = 0; row < rowCount; row++) {
+
+        cy.getWidget(expectedWidgetId)
+            .find(".ic3WidgetBox-content " +
+                "div[data-rowindex='" + row + "'] " +
+                "div[data-colindex='" + colIdx + "'] " +
+                "span")
+            .then($expectedSpan => {
+
+                cy.getWidget(widgetId)
+                    .find(".ic3WidgetBox-content " +
+                        "div[data-rowindex='" + row + "'] " +
+                        "div[data-colindex='" + colIdx + "'] " +
+                        "span")
+                    .should("have.text", $expectedSpan.text())
+            });
+
     }
 
 });
