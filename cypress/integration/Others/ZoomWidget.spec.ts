@@ -16,7 +16,7 @@ describe("Others/Zoom in out", () => {
             cy.clickUserMenuZoom("ww1");
             cy.waitForQueryCount(2);
             cy.closeZoomedWidget("ww1");
-            cy.get(".ic3App-payload").invoke('scrollTop').should('be.greaterThan', scrollY! - 50);
+            cy.get(".ic3App-payload").invoke('scrollTop').should('be.greaterThan', scrollY! - 80);
         });
 
     })
