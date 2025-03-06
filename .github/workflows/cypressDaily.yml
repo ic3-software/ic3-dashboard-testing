@@ -14,13 +14,13 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: npm install
 
       - name: Cypress on Chrome
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           quiet: true
           config-file: cypress.config-github.ts
