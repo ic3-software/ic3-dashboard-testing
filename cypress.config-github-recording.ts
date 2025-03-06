@@ -20,7 +20,7 @@ export default defineConfig({
             openMode: 2,
         },
 
-        reporter: "Min",
+        reporter: 'Spec',
 
         viewportWidth: 1600,
         viewportHeight: 1200,

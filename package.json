@@ -21,8 +21,8 @@
   "scripts": {
     "cypress:open localhost": "cypress open --config baseUrl=http://localhost:3000",
     "cypress:open": "cypress open --config baseUrl=https://dev.iccube.com",
-    "cypress:run localhost": "cypress run --headless --config baseUrl=http://localhost:3000",
-    "cypress:run": "cypress run --headless --config baseUrl=https://dev.iccube.com",
+    "cypress:run localhost": "cypress run --headless --quiet --config baseUrl=http://localhost:3000",
+    "cypress:run": "cypress run --headless --quiet --config baseUrl=https://dev.iccube.com",
     "build All Dashboards": "node ./etc/build_all_dashboards.mjs"
   }
 }

@@ -8,6 +8,8 @@ export default defineConfig({
 
     e2e: {
 
+        reporter: 'Spec',
+
         baseUrl: process.env.baseUrl,
 
         supportFile: "cypress/support/e2e.ts",
