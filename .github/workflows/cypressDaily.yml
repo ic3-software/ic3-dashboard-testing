@@ -22,6 +22,7 @@ jobs:
       - name: Cypress on Chrome
         uses: cypress-io/github-action@v5
         with:
+          quiet: true
           config-file: cypress.config-github.ts
           config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
           browser: chrome
