@@ -25,6 +25,7 @@ export default defineConfig({
 
         setupNodeEvents(on, config) {
             on('task', {readPdf})
+            require('cypress-failed-log/on')(on)
         },
 
         numTestsKeptInMemory: 2
