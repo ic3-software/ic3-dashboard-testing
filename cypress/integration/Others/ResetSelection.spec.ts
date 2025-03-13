@@ -7,6 +7,7 @@ describe("Others/reset selection", () => {
         cy.login();
         cy.openViewerTestReport("Others/reset selection", true, false);
         cy.waitForQueryCount(3 /* 3 embedded data source */);
+        cy.clearAllLocalStorage();
     });
 
     it("Test app notification to reset selection is working with data dependent initial selection ", () => {
