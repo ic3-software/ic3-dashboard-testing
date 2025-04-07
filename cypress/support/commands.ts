@@ -1413,6 +1413,8 @@ Cypress.Commands.add('login', () => {
 
     cy.session("login", () => {
 
+        cy.clearAllLocalStorage();
+
         if (Cypress.config().baseUrl !== "http://localhost:3000") {
 
             cy.visit("/icCube/report/console")
