@@ -15,11 +15,14 @@ describe("Others/reset selection", () => {
         // Start with buttons selected
         cy.selectButton("ww1", "2020 Feb");
         cy.assertButtonsSelected("ww1", ["2020 Feb"]);
+        cy.waitForQueryCount(4);
         cy.selectButton("ww2", "2022");
         cy.assertButtonsSelected("ww2", ["2022"]);
+        cy.waitForQueryCount(7);
 
         // Now clear all selection. Expected to clear both ww1 and ww2.
         cy.selectButton("ww3", "Reset Selection");
+        cy.waitForQueryCount(9);
 
         // Buttons should be in default state: no selection.
         cy.assertButtonsSelected("ww1", ["2020 Mar"]);  // Should be the default selection
