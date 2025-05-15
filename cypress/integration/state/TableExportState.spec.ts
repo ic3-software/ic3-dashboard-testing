@@ -12,9 +12,9 @@ describe("State/Table export state", () => {
 
     it("ww0: Table state quick navigation regression test", () => {
         // Navigating away from a table that saves state should work
-        cy.get('[data-testid="DashboardIcon"]').click();
+        cy.switchEditorToQuickViewMode();
         cy.getTableHeader("ww0", "Name").click();  // Sort on Name
-        cy.get('[data-testid="CreateIcon"]').click();
+        cy.switchEditorToQuickViewMode();
 
         // Assert no errors
         cy.get('@consoleError').should('not.have.been.called')

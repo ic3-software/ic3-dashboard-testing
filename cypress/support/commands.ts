@@ -3869,7 +3869,7 @@ Cypress.Commands.add("selectSingleChartBarInGroup", (widgetId: string, group: nu
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(${group + 1}) g[role='menuitem']:nth-child(${child + 1})`)
-        .click()
+        .click({force: true})
     ;
 
 });
