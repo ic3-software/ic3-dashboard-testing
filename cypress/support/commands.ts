@@ -901,7 +901,7 @@ declare namespace Cypress {
 
         closeDropdown(widgetId: string): void;
 
-        assertDropdownOptions(widgetId: string, labels: string[]): void;
+        assertDropdownOptions(widgetId: string, labels: string[], search?: string): void;
 
         selectDropdownFromInput(widgetId: string, label: string): void;
 
@@ -3066,9 +3066,17 @@ Cypress.Commands.add("closeDropdown", (widgetId: string) => {
 
 });
 
-Cypress.Commands.add("assertDropdownOptions", (widgetId: string, labels: string[]) => {
+Cypress.Commands.add("assertDropdownOptions", (widgetId: string, labels: string[], search?:string) => {
 
     cy.openDropdown(widgetId);
+
+    if (search) {
+        cy.getWidget(widgetId)
+            .find("input")
+            .clear()
+            .type(search)
+            .wait(500);
+    }
 
     cy.get("div.MuiAutocomplete-popper[role='presentation']")
         .find(`[data-cy^="filter-o-ac-"]`)
@@ -3085,12 +3093,6 @@ Cypress.Commands.add("assertDropdownOptions", (widgetId: string, labels: string[
             expect(actual).to.equal(expected);
         })
     ;
-
-    // labels.forEach(label => {
-    //     cy.get("div.MuiAutocomplete-popper[role='presentation']")
-    //         .find(`[data-cy="filter-o-ac-${label}"]`)
-    //     ;
-    // });
 
     cy.closeDropdown(widgetId);
 
@@ -3121,7 +3123,6 @@ Cypress.Commands.add("selectDropdownFromInputLazy", (widgetId: string, label: st
         .getWidget(widgetId)
         .find(".ic3WidgetBox-header")
         .click();
-    ;
 
 });
 
