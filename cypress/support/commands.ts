@@ -2039,7 +2039,7 @@ Cypress.Commands.add('clickDrilldownMenu', (widgetId: string, path: (number | st
             ;
         } else {
             cy.get("div[data-cy='drilldown-menu']")
-                .find(`li[role="menuitem"] > p:contains('${p}')`)
+                .find(`li[role="menuitem"] span:contains('${p}')`)
                 .click()
             ;
         }

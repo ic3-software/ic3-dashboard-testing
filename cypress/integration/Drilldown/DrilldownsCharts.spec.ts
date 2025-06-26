@@ -130,13 +130,13 @@ describe("Drilldown/Drilldowns Charts", () => {
         assertChartDrilldown(widgetId, eventWidgetId, YEARS, null, null)
 
         selectChart(widgetId, YEARS_AS_CHILD_NO["2018"]);
-        cy.clickDrilldownMenu(widgetId, ["Geography", "Continent", "Members"]);
+        cy.clickDrilldownMenu(widgetId, ["Geography", "Continent"]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"], "2018", "[Time].[Time].[Year].&[2018-01-01]");
         assertChartDrilldownEvent("ww5", "2018", "([Time].[Time].[Year].&[2018-01-01])")
 
         selectChart(widgetId, 2 /* Europe */);
-        cy.clickDrilldownMenu(widgetId, [1, 3, 2]);
+        cy.clickDrilldownMenu(widgetId, ["Product", 4]);
         cy.waitForQueryCount(++queryCount);
         assertChartDrilldown(widgetId, eventWidgetId, ["Personal", "Server", "Silver", "Gold", "Platinum"], "Europe", "[Geography].[Geography].[Continent].&[EU]");
         assertChartDrilldownEvent("ww5", "2018 > Europe", "([Time].[Time].[Year].&[2018-01-01],[Geography].[Geography].[Continent].&[EU])")

@@ -105,7 +105,7 @@ describe("Drilldown/Drilldowns PivotTables", () => {
 
         cy.log("drilldown: 2018")
         cy.drilldownPivotTableLeftHeader(widgetId, 0, 0);
-        cy.clickDrilldownMenu(widgetId, [1, 3, 2] /* Article / Article / Members */);
+        cy.clickDrilldownMenu(widgetId, ["Product", 4] /* Product / Article */);
         cy.waitForQueryCount(++queryCount);
         cy.assertPivotTableLeftHeader(widgetId, 0, 0, "2018");
         cy.assertPivotTableLeftHeader(widgetId, 1, 0, "Personal");
@@ -118,7 +118,7 @@ describe("Drilldown/Drilldowns PivotTables", () => {
 
         cy.log("drilldown: 2018")
         cy.drilldownPivotTableLeftHeader(widgetId, 0, 0);
-        cy.clickDrilldownMenu(widgetId, ["Geography", "Continent", "Members"]);
+        cy.clickDrilldownMenu(widgetId, ["Geography", "Continent"]);
         cy.waitForQueryCount(++queryCount);
         cy.assertPivotTableLeftHeader(widgetId, 0, 0, "2018");
         cy.assertPivotTableLeftHeader(widgetId, 1, 0, "Africa");

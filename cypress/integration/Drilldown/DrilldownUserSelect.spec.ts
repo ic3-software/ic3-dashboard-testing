@@ -22,7 +22,7 @@ describe("Drilldown/User Select", () => {
         cy.get("div[data-cy='drilldown-menu']").should("exist");
         cy.clickOutside();
         cy.clickTableCell(table1, 0, 0);
-        cy.clickDrilldownMenu(table1, ["Product", 5, 2]);
+        cy.clickDrilldownMenu(table1, ["Product", 4]);
         cy.assertTableCellContent(table1, 0, 0, "All Regions");
         cy.assertTableCellContent(table1, 1, 0, "Personal");
         cy.assertTableCellContent(table1, 2, 0, "Server");
@@ -38,7 +38,7 @@ describe("Drilldown/User Select", () => {
         cy.get("div[data-cy='drilldown-menu']").should("exist");
         cy.clickOutside();
         cy.drilldownPivotTableLeftHeader(table2, 0, 0);
-        cy.clickDrilldownMenu(table2, ["Product", 5, 2]);
+        cy.clickDrilldownMenu(table2, ["Product", 4]);
         cy.assertPivotTableLeftHeader(table2, 0, 0, "All Regions");
         cy.assertPivotTableLeftHeader(table2, 1, 0, "Personal");
         cy.assertPivotTableLeftHeader(table2, 2, 0, "Server");
