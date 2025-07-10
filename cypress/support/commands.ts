@@ -460,7 +460,9 @@ const PRINT_STATUS_TIMEOUT = 30000;
 const STATOS_SELECTION_BACKGROUND_COLOR = "rgb(234, 245, 254)";
 const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
-function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: string } {
+function createPrintInBrowserURL(path: string, orientation?: "portrait" | "landscape"): Partial<VisitOptions> & {
+    url: string
+} {
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
@@ -483,7 +485,7 @@ function createPrintInBrowserURL(path: string): Partial<VisitOptions> & { url: s
                 // A4
 
                 pageSizeName: "A4",
-                pageOrientation: "portrait",
+                pageOrientation: orientation ?? "portrait",
 
                 pageSizeUnits: "mm",
                 pageWidth: 210,
@@ -576,7 +578,7 @@ declare namespace Cypress {
         openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean,
                              userLocale?: string): void;
 
-        openPrintInBrowserTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
+        openPrintInBrowserTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, orientation?: "portrait" | "landscape"): void;
 
         reloadAndWait(waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
@@ -1513,7 +1515,8 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
 
 });
 
-Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
+Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQueryStatus = true, waitForPrintStatus = true,
+                                                      orientation: "portrait" | "landscape" = "portrait") => {
 
     cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
 
@@ -1527,7 +1530,7 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
 
     }
 
-    const vURL = createPrintInBrowserURL(path);
+    const vURL = createPrintInBrowserURL(path, orientation);
 
     // forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
 
