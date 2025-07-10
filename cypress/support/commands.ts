@@ -980,6 +980,10 @@ declare namespace Cypress {
 
         assertFilterPanelItems(widgetId: string, filterNames: string[]): void;
 
+        assertFilterPanelValue(widgetId: string, value: string, index?: number): void;
+
+        assertFilterPanelBetween(widgetId: string, start: string, end: string, index?: number): void;
+
         panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
 
         panelFilterSaveView(widgetId: string, viewName: string): void;
@@ -3066,7 +3070,7 @@ Cypress.Commands.add("closeDropdown", (widgetId: string) => {
 
 });
 
-Cypress.Commands.add("assertDropdownOptions", (widgetId: string, labels: string[], search?:string) => {
+Cypress.Commands.add("assertDropdownOptions", (widgetId: string, labels: string[], search?: string) => {
 
     cy.openDropdown(widgetId);
 
@@ -3685,12 +3689,37 @@ Cypress.Commands.add("assertFilterPanelItems", (widgetId: string, filterNames: s
     filterNames.forEach((name, index) => {
 
         cy.getWidget(widgetId)
-            .get("[data-cy='filters'] [data-cy='filter-item']")
+            .get("[data-cy='filter-item']")
             .eq(index)
             .find(".ic3FilterPanel-fieldName")
             .contains(name);
 
     });
+});
+
+Cypress.Commands.add("assertFilterPanelValue", (widgetId: string, value: string, index = 0) => {
+
+    cy.getWidget(widgetId)
+        .find("[data-cy='filter-item']")
+        .eq(index)
+        .find("[data-cy=value-selector-text]")
+        .find(`input[value="${value}"]`);
+
+});
+
+Cypress.Commands.add("assertFilterPanelBetween", (widgetId: string, start: string, end: string, index = 0) => {
+
+    cy.getWidget(widgetId)
+        .find("[data-cy='filter-item']")
+        .eq(index)
+        .find("[data-cy=value-selector-text]").eq(0)
+        .find(`input[value="${start}"]`);
+    cy.getWidget(widgetId)
+        .find("[data-cy='filter-item']")
+        .eq(index)
+        .find("[data-cy=value-selector-text]").eq(1)
+        .find(`input[value="${end}"]`);
+
 });
 
 Cypress.Commands.add("panelFilterClear", (widgetId: string, index: number) => {
