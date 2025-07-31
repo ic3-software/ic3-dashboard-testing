@@ -23,8 +23,6 @@ describe("Others/ViewerGridLayoutPositioning", () => {
 });
 
 function assertSizing(widget: string, expected: number) {
-    // print scale = 0.64
-    // correct size = expected * 0.64
     cy.getWidget(widget)
         .should('have.css', 'width').should(width => {
         expect(width).to.include('px');
