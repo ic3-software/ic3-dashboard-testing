@@ -8,7 +8,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/TableColumnGroupsResizableState.spec.ts"
+            "**/CreateGadgetFromScratch.spec.ts"
         ],
 
         excludeSpecPattern: [
