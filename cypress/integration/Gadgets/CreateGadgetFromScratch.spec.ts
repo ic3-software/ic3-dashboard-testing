@@ -13,7 +13,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
 
         // Open gadget editor
         cy.get("[data-cy='appMenu-button-newGadget']").click();
-        cy.get("div[data-cy=schemaName] input").type("Sales (LiveDemo){downArrow}{enter}")
+        cy.get("div[data-cy=schemaName] input").type("Sales (LiveDemo) (tomIII){downArrow}{enter}")
         cy.get("div[data-cy='layoutConfigId-name'] input").type("Desktop{downArrow}{enter}")
         cy.get("[data-cy='button-ok']").click();
 
@@ -41,7 +41,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
             .trigger('mouseup', 100, 600, {force: true})
 
         cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
-        cy.widgetEditorEnterMdxStatement('SELECT [Time].[Time].[Year].allmembers ON "MdxBuilderFilterItems"FROM [Sales] CELL PROPERTIES CELL_ORDINAL')
+        cy.widgetEditorEnterMdxStatement('SELECT [Time].[Time].[Year].allmembers ON "MdxBuilderFilterItems" FROM [Sales] CELL PROPERTIES CELL_ORDINAL')
 
         cy.widgetEditorChangeTab("tab-interactions");
         cy.widgetEditorOpenOptionGroup("groupSelection");
