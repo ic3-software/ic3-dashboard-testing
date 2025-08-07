@@ -26,6 +26,7 @@
 import Timeoutable = Cypress.Timeoutable;
 import VisitOptions = Cypress.VisitOptions;
 import Loggable = Cypress.Loggable;
+import ClickOptions = Cypress.ClickOptions;
 
 require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
@@ -871,7 +872,7 @@ declare namespace Cypress {
         // Filter: Buttons
         // -------------------------------------------------------------------------------------------------------------
 
-        selectButton(widgetId: string, label: string): void;
+        selectButton(widgetId: string, label: string, options?: Partial<ClickOptions>): void;
 
         assertButtonSelected(widgetId: string, label: string): void;
 
@@ -2907,12 +2908,12 @@ Cypress.Commands.add("assertRepetitionWidgetRowColumnCount", (pageNb: number, wi
 
 // Buttons
 
-Cypress.Commands.add("selectButton", (widgetId: string, label: string) => {
+Cypress.Commands.add("selectButton", (widgetId: string, label: string, options?: Partial<ClickOptions>) => {
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content button[data-name="${label}"]`)
         // .parent("div")
-        .click()
+        .click(options)
     ;
 
 });

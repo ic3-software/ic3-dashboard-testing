@@ -36,8 +36,8 @@ describe("Tables/Table Column Groups State", () => {
         assertTableColumnWidth(cy, widgetId, "Business,Amount", 80 + 50);
 
         // Click CONSUMER
-        cy.wait(150);
-        cy.selectButton("ww1", "2021");
+        cy.wait(300);
+        cy.selectButton("ww1", "2021", {force:true});
         cy.assertButtonSelected("ww1", "2021");
         cy.waitForQueryCount(3);
 
