@@ -36,7 +36,9 @@ describe("Tables/Table Resizing State", () => {
         assertTableColumnWidth(cy, widgetId, "Amount", 80 + 50);
 
         // Click CONSUMER
-        cy.selectButton("ww1", "Consumer");
+        cy.wait(300);
+        cy.selectButton("ww1", "Consumer", {force:true});
+        cy.assertButtonSelected("ww1", "Consumer");
         cy.waitForQueryCount(3);
 
         assertTableColumnWidth(cy, widgetId, "Amount", 80 + 50);
