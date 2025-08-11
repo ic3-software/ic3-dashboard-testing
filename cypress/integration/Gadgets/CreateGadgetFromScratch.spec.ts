@@ -13,8 +13,10 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
 
         // Open gadget editor
         cy.get("[data-cy='appMenu-button-newGadget']").click();
-        cy.get("div[data-cy=schemaName] input").clear().type("Sales (LiveDemo) (tomIII){downArrow}{enter}")
+        cy.get("div[data-cy=schemaName] input").click().clear();
+        cy.get("div[data-cy=schemaName] input").clear().type("Sales (LiveDemo) (tomIII){downArrow}{enter}");
         cy.get("div[data-cy=schemaName] input").should('have.value', 'Sales (LiveDemo) (tomIII)');
+        cy.get("div[data-cy='layoutConfigId-name'] input").click().clear();
         cy.get("div[data-cy='layoutConfigId-name'] input").clear().type("Desktop{downArrow}{enter}")
         cy.get("div[data-cy='layoutConfigId-name'] input").should('have.value', 'Desktop');
         cy.get("[data-cy='button-ok']").click();
