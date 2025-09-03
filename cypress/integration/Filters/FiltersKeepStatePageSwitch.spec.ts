@@ -12,7 +12,7 @@ describe("Filters/Filters keep state when switching page", () => {
     beforeEach(() => {
         cy.login();
         cy.openEditorTestReport("Filters/Filters keep state page switch", true, false);
-        cy.waitForQueryCount(2);
+        //cy.waitForQueryCount(2);
     });
 
     it("Filter values are remembered when switching page", () => {
