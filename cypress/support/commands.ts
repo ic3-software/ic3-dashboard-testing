@@ -28,6 +28,7 @@ import VisitOptions = Cypress.VisitOptions;
 import Loggable = Cypress.Loggable;
 import ClickOptions = Cypress.ClickOptions;
 
+require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
 require('cypress-cdp')
 
