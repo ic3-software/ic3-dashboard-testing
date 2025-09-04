@@ -48,10 +48,31 @@ export function schemaBrowserExpandNode(type: SchemaBrowserMdxEntityDataType, ca
 
 export function schemaBrowserDragNode(caption: string, dropAxis: string, rootClass = ".ic3EditorDrawerShell-content") {
 
-    cy.get(rootClass + ' .ic3WidgetEditorQueryPanel-Hierarchies div[data-cy="' + caption + '"] .ic3-draggable')
-        .trigger('dragstart');
+    cy.get(`${rootClass} .ic3WidgetEditorQueryPanel-Hierarchies div[data-cy="${caption}"] .ic3-draggable`)
+        .scrollIntoView()
+        .should('be.visible')
+        .as('dragSource');
 
-    cy.get(rootClass + ' .ic3WidgetEditorQueryPanel-Axis[data-cy="' + dropAxis + '"] .ic3-dropZone')
-        .trigger('drop');
+    // Wait for the drop zone to be visible
+    cy.get(`${rootClass} .ic3WidgetEditorQueryPanel-Axis[data-cy="${dropAxis}"] .ic3-dropZone`)
+        .should('be.visible')
+        .as('dropTarget');
+
+    // Perform drag and drop with more reliable events
+    cy.get('@dragSource').trigger('mousedown', { which: 1, button: 0 });
+
+    // Add slight delay to ensure drag start is registered
+    cy.wait(100);
+
+    cy.get('@dragSource')
+        .trigger('dragstart')
+        .trigger('drag', { force: true });
+
+    cy.get('@dropTarget')
+        .trigger('dragover')
+        .trigger('drop', { force: true });
+
+    cy.get('@dragSource')
+        .trigger('mouseup', { force: true });
 
 }
