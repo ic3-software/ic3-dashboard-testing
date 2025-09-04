@@ -3,7 +3,6 @@
   "version": "8.6.2",
   "private": true,
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "2.3.0",
     "@types/node": "24.2.0",
     "@types/pdf-parse": "1.1.5",
     "@types/cypress-cdp": "1.4.0",
