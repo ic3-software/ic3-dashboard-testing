@@ -16,8 +16,7 @@
     "pdf-parse": "1.1.1",
     "read-excel-file": "6.0.1",
     "typescript": "5.9.2",
-    "cypress-failed-log": "2.10.0",
-    "mocha-failures-reporter" : ""
+    "cypress-failed-log": "2.10.0"
   },
   "scripts": {
     "cypress:open localhost": "cypress open --config baseUrl=http://localhost:3000",
