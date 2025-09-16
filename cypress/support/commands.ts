@@ -28,7 +28,6 @@ import VisitOptions = Cypress.VisitOptions;
 import Loggable = Cypress.Loggable;
 import ClickOptions = Cypress.ClickOptions;
 
-require('@4tw/cypress-drag-drop')
 require('cypress-real-events/support')
 require('cypress-cdp')
 
@@ -1297,6 +1296,8 @@ declare namespace Cypress {
         loadSchema(schemaName: string): void;
 
         unloadSchema(schemaName: string): void;
+
+        resizeTableColumnWidth(widgetId: string, headerTitle: string, sizePx: number): void;
 
     }
 }
@@ -4807,4 +4808,25 @@ Cypress.Commands.add("datePickerChooseShortcut", (widgetId: string, shortcut: st
         .eq(0)
         .click();
 
+});
+
+Cypress.Commands.add('resizeTableColumn', (widgetId: string, headerTitle: string, sizePx: number) => {
+    cy.getWidget(widgetId).get(`.MuiDataGrid-columnHeader[data-field='${headerTitle}'] .MuiDataGrid-columnSeparator--resizable`)
+        .then(($el) => {
+            const rect = $el[0].getBoundingClientRect();
+            cy.wrap($el)
+                .trigger('mousedown', {
+                    button: 0,
+                    clientX: rect.x + rect.width / 2,
+                    clientY: rect.y + rect.height / 2,
+                    force: true
+                })
+                .trigger('mousemove', {
+                    button: 0,
+                    clientX: rect.x + rect.width / 2 + sizePx,
+                    clientY: rect.y + rect.height / 2,
+                    force: true
+                })
+                .trigger('mouseup', {force: true});
+        });
 });

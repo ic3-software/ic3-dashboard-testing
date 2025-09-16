@@ -1,4 +1,4 @@
-import {assertTableColumnWidth, dragTableColumnWidth} from "./TableUtils";
+import {assertTableColumnWidth, resizeTableColumnWidth} from "./TableUtils";
 
 
 describe("Tables/Table Column Groups State", () => {
@@ -16,7 +16,7 @@ describe("Tables/Table Column Groups State", () => {
         assertTableColumnWidth(cy, widgetId, "Business,Amount", 80);
         assertTableColumnWidth(cy, widgetId, "Business,Amount MIN", 80);
 
-        dragTableColumnWidth(cy, widgetId, "Business,Amount", 50);
+        resizeTableColumnWidth(cy, widgetId, "Business,Amount", 50);
         assertTableColumnWidth(cy, widgetId, "Business,Amount", 80 + 50);
 
         // Reload
@@ -32,7 +32,7 @@ describe("Tables/Table Column Groups State", () => {
         const widgetId = "ww0";
 
         assertTableColumnWidth(cy, widgetId, "Business,Amount", 80);
-        dragTableColumnWidth(cy, widgetId, "Business,Amount", 50);
+        resizeTableColumnWidth(cy, widgetId, "Business,Amount", 50);
         assertTableColumnWidth(cy, widgetId, "Business,Amount", 80 + 50);
 
         // Click CONSUMER

@@ -1,4 +1,4 @@
-import {assertTableColumnWidth, dragTableColumnWidth} from "./TableUtils";
+import {assertTableColumnWidth, resizeTableColumnWidth} from "./TableUtils";
 
 
 describe("Tables/Table Resizing", () => {
@@ -16,7 +16,7 @@ describe("Tables/Table Resizing", () => {
         assertTableColumnWidth(cy, widgetId, "Country", 180);
         assertTableColumnWidth(cy, widgetId, "Personal", 80);
 
-        dragTableColumnWidth(cy, widgetId, "Country", 55);
+        resizeTableColumnWidth(cy, widgetId, "Country", 55);
         assertTableColumnWidth(cy, widgetId, "Country", 180 + 55);
     })
 
@@ -38,7 +38,7 @@ describe("Tables/Table Resizing (editor)", () => {
         assertTableColumnWidth(cy, widgetId, "Country", 180);
         assertTableColumnWidth(cy, widgetId, "Personal", 80);
 
-        dragTableColumnWidth(cy, widgetId, "Country", 55);
+        resizeTableColumnWidth(cy, widgetId, "Country", 55);
         assertTableColumnWidth(cy, widgetId, "Country", 180 + 55);
 
     })
@@ -51,7 +51,7 @@ describe("Tables/Table Resizing (editor)", () => {
         cy.widgetEditorOpen(widgetId);
 
         assertTableColumnWidth(cy, widgetId, "Silver", 80);
-        dragTableColumnWidth(cy, widgetId, "Silver", 55);
+        resizeTableColumnWidth(cy, widgetId, "Silver", 55);
         assertTableColumnWidth(cy, widgetId, "Silver", 80 + 55);
 
         cy.widgetEditorOpenOptionGroup("columns");

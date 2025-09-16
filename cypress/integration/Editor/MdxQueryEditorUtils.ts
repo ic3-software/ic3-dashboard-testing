@@ -72,7 +72,4 @@ export function schemaBrowserDragNode(caption: string, dropAxis: string, rootCla
         .trigger('dragover')
         .trigger('drop', { force: true });
 
-    cy.get('@dragSource')
-        .trigger('mouseup', { force: true });
-
 }

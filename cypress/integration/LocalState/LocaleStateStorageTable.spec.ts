@@ -1,4 +1,4 @@
-import {assertTableColumnWidth, dragTableColumnWidth} from "../Tables/TableUtils";
+import {assertTableColumnWidth, resizeTableColumnWidth} from "../Tables/TableUtils";
 
 describe("Local State/Table", () => {
 
@@ -36,7 +36,7 @@ describe("Local State/Table", () => {
         cy.sortTable(wid, 1);
         cy.assertTableCellContent(wid, 0, 1, "51")
 
-        dragTableColumnWidth(cy, wid, "Continent", 55);
+        resizeTableColumnWidth(cy, wid, "Continent", 55);
         assertTableColumnWidth(cy, wid, "Continent", 300 + 35);  //why 35 ?
 
         // Then refresh page
