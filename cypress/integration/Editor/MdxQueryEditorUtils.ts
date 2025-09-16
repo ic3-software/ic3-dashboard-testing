@@ -59,17 +59,21 @@ export function schemaBrowserDragNode(caption: string, dropAxis: string, rootCla
         .as('dropTarget');
 
     // Perform drag and drop with more reliable events
-    cy.get('@dragSource').trigger('mousedown', { which: 1, button: 0 });
+    cy.get('@dragSource').trigger('mousedown', {which: 1, button: 0});
 
     // Add slight delay to ensure drag start is registered
     cy.wait(100);
+    const dataTransfer = new DataTransfer();
 
     cy.get('@dragSource')
-        .trigger('dragstart')
-        .trigger('drag', { force: true });
+        .trigger('dragstart', {dataTransfer})
+        .trigger('drag', {force: true});
 
     cy.get('@dropTarget')
         .trigger('dragover')
-        .trigger('drop', { force: true });
+        .trigger('drop', {dataTransfer, force: true});
 
+    cy.get('@dropTarget')
+        .find(`div[title="${caption}"]`)
+        .should('have.length.at.least', 1);
 }
