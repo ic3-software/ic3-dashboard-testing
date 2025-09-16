@@ -11,6 +11,7 @@ describe("Print/Print State Filter Sankey", () => {
     it("ww0: Countries", () => {
 
         cy.selectButton("ww0", "Australia");
+        cy.waitForQueryCount(3);
         cy.sankeyClickArea("ww2", "Sydney");
         cy.clickOutside() /* prevent hover color effect */;
 
