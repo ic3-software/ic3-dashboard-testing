@@ -12,9 +12,11 @@ describe("Tables/Table drilldown and on row click", () => {
 
         cy.assertEventValue("ww2", null);
         cy.clickTableCell("ww0", 0, 0);
+        cy.waitForQueryCount(2);
         cy.assertEventValue("ww2", "Africa");
 
         cy.clickTableCell("ww0", 2, 0);
+        cy.waitForQueryCount(3);
         cy.assertEventValue("ww2", "South Africa");
 
     });
@@ -25,6 +27,7 @@ describe("Tables/Table drilldown and on row click", () => {
 
         cy.assertEventValue("ww2", null);
         cy.clickTableCellDrilldown("ww0", 0, 0);
+        cy.waitForQueryCount(2);
         cy.assertEventValue("ww2", null);
 
     });
