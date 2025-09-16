@@ -24,6 +24,7 @@ jobs:
           config-file: cypress.config-github.ts
           config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
           browser: chrome
+          command: npx cypress run --reporter min
         env:
           # pass the Cypress Cloud record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
