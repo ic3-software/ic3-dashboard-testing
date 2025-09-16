@@ -4810,7 +4810,7 @@ Cypress.Commands.add("datePickerChooseShortcut", (widgetId: string, shortcut: st
 
 });
 
-Cypress.Commands.add('resizeTableColumn', (widgetId: string, headerTitle: string, sizePx: number) => {
+Cypress.Commands.add('resizeTableColumnWidth', (widgetId: string, headerTitle: string, sizePx: number) => {
     cy.getWidget(widgetId).get(`.MuiDataGrid-columnHeader[data-field='${headerTitle}'] .MuiDataGrid-columnSeparator--resizable`)
         .then(($el) => {
             const rect = $el[0].getBoundingClientRect();
