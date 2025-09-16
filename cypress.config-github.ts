@@ -10,7 +10,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/*Selection.spec.ts",
+            "**/*.spec.ts",
         ],
 
         excludeSpecPattern: [
