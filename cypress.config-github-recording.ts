@@ -8,7 +8,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/PrintStateFilterSankey.spec.ts"
+            "**/TableAndChartSelection.spec.ts"
         ],
 
         excludeSpecPattern: [
