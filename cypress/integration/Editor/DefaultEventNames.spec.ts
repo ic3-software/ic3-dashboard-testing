@@ -21,8 +21,7 @@ describe("Editor/Default Event Names", () => {
 
         schemaBrowserDragNode("Country", "MdxBuilderFilterItems");
 
-        cy.widgetEditorApply();
-        cy.widgetEditorClose();
+        cy.widgetEditorApplyAndClose();
 
         cy.selectButton("ww1", "China");
         cy.assertEventValue("ww0", "China");

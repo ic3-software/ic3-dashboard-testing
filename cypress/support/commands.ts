@@ -4662,6 +4662,10 @@ Cypress.Commands.add("widgetEditorChangeBoolean", (input: string) => {
 Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
     cy.widgetEditorApply();
+    cy.wait(100);
+    cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+        .should('have.class', 'data-cy-ready')
+    ;
     cy.widgetEditorClose();
 
 });
