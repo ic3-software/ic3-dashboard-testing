@@ -3,7 +3,7 @@ import {readPdf} from "./cypress/scripts/readPdf";
 
 export default defineConfig({
 
-    reporter: 'min',
+    reporter: 'spec',
 
     e2e: {
 
@@ -22,8 +22,6 @@ export default defineConfig({
             runMode: 2,
             openMode: 2,
         },
-
-        reporter: 'min',
 
         viewportWidth: 1600,
         viewportHeight: 1200,
