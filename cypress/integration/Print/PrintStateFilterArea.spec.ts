@@ -11,6 +11,7 @@ describe("Print/Print State Filter Area", () => {
     it("ww0: Countries", () => {
 
         cy.selectButton("ww0", "Australia");
+        cy.waitForQueryCount(3);
         cy.areaClickPoint("ww2", 2);
         cy.clickOutside() /* prevent hover color effect */;
 
