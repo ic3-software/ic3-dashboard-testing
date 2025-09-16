@@ -3,6 +3,8 @@ import {readPdf} from "./cypress/scripts/readPdf";
 
 export default defineConfig({
 
+    reporter: 'min',
+
     e2e: {
 
         supportFile: "cypress/support/e2e.ts",
