@@ -11,6 +11,7 @@ describe("Print/Print State Filter Donut", () => {
     it("ww0: Countries", () => {
 
         cy.selectButton("ww0", "Australia");
+        cy.waitForQueryCount(3);
         cy.donutClickSlice("ww2", 2);
         cy.clickOutside() /* prevent hover color effect */;
 

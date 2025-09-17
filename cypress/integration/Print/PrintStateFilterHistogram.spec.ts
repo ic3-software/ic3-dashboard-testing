@@ -11,6 +11,7 @@ describe("Print/Print State Filter Histogram", () => {
     it("ww0: Countries", () => {
 
         cy.selectButton("ww0", "Australia");
+        cy.waitForQueryCount(3);
         cy.histogramClickColumn("ww2", 1);
         cy.clickOutside() /* prevent hover color effect */;
 
