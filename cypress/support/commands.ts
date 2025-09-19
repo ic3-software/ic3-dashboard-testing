@@ -607,6 +607,8 @@ declare namespace Cypress {
 
         waitForPrintStatus(): Chainable<Subject>;
 
+        switchQueryEditorLimits(): void;
+
         refreshDashboard(): void;
 
         clickNextPage(): void;
@@ -1393,6 +1395,13 @@ function createAppViewingURL(testAppName: string): Partial<VisitOptions> & { url
 Cypress.Commands.add('refreshDashboard', () => {
 
     cy.get("[data-cy='appMenu-button-refreshReport']")
+        .click();
+
+});
+
+Cypress.Commands.add('switchQueryEditorLimits', () => {
+
+    cy.get("[data-cy='appMenu-button-switch-query-editor-limits']")
         .click();
 
 });
