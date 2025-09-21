@@ -23,7 +23,7 @@ describe("Others/Constants", () => {
         cy.wait(5100);
         cy.getWidget("ww0", "data-cy-request-ajax-timeout");
 
-        cy.getWidget("ww0").find('button[data-cy="refreshQuery"]').click();
+        cy.getWidget("ww0").find('button[data-cy="runQueryNoEditorTimeout"]').click();
         cy.wait(5100);
         cy.assertPivotTableRowCount("ww0",1);
 
