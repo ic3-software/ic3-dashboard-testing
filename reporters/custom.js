@@ -9,12 +9,12 @@ class FailuresSummaryReporter extends Base {
         super(runner);
 
         runner.on("fail", (test, err) => {
-            const title = test.fullTitle();
+            const fileName = test.file || test.ctx?.file || Cypress.spec.name;
             const error = err && (err.stack || err.message) || "Unknown error";
 
             failures.push({title, error});
 
-            console.log(`❌ FAIL: ${title}`);
+            console.log(`❌ FAIL: ${fileName}`);
             console.log(error);
         });
 
