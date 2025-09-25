@@ -45,7 +45,7 @@ process.on("exit", () => {
     if (failures.length > 0) {
         console.log("\n--- Failed Tests ---");
         failures.forEach((f, i) => {
-            console.log(`${i + 1}) ${f.title}`);
+            console.log(`${i + 1}) ${f.fileName}`);
         });
     }
 });
