@@ -12,7 +12,7 @@ class FailuresSummaryReporter extends Base {
             const fileName = test.file || test.ctx?.file;
             const error = err && (err.stack || err.message) || "Unknown error";
 
-            failures.push({title, error});
+            failures.push({fileName, error});
 
             console.log(`❌ FAIL: ${fileName}`);
             console.log(error);
