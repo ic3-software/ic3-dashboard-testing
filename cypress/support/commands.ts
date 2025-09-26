@@ -460,6 +460,12 @@ const PRINT_STATUS_TIMEOUT = 30000;
 const STATOS_SELECTION_BACKGROUND_COLOR = "rgb(234, 245, 254)";
 const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
+
+function visitUrl(vURL: Partial<VisitOptions> & { url: string }) {
+    Cypress.env('url',  JSON.stringify(vURL));
+    cy.visit(vURL);
+}
+
 function createPrintInBrowserURL(path: string, orientation?: "portrait" | "landscape"): Partial<VisitOptions> & {
     url: string
 } {
@@ -1479,7 +1485,7 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
 
     forceRenderNotVisibleWidgets();
 
-    cy.visit(vURL);
+    visitUrl(vURL);
 
     if (waitForQueryStatus) {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
@@ -1500,9 +1506,10 @@ Cypress.Commands.add('openMdxConsole', () => {
     const vURL = {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/mdxConsole" : "/icCube/report/mdxConsole",
     }
-    cy.visit(vURL);
+    visitUrl(vURL);
 
 })
+
 
 Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true,
                                               doNotForceWidgetRendering?: boolean, userLocale?: string) => {
@@ -1510,7 +1517,8 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
     const vURL = createViewingURL(path, userLocale);
 
     forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
-    cy.visit(vURL);
+
+    visitUrl(vURL);
 
     if (waitForQueryStatus) {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
@@ -1545,7 +1553,7 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
 
     // forceRenderNotVisibleWidgets(doNotForceWidgetRendering);
 
-    cy.visit(vURL);
+    visitUrl(vURL);
 
     if (waitForQueryStatus) {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
@@ -1585,7 +1593,7 @@ Cypress.Commands.add('openGadgetEditor', (path?: string) => {
     const vURL = createGadgetEditorURL(path);
 
     forceRenderNotVisibleWidgets();
-    cy.visit(vURL);
+    visitUrl(vURL);
 
 
 });
@@ -1598,7 +1606,7 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
     const vURL = createEditingURL(path);
 
     forceRenderNotVisibleWidgets();
-    cy.visit(vURL);
+    visitUrl(vURL);
 
     if (waitForQueryStatus) {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
@@ -1700,7 +1708,7 @@ Cypress.Commands.add('switchEditorToQuickViewMode', () => {
 Cypress.Commands.add('openAdministration', () => {
 
     const vURL = createAdminURL(path);
-    cy.visit(vURL);
+    visitUrl(vURL);
 
 });
 
