@@ -31,23 +31,11 @@ class FailuresSummaryReporter extends Base {
         });
 
         runner.on(EVENT_TEST_FAIL, (test, error) => {
-           // const url = Cypress.env('url') ?? 'empty';
-            const fileName = Cypress.spec.name;
-
-            const failure = {fileName, error};
-            failures.push(failure);
-
             // Ensure specFailures is initialized
             if (!this.specFailures) {
                 this.specFailures = [];
             }
-            this.specFailures.push(failure);
-
-            console.log(``)
-          //  console.log(`❌ FAIL on report ${url}`)
-            console.log(`❌ FAIL file: ${fileName}`);
-            console.log(`Test title: ${test.title}`);
-            console.log(error.message);
+            this.specFailures.push(error);
         });
 
         runner.on(EVENT_RUN_END, () => {
@@ -56,8 +44,8 @@ class FailuresSummaryReporter extends Base {
 
             if (hasFailures) {
                 console.log(`❌ Error: ${this.currentSpec}`);
-                this.specFailures.forEach((err) => {
-                    console.log(`   - ${err.error.message}`);
+                this.specFailures.forEach((failure) => {
+                    console.log(`   - ${failure.error.message}`);
                 });
             } else {
                 console.log(`✅ Completed: ${this.currentSpec}`);
