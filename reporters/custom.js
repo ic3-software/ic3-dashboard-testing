@@ -1,39 +1,76 @@
 const Mocha = require("mocha");
 const {Base} = Mocha.reporters;
+const {
+    EVENT_SUITE_BEGIN,
+    EVENT_TEST_FAIL,
+    EVENT_RUN_END
+} = Mocha.Runner.constants;
+
 
 let globalStats = {tests: 0, passes: 0, failures: 0, pending: 0};
-let failures = new Set();
+let failures = [];
+
+// on change -> npx tsc reporters/custom.ts
 
 class FailuresSummaryReporter extends Base {
+    specFailures;
+    currentSpec;
+
     constructor(runner) {
         super(runner);
 
-        runner.on("fail", (err, runnable) => {
+        // Initialize properties in constructor
+        this.specFailures = [];
+        this.currentSpec = '';
 
-            const url = Cypress.env('url') ?? 'empty';
-
-            failures.add(Cypress.spec.name);
-
-            console.log(``)
-            console.log(`❌ FAIL on report ${url}`)
-            console.log(`Test file: ${Cypress.spec.name}`);
-            console.log(`Test title:: runnable.title`);
-            console.log(err);
+        runner.on(EVENT_SUITE_BEGIN, (suite) => {
+            if (suite.root) {
+                // 'suite.file' provides the absolute path to the current spec file.
+                this.currentSpec = suite.file;
+            }
         });
 
+        runner.on(EVENT_TEST_FAIL, (test, error) => {
+           // const url = Cypress.env('url') ?? 'empty';
+            const fileName = Cypress.spec.name;
 
-        runner.on("end", () => {
-            // Print spec summary
-            if (this.specFailures.length > 0) {
+            const failure = {fileName, error};
+            failures.push(failure);
+
+            // Ensure specFailures is initialized
+            if (!this.specFailures) {
+                this.specFailures = [];
+            }
+            this.specFailures.push(failure);
+
+            console.log(``)
+          //  console.log(`❌ FAIL on report ${url}`)
+            console.log(`❌ FAIL file: ${fileName}`);
+            console.log(`Test title: ${test.title}`);
+            console.log(error.message);
+        });
+
+        runner.on(EVENT_RUN_END, () => {
+            // Safe check for specFailures existence and length
+            const hasFailures = this.specFailures && this.specFailures.length > 0;
+
+            if (hasFailures) {
                 console.log(`❌ Error: ${this.currentSpec}`);
+                this.specFailures.forEach((err) => {
+                    console.log(`   - ${err.error.message}`);
+                });
             } else {
                 console.log(`✅ Completed: ${this.currentSpec}`);
             }
+
             // accumulate across specs
             globalStats.tests += this.stats.tests || 0;
             globalStats.passes += this.stats.passes || 0;
             globalStats.failures += this.stats.failures || 0;
             globalStats.pending += this.stats.pending || 0;
+
+            // Reset for next spec
+            this.specFailures = [];
         });
     }
 }
@@ -50,8 +87,9 @@ process.on("exit", () => {
     if (failures.length > 0) {
         console.log("\n--- Failed Tests ---");
         failures.forEach((f, i) => {
-            console.log(`${i + 1}) ${f.title}`);
+            console.log(`${i + 1}) ${f.fileName}`);
         });
     }
 });
+
 module.exports = FailuresSummaryReporter;
