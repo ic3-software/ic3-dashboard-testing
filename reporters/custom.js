@@ -44,8 +44,8 @@ class FailuresSummaryReporter extends Base {
 
             if (hasFailures) {
                 console.log(`❌ Error: ${this.currentSpec}`);
-                this.specFailures.forEach((failure) => {
-                    console.log(`   - ${failure.error.message}`);
+                this.specFailures.forEach((error) => {
+                    console.log(`   - ${error.message}`);
                 });
             } else {
                 console.log(`✅ Completed: ${this.currentSpec}`);
