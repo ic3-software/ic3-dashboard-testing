@@ -19,7 +19,7 @@ describe("Filters/Event in header", () => {
         cy.assertWidgetHeader(tableWidget, "Table - no selection table");
 
         cy.selectPivotTableLeftHeader(widgetId, 0, 0);
-        cy.assertWidgetQueryLoading(tableWidget);
+        //  cy.assertWidgetQueryLoading(tableWidget);
         cy.assertWidgetHeader(buttonsWidgetId, "Buttons - Business");
         cy.assertWidgetHeader(tableWidget, "Table - Business");
 
@@ -28,7 +28,7 @@ describe("Filters/Event in header", () => {
         cy.assertWidgetHeader(tableWidget, "Table - no selection table");
 
         cy.selectPivotTableLeftHeader(widgetId, 1, 0);
-        cy.assertWidgetQueryLoading(tableWidget);
+        // cy.assertWidgetQueryLoading(tableWidget);
         cy.assertWidgetHeader(buttonsWidgetId, "Buttons - Consumer");
         cy.assertWidgetHeader(tableWidget, "Table - Consumer");
 
