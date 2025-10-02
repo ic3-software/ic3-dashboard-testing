@@ -776,6 +776,8 @@ declare namespace Cypress {
 
         getTableHeader(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
 
+        getTableHeaderZoomed(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
+
         assertTableRowCount(widgetId: string, count: number): void;
 
         assertTableColCount(widgetId: string, count: number): void;
@@ -2265,6 +2267,13 @@ Cypress.Commands.add("assertTableDomColCount", (widgetId: string, count: number)
 Cypress.Commands.add("getTableHeader", (widgetId: string, headerTitle: string, extra?: string) => {
 
     return cy.getWidget(widgetId)
+        .find(getTableHeaderSelector(headerTitle, extra))
+
+});
+
+Cypress.Commands.add("getTableHeaderZoomed", (widgetId: string, headerTitle: string, extra?: string) => {
+
+    return cy.getZoomedWidget(widgetId)
         .find(getTableHeaderSelector(headerTitle, extra))
 
 });

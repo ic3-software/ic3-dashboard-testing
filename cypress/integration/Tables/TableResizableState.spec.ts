@@ -1,4 +1,4 @@
-import {assertTableColumnWidth, resizeTableColumnWidth} from "./TableUtils";
+import {assertTableColumnWidth, assertTableColumnWidthZoomed, resizeTableColumnWidth} from "./TableUtils";
 
 
 describe("Tables/Table Resizing State", () => {
@@ -37,12 +37,28 @@ describe("Tables/Table Resizing State", () => {
 
         // Click CONSUMER
         cy.wait(300);
-        cy.selectButton("ww1", "Consumer", {force:true});
+        cy.selectButton("ww1", "Consumer", {force: true});
         cy.assertButtonSelected("ww1", "Consumer");
         cy.waitForQueryCount(3);
 
         assertTableColumnWidth(cy, widgetId, "Amount", 80 + 50);
 
+    });
+
+    it("Check resizing and local state when zoom", () => {
+
+        const widgetId = "ww0";
+
+        assertTableColumnWidth(cy, widgetId, "Amount", 80);
+        resizeTableColumnWidth(cy, widgetId, "Amount", 50);
+        assertTableColumnWidth(cy, widgetId, "Amount", 80 + 50);
+        cy.wait(500);  // Wait for debounce
+
+        // Zoom
+        cy.clickOutside();
+        cy.clickUserMenuZoom(widgetId);
+
+        assertTableColumnWidthZoomed(cy, widgetId, "Amount", 80 + 50);
     });
 
 });
