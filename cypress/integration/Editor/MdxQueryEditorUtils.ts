@@ -74,6 +74,6 @@ export function schemaBrowserDragNode(caption: string, dropAxis: string, rootCla
         .trigger('drop', {dataTransfer, force: true});
 
     cy.get('@dropTarget')
-        .find(`div[title="${caption}"]`)
+        .find(`div[data-cy="${caption}"]`)
         .should('have.length.at.least', 1);
 }
