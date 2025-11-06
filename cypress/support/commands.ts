@@ -462,7 +462,7 @@ const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
 
 function visitUrl(vURL: Partial<VisitOptions> & { url: string }) {
-    Cypress.env('url',  JSON.stringify(vURL));
+    Cypress.env('url', JSON.stringify(vURL));
     cy.visit(vURL);
 }
 
@@ -597,7 +597,11 @@ declare namespace Cypress {
          */
         openEditorTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
-        waitForQueryCount(count: number): void;
+        /**
+         * @param count number of queries on success
+         * @param countTotal total number of queries (including waiting). Default = count.
+         */
+        waitForQueryCount(count: number, countTotal?: number): void;
 
         waitForChartRendering(count: number): void;
 
@@ -1648,7 +1652,7 @@ Cypress.Commands.add('waitForPrintStatus', () => {
 
 });
 
-Cypress.Commands.add('waitForQueryCount', (countAsNumber: number) => {
+Cypress.Commands.add('waitForQueryCount', (countSuccess: number, totalQueryCount?: number) => {
 
     // https://glebbahmutov.com/blog/cypress-tips-and-tricks/#interactive-and-headed-mode
     let waitTime = 250;
@@ -1663,12 +1667,13 @@ Cypress.Commands.add('waitForQueryCount', (countAsNumber: number) => {
     //          => this method should fail
     // -----------------------------------------------------------------------------------------------------------------
 
-    const count = "" + countAsNumber;
+    const count = "" + countSuccess;
+    const countTotal = "" + (totalQueryCount ?? countSuccess);
     cy.waitForQueryStatus();
     cy.get("div.ic3AppStats").invoke('attr', 'data-cy-queries-on-success').should('eq', count, {timeout: QUERY_COUNT_TIMEOUT})
-        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', count)
+        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
         .wait(waitTime)
-        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', count)
+        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
 });
 
 Cypress.Commands.add('waitForChartRendering', (count: number) => {
