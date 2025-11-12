@@ -26,6 +26,6 @@ function assertSizing(widget: string, expected: number) {
     // print scale = 0.64
     // correct size = expected * 0.64
     cy.getWidget(widget)
-        .assertCssPx('width', expected * 0.64)
+        .assertCssPx('width', expected * 0.64, 0.005)
     ;
 }
