@@ -24,8 +24,6 @@ describe("Others/ViewerGridLayoutPositioning", () => {
 
 function assertSizing(widget: string, expected: number) {
     cy.getWidget(widget)
-        .should('have.css', 'width').should(width => {
-        expect(width).to.include('px');
-        expect(parseInt(width, 10)).to.be.within((expected - 3), (expected + 3));  // Adres rounding issues.
-    });
+        .assertCssPx('width', expected, 0.05)
+    ;
 }

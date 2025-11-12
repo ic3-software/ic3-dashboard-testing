@@ -27,6 +27,7 @@ import Timeoutable = Cypress.Timeoutable;
 import VisitOptions = Cypress.VisitOptions;
 import Loggable = Cypress.Loggable;
 import ClickOptions = Cypress.ClickOptions;
+import Chainable = Cypress.Chainable;
 
 require('cypress-real-events/support')
 require('cypress-cdp')
@@ -1164,6 +1165,8 @@ declare namespace Cypress {
 
         keyShift(cb: () => void): void;
 
+        assertCssPx(cssProperty: string, expectedValue: number, precision?: number): void;
+
         /**
          * Assuming the widget contains a marked down:
          * <pre>
@@ -1807,23 +1810,19 @@ Cypress.Commands.add('assertWidgetDetailsEx', (pageNb: number, widgetId: string,
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
         .should("have.length", 1)
-        .invoke("css", "left")
-        .should("match", new RegExp(left + "(.*)?px"));
+        .assertCssPx('left', left, 0.005);
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
         .should("have.length", 1)
-        .invoke("css", "top")
-        .should("match", new RegExp(top + "(.*)?px"));
+        .assertCssPx('top', top, 0.005);
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
         .should("have.length", 1)
-        .invoke("css", "width")
-        .should("match", new RegExp(width + "(.*)?px"));
+        .assertCssPx('width', width, 0.005);
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
         .should("have.length", 1)
-        .invoke("css", "height")
-        .should("match", new RegExp(height + "(.*)?px"));
+        .assertCssPx('height', height, 0.005);
 
 });
 
@@ -2709,6 +2708,20 @@ Cypress.Commands.add("assertPivotTableColCount", (widgetId: string, count: numbe
 
 });
 
+Cypress.Commands.add("assertCssPx", {prevSubject: true}, (prevSubject: Chainable<any>, cssProperty: string, expectedValue: number, precision = 0.001) => {
+
+    return cy.wrap(prevSubject)
+        .should("have.css", cssProperty)
+        .should(cssValue => {
+            const value = String(cssValue);
+            expect(value).to.include('px');
+            // Adres rounding issues.
+            const valueNumber = Number.parseFloat(String(value).substring(0, value.length - 2));
+            expect(valueNumber).to.be.within(expectedValue * (1 - precision), expectedValue * (1 + precision));
+        });
+
+});
+
 Cypress.Commands.add("assertPivotTableDetails", (pageNb: number, widgetId: string, withBoxHeader: boolean, withTableHeader: boolean, height: number, rowCount: number) => {
 
     const headerType = withBoxHeader ? "with-header" : "without-header";
@@ -2721,7 +2734,7 @@ Cypress.Commands.add("assertPivotTableDetails", (pageNb: number, widgetId: strin
     ;
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}']`)
-        .should("have.css", "height", height + "px")
+        .assertCssPx("height", height)
     ;
 
     cy.get(`[data-cy-page-nb='${pageNb}'] [data-widget-id='${widgetId}'] .ic3-pt`)

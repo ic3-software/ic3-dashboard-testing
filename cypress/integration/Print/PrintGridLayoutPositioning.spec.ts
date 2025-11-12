@@ -26,8 +26,6 @@ function assertSizing(widget: string, expected: number) {
     // print scale = 0.64
     // correct size = expected * 0.64
     cy.getWidget(widget)
-        .should('have.css', 'width').should(width => {
-        expect(width).to.include('px');
-        expect(parseInt(width, 10)).to.be.within((expected - 3) * 0.64, (expected + 3) * 0.64);  // Adres rounding issues.
-    });
+        .assertCssPx('width', expected * 0.64)
+    ;
 }
