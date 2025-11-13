@@ -3,7 +3,7 @@ describe("Others/WidgetsNotRendered", () => {
     beforeEach(() => {
         cy.login();
         cy.openViewerTestReport("Others/WidgetsNotRendered", undefined, false, true);
-        cy.waitForChartRendering(1);
+        cy.assertRenderedCharts(1);
     });
 
     it("Basic", () => {
@@ -11,10 +11,10 @@ describe("Others/WidgetsNotRendered", () => {
         // just one chart es rendered (the other one is not visible)
         cy.wait(100)
         cy.assertTableRowCount("ww0", 5)
-        cy.waitForChartRendering(1);
+        cy.assertRenderedCharts(1);
 
         // check ww1 is not rendered
-        cy.getWidget("ww1", "data-cy-no-into-view-yet")
+        cy.assertWidgetNotIntoView("ww1");
 
         // scroll dow the page (class needs to be the one with the scrollbar)
         cy.get(".ic3App-payload").scrollTo("bottom");

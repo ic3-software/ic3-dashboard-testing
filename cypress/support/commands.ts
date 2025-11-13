@@ -606,6 +606,8 @@ declare namespace Cypress {
 
         waitForChartRendering(count: number): void;
 
+        assertRenderedCharts(count: number): void;
+
         waitForBoxContentHook(count: number): void;
 
         setChartRendering(alias: string): void;
@@ -692,6 +694,8 @@ declare namespace Cypress {
         assertWidgetVisible(widgetId: string, visible: boolean): void;
 
         assertWidgetRenderStatus(widgetId: string, renderStatus: "RENDERING" | "RENDERED"): void;
+
+        assertWidgetNotIntoView(widgetId: string): void;
 
         // -------------------------------------------------------------------------------------------------------------
         // Switch widget
@@ -1682,9 +1686,13 @@ Cypress.Commands.add('waitForQueryCount', (countSuccess: number, totalQueryCount
 Cypress.Commands.add('waitForChartRendering', (count: number) => {
 
     cy.waitForQueryStatus();
+    cy.assertRenderedCharts(count);
+
+});
+
+Cypress.Commands.add('assertRenderedCharts', (count: number) => {
     cy.get('.ic3WidgetBox-header[data-cy-render-status="RENDERED"')
         .should('have.length', count)
-
 });
 
 Cypress.Commands.add('waitForBoxContentHook', (count: number) => {
@@ -1909,6 +1917,17 @@ Cypress.Commands.add('assertWidgetRenderStatus', (widgetId: string, renderStatus
         .should('not.exist');
     // Status found (timeout = 0 to assert what the status is now)
     cy.get(`[data-cy="widget-box-${widgetId}"] .ic3WidgetBox-header[data-cy-render-status="${renderStatus}"]`, {timeout: 0})
+        .should('have.length', 1);
+
+});
+
+Cypress.Commands.add('assertWidgetNotIntoView', (widgetId: string) => {
+
+    // Other status not found (timeout = 0 to assert what the status is now)
+    cy.get(`[data-cy="widget-box-${widgetId}"] .ic3WidgetBox-header`, {timeout: 0})
+        .should('not.exist');
+    // Status found (timeout = 0 to assert what the status is now)
+    cy.get(`[data-cy="widget-box-${widgetId}"] div[data-cy-type="data-cy-no-into-view-yet"]`, {timeout: 0})
         .should('have.length', 1);
 
 });
