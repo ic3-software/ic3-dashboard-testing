@@ -1,6 +1,6 @@
 
 //
-// Generated file: Tue May 28 2024 06:41:03 GMT+0200 (Central European Summer Time) 
+// Generated file: Fri Nov 21 2025 08:48:40 GMT+0100 (Central European Standard Time) 
 //
 // @see build_all_dashboards.js
 //
@@ -214,6 +214,11 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
           },
           {
             "kind": "FILE",
+            "name": "Switch",
+            "path": "shared:/Live Demo/Filters/Switch"
+          },
+          {
+            "kind": "FILE",
             "name": "Tree",
             "path": "shared:/Live Demo/Filters/Tree"
           }
@@ -243,6 +248,11 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
             "kind": "FILE",
             "name": "Connected Filters",
             "path": "shared:/Live Demo/How To/Connected Filters"
+          },
+          {
+            "kind": "FILE",
+            "name": "Custom Export File Name",
+            "path": "shared:/Live Demo/How To/Custom Export File Name"
           },
           {
             "kind": "FILE",
@@ -406,8 +416,8 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
           },
           {
             "kind": "FILE",
-            "name": "MDX Query Builder widget",
-            "path": "shared:/Live Demo/Miscellaneous/MDX Query Builder widget"
+            "name": "Global Events",
+            "path": "shared:/Live Demo/Miscellaneous/Global Events"
           },
           {
             "kind": "FILE",
