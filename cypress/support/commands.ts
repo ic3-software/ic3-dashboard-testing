@@ -1001,6 +1001,10 @@ declare namespace Cypress {
 
         assertFilterPanelItems(widgetId: string, filterNames: string[]): void;
 
+        assertFilterPanelSimpleItemsActive(widgetId: string, index: number, itemsActive: string[], itemsInactive: string[]): void;
+
+        assertFilterPanelSelectionItems(widgetId: string, index: number, items: string[]): void;
+
         assertFilterPanelValue(widgetId: string, value: string, index?: number): void;
 
         assertFilterPanelBetween(widgetId: string, start: string, end: string, index?: number): void;
@@ -1036,6 +1040,8 @@ declare namespace Cypress {
         // -------------------------------------------------------------------------------------------------------------
 
         singlePanelFilterSetSelection(widgetId: string, values: (string | RegExp)[]): void;
+
+        assertSinglePanelFilterSelectionItems(widgetId: string, values: string[]): void;
 
         // -------------------------------------------------------------------------------------------------------------
         // Chart: Bar
@@ -3765,6 +3771,62 @@ Cypress.Commands.add("assertFilterPanelItems", (widgetId: string, filterNames: s
     });
 });
 
+Cypress.Commands.add("assertFilterPanelSimpleItemsActive", (widgetId: string, index: number, itemsActive: string[], itemsInactive: string[]) => {
+
+    const filter = cy.getWidget(widgetId)
+        .find("[data-cy='filter-item']")
+        .eq(index);
+
+    filter.find("[data-cy='search-content']")
+        .find('p')
+        .should("have.length", itemsActive.length + itemsInactive.length);
+
+    itemsActive.forEach(value => {
+        cy.getWidget(widgetId)
+            .find("[data-cy='filter-item']")
+            .eq(index)
+            .find("[data-cy='search-content']")
+            .find('p')
+            .contains(value)
+            .should('have.css', 'color', 'rgb(22, 25, 76)');
+    });
+
+    itemsInactive.forEach(value => {
+        cy.getWidget(widgetId)
+            .find("[data-cy='filter-item']")
+            .eq(index)
+            .find("[data-cy='search-content']")
+            .find('p')
+            .contains(value)
+            .should('have.css', 'color', 'rgba(0, 0, 0, 0.26)');
+    });
+
+});
+
+Cypress.Commands.add("assertFilterPanelSelectionItems", (widgetId: string, index: number, items: string[]) => {
+
+    const filter = cy.getWidget(widgetId)
+        .find("[data-cy='filters'] [data-cy='filter-item']")
+        .eq(index)
+    ;
+
+    filter.find("[data-cy='value-selector-text']")
+        .find(".MuiInputBase-root")
+        .click()
+    ;
+
+    cy.get("[data-cy='search-content']")
+        .find('p')
+        .should('have.length', items.length);
+
+    items.forEach(v => {
+        cy.get("[data-cy='search-content']")
+            .find('p')
+            .contains(v);
+    });
+
+});
+
 Cypress.Commands.add("assertFilterPanelValue", (widgetId: string, value: string, index = 0) => {
 
     cy.getWidget(widgetId)
@@ -3944,6 +4006,27 @@ Cypress.Commands.add("singlePanelFilterSetSelection", (widgetId: string, values:
     cy.get("[data-cy='confirm-selection']")
         .click()
     ;
+
+});
+
+Cypress.Commands.add("assertSinglePanelFilterSelectionItems", (widgetId: string, values: string[]) => {
+
+    cy.getWidget(widgetId)
+        .find("[data-cy='value-selector-text']")
+        .find("input")
+        .click()
+    ;
+
+    cy.get("[data-cy='search-content']")
+        .find('p')
+        .should('have.length', values.length);
+
+    values.forEach(v => {
+        cy.get("[data-cy='search-content']")
+            .find('p')
+            .contains(v)
+        ;
+    });
 
 });
 
