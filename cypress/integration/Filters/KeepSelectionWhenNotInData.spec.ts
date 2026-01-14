@@ -13,6 +13,7 @@ describe("Filters/KeepSelectionWhenNotInData", () => {
     const tableId = "ww1";
     const buttonsId = "ww4";
     const eventId = "ww3";
+    const eventId2 = "ww5";
 
     it("table keeps selection when filtered out by filter panel", () => {
 
@@ -36,20 +37,20 @@ describe("Filters/KeepSelectionWhenNotInData", () => {
 
     it("buttons keeps selection when filtered out by filter panel", () => {
 
-        cy.assertEventValue(eventId, null);
+        cy.assertEventValue(eventId2, null);
         cy.selectButton(buttonsId, "Africa");  // Click Africa
-        cy.assertEventValue(eventId, "Africa");
+        cy.assertEventValue(eventId2, "Africa");
 
         // Now filter with the filter panel for Asia
         cy.panelFilterSetSelection(filterPanelId, 0, ["Asia"]);
 
         // Check Africa is kept in selection of the table
-        cy.assertEventValue(eventId, "Africa");
+        cy.assertEventValue(eventId2, "Africa");
         cy.assertWidgetHeaderSelection(buttonsId, "Africa selected");
 
         // Now ctrl click Asia, should keep Africa selected.
         cy.selectButton(buttonsId, "Asia", {ctrlKey: true});  // Click Asia
-        cy.assertEventValue(eventId, "Africa, Asia");
+        cy.assertEventValue(eventId2, "Africa, Asia");
         cy.assertWidgetHeaderSelection(buttonsId, "2 selected");
 
     });
