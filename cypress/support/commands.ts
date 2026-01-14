@@ -677,6 +677,8 @@ declare namespace Cypress {
 
         assertWidgetHeader(widgetId: string, header: string): void;
 
+        assertWidgetHeaderSelection(widgetId: string, selection: string): void;
+
         assertWidgetQueryLoading(widgetId: string): void;
 
         clickWidgetHeader(widgetId: string): Chainable<Subject>;
@@ -1976,6 +1978,14 @@ Cypress.Commands.add('assertWidgetHeader', (widgetId: string, header: string) =>
         .should('have.length', 1)
         .first()
         .should("have.text", header)
+
+});
+
+Cypress.Commands.add('assertWidgetHeaderSelection', (widgetId: string, selection: string) => {
+
+    return cy.getWidget(widgetId).find(".ic3WidgetBox-header div[data-cy='header-selection-chip']")
+        .should('have.length', 1)
+        .should('have.text', selection)
 
 });
 
