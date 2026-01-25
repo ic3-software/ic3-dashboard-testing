@@ -633,6 +633,8 @@ declare namespace Cypress {
          */
         switchEditorToQuickViewMode(): void;
 
+        clickOpenMoreTopMenu(): void;
+
         // -------------------------------------------------------------------------------------------------------------
         // Localization & administration
         // -------------------------------------------------------------------------------------------------------------
@@ -1725,7 +1727,13 @@ Cypress.Commands.add('setBoxContentHook', (alias: string) => {
 
 Cypress.Commands.add('switchEditorToQuickViewMode', () => {
 
-    cy.get("[data-cy='appMenu-button-switchEditing']").click();
+    cy.get("[data-cy='appMenu-button-switchToView']").click();
+
+});
+
+Cypress.Commands.add('clickOpenMoreTopMenu', () => {
+
+    cy.get("[data-cy='appMenu-button-more']").click();
 
 });
 

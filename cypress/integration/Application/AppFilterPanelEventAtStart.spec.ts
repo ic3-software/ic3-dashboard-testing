@@ -11,6 +11,7 @@ describe("Application/FilterPanel & eventAtStart", () => {
 
         const expected = 1;
         cy.waitForQueryCount(1);
+        cy.waitForQueryCount(3);
 
         const wPanel = "!appFilterPanel";
         cy.panelFilterRemove(wPanel, 0);

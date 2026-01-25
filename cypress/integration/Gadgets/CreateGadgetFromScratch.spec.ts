@@ -12,7 +12,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
          */
 
         // Open gadget editor
-        cy.get("[data-cy='appMenu-button-newGadget']").click();
+        cy.get("[data-cy='action-newGadget']").click();
         cy.get("div[data-cy=schemaName] input").click()
         cy.get("div[data-cy=schemaName] input").clear();
         cy.get("div[data-cy=schemaName] input").should('have.value', '');
@@ -21,8 +21,8 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
         cy.get("div[data-cy='layoutConfigId-name'] input").click();
         cy.get("div[data-cy='layoutConfigId-name'] input").clear();
         cy.get("div[data-cy='layoutConfigId-name'] input").should('have.value', '');
-        cy.get("div[data-cy='layoutConfigId-name'] input").type("Desktop{downArrow}{enter}")
-        cy.get("div[data-cy='layoutConfigId-name'] input").should('have.value', 'Desktop');
+        cy.get("div[data-cy='layoutConfigId-name'] input").type("Documentation Layout (Desktop){downArrow}{enter}")
+        cy.get("div[data-cy='layoutConfigId-name'] input").should('have.value', 'Documentation Layout (Desktop)');
         cy.get("[data-cy='button-ok']").click();
 
         // Place table
