@@ -632,6 +632,7 @@ declare namespace Cypress {
          * Click in the editor top left icon.
          */
         switchEditorToQuickViewMode(): void;
+        switchEditorToEditViewMode(): void;
 
         clickOpenMoreTopMenu(): void;
 
@@ -1730,6 +1731,12 @@ Cypress.Commands.add('setBoxContentHook', (alias: string) => {
 Cypress.Commands.add('switchEditorToQuickViewMode', () => {
 
     cy.get("[data-cy='appMenu-button-switchToView']").click();
+
+});
+
+Cypress.Commands.add('switchEditorToEditViewMode', () => {
+
+    cy.get("[data-cy='appMenu-button-switchToEditing']").click();
 
 });
 

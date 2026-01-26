@@ -14,7 +14,7 @@ describe("State/Table export state", () => {
         // Navigating away from a table that saves state should work
         cy.switchEditorToQuickViewMode();
         cy.getTableHeader("ww0", "Name").click();  // Sort on Name
-        cy.switchEditorToQuickViewMode();
+        cy.switchEditorToEditViewMode();
 
         // Assert no errors
         cy.get('@consoleError').should('not.have.been.called')
