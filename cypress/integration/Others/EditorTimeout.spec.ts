@@ -20,6 +20,7 @@ describe("Others/Constants", () => {
 
     it("test editor time-out", () => {
 
+        cy.switchQueryEditorLimits();
         cy.wait(5100);
         cy.getWidget("ww0", "data-cy-request-ajax-timeout");
 
@@ -31,10 +32,10 @@ describe("Others/Constants", () => {
 
     it("test top menu switch", () => {
 
+        cy.switchQueryEditorLimits();
         cy.wait(5100);
         cy.getWidget("ww0", "data-cy-request-ajax-timeout");
 
-        cy.switchQueryEditorLimits();
         cy.refreshDashboard();
         cy.wait(5100);
         cy.assertPivotTableRowCount("ww0",1);

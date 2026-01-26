@@ -1431,9 +1431,11 @@ Cypress.Commands.add('refreshDashboard', () => {
 
 Cypress.Commands.add('switchQueryEditorLimits', () => {
 
-    cy.get("[data-cy='appMenu-button-switch-query-editor-limits']")
-        .click();
+    cy.clickOpenMoreTopMenu();
 
+    cy.get("[data-cy='switch-query-editor-limits']").click();
+
+    cy.clickOpenMoreTopMenu();
 });
 
 Cypress.Commands.add('clickNextPage', () => {
