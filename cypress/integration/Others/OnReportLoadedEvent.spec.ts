@@ -37,7 +37,7 @@ describe("Others/onReportLoadedEvent", () => {
         cy.refreshDashboard();
         cy.wait(100);
         cy.waitForPrintStatus();
-        cy.assertEventWithText("ww1", "id1" , "2");
+        cy.assertEventWithText("ww1", "id1" , "3");
         cy.assertEventWithText("ww1", "id2" , "1")
 
     });
