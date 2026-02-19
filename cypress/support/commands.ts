@@ -4803,7 +4803,7 @@ Cypress.Commands.add("widgetEditorQueryBuilderAssertNode", (dropAxis: string, no
 
 Cypress.Commands.add("widgetEditorOpenOptionGroup", (name: string) => {
 
-    cy.get(`.ic3App-drawer .MuiAccordion-root[data-cy=${name}]`).click()
+    cy.get(`.ic3App-drawer .MuiAccordion-root[data-cy=${name}] .MuiAccordionSummary-expandIconWrapper`).click()
 
 });
 
@@ -4836,7 +4836,7 @@ Cypress.Commands.add("widgetEditorChangeBoolean", (input: string) => {
 Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
     cy.widgetEditorApply();
-    cy.wait(100);
+    cy.wait(400);
     cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
         .should('have.class', 'data-cy-ready')
     ;
