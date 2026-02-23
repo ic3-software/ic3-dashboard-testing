@@ -29,13 +29,13 @@ describe("Others/onReportLoadedEvent", () => {
         cy.assertEventWithText("ww1", "id2" , "1")
 
         cy.refreshDashboard();
-        cy.wait(100);
+        cy.wait(250);
         cy.waitForPrintStatus();
         cy.assertEventWithText("ww1", "id1" , "2");
         cy.assertEventWithText("ww1", "id2" , "1")
 
         cy.refreshDashboard();
-        cy.wait(100);
+        cy.wait(250);
         cy.waitForPrintStatus();
         cy.assertEventWithText("ww1", "id1" , "3");
         cy.assertEventWithText("ww1", "id2" , "1")
