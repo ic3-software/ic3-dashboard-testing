@@ -4780,14 +4780,19 @@ Cypress.Commands.add("widgetEditorTabNotExists", (tabName: string) => {
 
 });
 
+
 Cypress.Commands.add("widgetEditorEnterMdxStatement", (statement: string) => {
 
     cy.widgetEditorChangeTab("tab-query");
     cy.get('button[data-cy="switchMdxToStatement"]').click();
-    cy.get('.cm-content')
-        .invoke('text', statement)
-        .wait(500)
 
+    cy.get('.cm-content')
+        .click()
+        .focused()
+        .keyboardDeleteAll()
+        .type(statement, { force: true })
+
+    cy.wait(500);
 });
 
 Cypress.Commands.add("widgetEditorChangeTextOption", (name: string, newValue: string) => {
