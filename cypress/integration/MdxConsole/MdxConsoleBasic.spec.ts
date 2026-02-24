@@ -1,3 +1,11 @@
+function selectSalesDemoSchema() {
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName'] input").click()
+    cy.wait(500)
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName'] input").type("Sales (Demo)", {force: true});
+
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName']").get('li.MuiAutocomplete-option[data-option-index="0"]').click()
+}
+
 describe("Local State/Bar chart", () => {
 
 
@@ -11,11 +19,7 @@ describe("Local State/Bar chart", () => {
 
         cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Select a Schema");
 
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName'] input")
-            .click()
-            .type("Sales (Demo)", {force: true})
-            .get('li.MuiAutocomplete-option[data-option-index="0"]').click()
-
+        selectSalesDemoSchema();
 
         cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").click();
         cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Sales (Demo)");
@@ -72,10 +76,7 @@ describe("Local State/Bar chart", () => {
 
     it("Debugger", () => {
 
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName'] input")
-            .click()
-            .type("Sales (Demo)", {force: true})
-            .get('li.MuiAutocomplete-option[data-option-index="0"]').click()
+        selectSalesDemoSchema()
 
 
         cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").click();
