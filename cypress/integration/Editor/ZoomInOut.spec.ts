@@ -32,7 +32,7 @@ describe("Editor/Zoom in out", () => {
                 cy.get('[data-cy="toolbar-zoomValue"]').invoke('text').should('equal', '110%');
                 cy.get('#app-payload > .ic3App-dashboard').invoke('outerWidth').should('be.closeTo', Number(outerWidth), 0.5);
 
-                cy.clickOpenMoreTopMenu();
+                cy.clickOutside();
             });
     });
 
@@ -57,7 +57,7 @@ describe("Editor/Zoom in out", () => {
                 cy.get('[data-cy="toolbar-zoomValue"]').invoke('text').should('equal', '110%');
                 cy.get('#app-payload > .ic3App-dashboard').invoke('height').should('be.closeTo', Number(outerHeight), 0.5);
 
-                cy.clickOpenMoreTopMenu();
+                cy.clickOutside();
             });
     });
 
