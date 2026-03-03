@@ -845,6 +845,8 @@ declare namespace Cypress {
 
         sortPivotTable(widgetId: string, column: number, row?: number): void;
 
+        assertNoDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
+
         drilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
         drilldownPivotTableTopHeader(widgetId: string, row: number, col: number): void;
@@ -2655,6 +2657,16 @@ Cypress.Commands.add("sortPivotTable", (widgetId: string, column: number, row = 
 
 });
 
+
+Cypress.Commands.add("assertNoDrilldownPivotTableLeftHeader", (widgetId: string, row: number, col: number) => {
+
+    // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-left-header div[data-vr='${row}'][data-vc='${col}']`)
+        .find('svg.ic3-pt-empty-drilldown')
+
+});
 
 Cypress.Commands.add("drilldownPivotTableLeftHeader", (widgetId: string, row: number, col: number) => {
 
