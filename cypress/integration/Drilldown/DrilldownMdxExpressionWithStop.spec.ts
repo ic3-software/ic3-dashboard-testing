@@ -8,7 +8,7 @@ describe("Drilldown/User Select", () => {
     beforeEach(() => {
         cy.login();
         cy.openViewerTestReport("Drilldown/Drilldown MDX Expression With Stop");
-        cy.waitForQueryCount(3);
+        cy.waitForQueryCount(4);
     });
 
     it("pivot table", () => {
@@ -16,11 +16,11 @@ describe("Drilldown/User Select", () => {
         const widgetId = "ww1";
 
         cy.drilldownPivotTableLeftHeader(widgetId, 0, 0 /* All Regions */);
-        cy.waitForQueryCount(4);
+        cy.waitForQueryCount(5);
         cy.assertPivotTableRowCount(widgetId, 6);
 
         cy.drilldownPivotTableLeftHeader(widgetId, 4, 0 /* 2021 */);
-        cy.waitForQueryCount(5);
+        cy.waitForQueryCount(6);
         cy.assertPivotTableRowCount(widgetId, 6 + 5);
         cy.assertPivotTableCell(widgetId, 4, 0, "€1,303,900");
         cy.assertPivotTableCell(widgetId, 4 + 1, 0, "€27,500");
