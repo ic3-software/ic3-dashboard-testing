@@ -847,6 +847,8 @@ declare namespace Cypress {
 
         assertNoDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
+        assertDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
+
         drilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
         drilldownPivotTableTopHeader(widgetId: string, row: number, col: number): void;
@@ -2664,7 +2666,18 @@ Cypress.Commands.add("assertNoDrilldownPivotTableLeftHeader", (widgetId: string,
 
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-left-header div[data-vr='${row}'][data-vc='${col}']`)
-        .find('svg.ic3-pt-empty-drilldown')
+        .find(':is(svg.ic3-pt-icon-none,svg.ic3-pt-empty-drilldown)')
+
+
+});
+Cypress.Commands.add("assertDrilldownPivotTableLeftHeader", (widgetId: string, row: number, col: number) => {
+
+    // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-left-header div[data-vr='${row}'][data-vc='${col}']`)
+        .find(':is(svg.ic3-pt-icon-none,svg.ic3-pt-empty-drilldown)')
+        .should("not.exist")
 
 });
 
