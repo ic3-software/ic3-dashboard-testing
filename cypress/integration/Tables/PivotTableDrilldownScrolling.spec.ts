@@ -13,7 +13,7 @@ describe("Tables/PivotTableDrilldownScrolling", () => {
 
         cy.drilldownPivotTableLeftHeader("ww0", 1, 0);
 
-        // Scroll to the end in the pivot table (scroll a few times to mimic mouse)
+        // Scroll to the end in the pivot table
         cy.scrollPivotTable("ww0", 999);
 
         // Assert 6 visible rows in DOM
