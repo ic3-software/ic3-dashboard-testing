@@ -34,7 +34,7 @@ function executeQuery() {
     cy.waitForQueryCount(1);
 }
 
-describe("Local State/Bar chart", () => {
+describe("Mdx Console", () => {
 
 
     beforeEach(() => {
@@ -42,6 +42,7 @@ describe("Local State/Bar chart", () => {
         cy.openMdxConsole();
         cy.clearAllLocalStorage();
     });
+
     it("Export Excel", () => {
 
         executeQuery();
