@@ -1,9 +1,37 @@
+// @ts-ignore
+import readXlsxFile, {Row} from "read-excel-file";
+
+
 function selectSalesDemoSchema() {
     cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName'] input").click()
     cy.wait(500)
     cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName'] input").type("Sales (Demo)", {force: true});
 
     cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName']").get('li.MuiAutocomplete-option[data-option-index="0"]').click()
+}
+
+function executeQuery() {
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Select a Schema");
+
+    selectSalesDemoSchema();
+
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").click();
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Sales (Demo)");
+
+    cy.getWidget("!w-console").find('.cm-content')
+        .invoke('text', "SELECT  \n" +
+            "  [Measures].members  on 0\n" +
+            "  [Customers].[Geography].[Country] on 1\n" +
+            "FROM [Sales] \n"
+            + "-- " + new Date()
+        )
+        .wait(500)
+
+    // one and only one query
+    cy.waitForQueryCount(0);
+    cy.get("button[data-cy='appMenu-button-mdxConsole.execute']").click()
+    cy.assertPivotTableRowCount("w-result", 16);
+    cy.waitForQueryCount(1);
 }
 
 describe("Local State/Bar chart", () => {
@@ -14,30 +42,24 @@ describe("Local State/Bar chart", () => {
         cy.openMdxConsole();
         cy.clearAllLocalStorage();
     });
+    it("Export Excel", () => {
 
+        executeQuery();
+
+        cy.exportToExcel("w-result");
+
+        cy.readFileFromDownload("Result ( Pivot Table ) .xlsx").then((blob) => {
+            //  check the file exits
+        });
+
+        cy.clickUserMenu("w-result", "export_csv");
+        cy.readFileFromDownload("Result ( Pivot Table ) .csv").then((blob) => {
+            //  check the file exits
+        });
+
+    });
     it("Basic", () => {
-
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Select a Schema");
-
-        selectSalesDemoSchema();
-
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").click();
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Sales (Demo)");
-
-        cy.getWidget("!w-console").find('.cm-content')
-            .invoke('text', "SELECT  \n" +
-                "  [Measures].members  on 0\n" +
-                "  [Customers].[Geography].[Country] on 1\n" +
-                "FROM [Sales] \n"
-                + "-- " + new Date()
-            )
-            .wait(500)
-
-        // one and only one query
-        cy.waitForQueryCount(0);
-        cy.get("button[data-cy='appMenu-button-mdxConsole.execute']").click()
-        cy.assertPivotTableRowCount("w-result", 16);
-        cy.waitForQueryCount(1);
+        executeQuery();
 
         // check local storage
         cy.reload();
