@@ -1,7 +1,7 @@
 describe("Local State/Markers map", () => {
 
     const dashboard = "Local State/Markers map";
-    const header = "Markers Map (Google) [Geography].[Geography].[Country].&[ZA]";
+    const header = "Markers Map (Google) [Geography].[Geography].[Country].&[ES]";
     const wid = "ww14";
 
     beforeEach(() => {
@@ -13,9 +13,9 @@ describe("Local State/Markers map", () => {
 
     it("Save/Restore State", () => {
 
-        // First create the state
-        cy.getWidget(wid)
-            .click({}) // Clicks in the center of the widget → ZA.
+        // Find the pin element by color
+        cy.getWidget(wid).get("gmp-pin[background='#ed591a']")
+            .click({force: true}) // Clicks in the center of the widget → ES.
 
         // Assert the state
         cy.assertWidgetHeader(wid, header);
