@@ -11,7 +11,7 @@ function assertLang(language: string) {
     // Test API localization has fallback
     cy.window().its('cypressReporting')
         .then((reporting: any) => {
-            const publicContext = reporting['context']['asPublicContext']();
+            const publicContext = reporting['context']['asPublicContextOnThemeId']();
             return publicContext.translateContent('tagWithArgument', 'argument1', 'argument2');
         }).should('eq', `test (${language}) arg0: argument1 | arg1 argument2`);
 
