@@ -32,7 +32,8 @@ describe("Query Builder Tree", () => {
         cy.get(".ic3QueryBuilderNode-root").should("have.length", 4);
 
         cy.widgetEditorMdxTreeFilter("year");
-        cy.get(".ic3QueryBuilderNode-root").should("have.length", 6);
+        // 9 since Range Date (new dim. for Range Chart)
+        cy.get(".ic3QueryBuilderNode-root").should("have.length", 9);
 
         cy.widgetEditorClose();
     });
