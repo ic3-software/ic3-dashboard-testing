@@ -45,7 +45,7 @@ describe("Selection/Sankey Selection", () => {
         clickSankeyNode(widgetId, "Silver", false);
         clickSankeyNode(widgetId, "License", true);
         cy.assertEventValue(eventWidgetId, "Silver, License");
-        cy.assertEventMdx(eventWidgetId, "([Product].[Product].[Article].&[3],[Product].[Product].[Category].&[1])");
+        cy.assertEventMdx(eventWidgetId, "{[Product].[Product].[Article].&[3],[Product].[Product].[Category].&[1]}");
 
     });
 
@@ -71,8 +71,19 @@ describe("Selection/Sankey Selection", () => {
 
         clickSankeyNode(widgetId, "Server", false);
         clickSankeyNode(widgetId, "Global South", true);
-        cy.assertEventValue(eventWidgetId, "Server, Global South");
+        cy.assertEventValue(eventWidgetId, "(Server, Global South)");
         cy.assertEventMdx(eventWidgetId, "([Product].[Article].[Article].&[2],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH])");
+
+        clickSankeyNode(widgetId, "Global North", false);
+        clickSankeyNode(widgetId, "Global South", true);
+        clickSankeyNode(widgetId, "Silver", true);
+        clickSankeyNode(widgetId, "Gold", true);
+        clickSankeyNode(widgetId, "Business", true);
+        cy.assertEventValue(eventWidgetId, "(Global North, Global South, Silver, Gold, Business)");
+        cy.assertEventMdx(eventWidgetId,
+            "({[Geography].[Classification].[Hemisphere].&[GLOBAL NORTH],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH]}," +
+            "{[Product].[Article].[Article].&[3],[Product].[Article].[Article].&[4]}," +
+            "[Customer].[Customer].[Type].&[BUSINESS])");
 
     });
 
@@ -99,7 +110,14 @@ describe("Selection/Sankey Selection", () => {
         clickSankeyNode(widgetId, "Gold", false);
         clickSankeyNode(widgetId, "Platinum", true);
         cy.assertEventValue(eventWidgetId, "Gold, Platinum");
-        cy.assertEventMdx(eventWidgetId, "([Product].[Article].[Article].&[4],[Product].[Article].[Article].&[5])");
+        cy.assertEventMdx(eventWidgetId, "{[Product].[Article].[Article].&[4],[Product].[Article].[Article].&[5]}");
+
+        clickSankeyNode(widgetId, "Gold", false);
+        clickSankeyNode(widgetId, "Platinum", true);
+        clickSankeyNode(widgetId, "Silver", true);
+        clickSankeyNode(widgetId, "Server", true);
+        cy.assertEventValue(eventWidgetId, "Gold, Platinum, Silver, Server");
+        cy.assertEventMdx(eventWidgetId, "{[Product].[Article].[Article].&[4],[Product].[Article].[Article].&[5],[Product].[Article].[Article].&[3],[Product].[Article].[Article].&[2]}");
 
     });
 
