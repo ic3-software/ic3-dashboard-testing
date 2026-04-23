@@ -632,6 +632,7 @@ declare namespace Cypress {
          * Click in the editor top left icon.
          */
         switchEditorToQuickViewMode(): void;
+
         switchEditorToEditViewMode(): void;
 
         clickOpenMoreTopMenu(): void;
@@ -1017,6 +1018,8 @@ declare namespace Cypress {
         assertFilterPanelValue(widgetId: string, value: string, index?: number): void;
 
         assertFilterPanelBetween(widgetId: string, start: string, end: string, index?: number): void;
+
+        assertFilterPanelItemIntermediate(widgetId: string, index: number, itemIndex: number, isFakeHierarchy?: boolean): void;
 
         panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
 
@@ -3904,6 +3907,34 @@ Cypress.Commands.add("assertFilterPanelBetween", (widgetId: string, start: strin
 
 });
 
+Cypress.Commands.add("assertFilterPanelItemIntermediate", (widgetId: string, index: number, itemIndex: number,
+                                                           isFakeHierarchy = false): void => {
+
+    const filter = cy.getWidget(widgetId)
+        .find("[data-cy='filters'] [data-cy='filter-item']")
+        .eq(index)
+    ;
+
+    filter.find("[data-cy='value-selector-text']")
+        .find(".MuiInputBase-root")
+        .click()
+    ;
+
+    if (isFakeHierarchy) {
+        cy.get("[data-cy='search-content']")
+            .find(`div[data-cy="fp-item-${itemIndex}"] div.ic3-RegItem-hasDescendantsIcon`)
+            .should('have.length', 1);
+
+    } else {
+        cy.get("[data-cy='search-content']")
+            .find(`div[data-cy="fp-item-${itemIndex}"] input[data-indeterminate="true"]`)
+            .should('have.length', 1);
+    }
+
+    cy.clickOutside();
+
+});
+
 Cypress.Commands.add("panelFilterClear", (widgetId: string, index: number) => {
 
     if (index === -1) {
@@ -4815,7 +4846,7 @@ Cypress.Commands.add("widgetEditorEnterMdxStatement", (statement: string) => {
         .click()
         .focused()
         .keyboardDeleteAll()
-        .type(statement, { force: true })
+        .type(statement, {force: true})
 
     cy.wait(500);
 });
