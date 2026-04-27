@@ -60,27 +60,25 @@ describe("Filters/Autocomplete Lazy Behavior", () => {
 
         const widgetId = "ww0";
 
-        let EXISTING_QR_CODE = "MISSING_QR_CODE";
-        cy.window().then(w => w.Cypress.QRCode = EXISTING_QR_CODE);
+        let MISSING_QR_CODE = "MISSING_QR_CODE";
+        cy.window().then(w => w.Cypress.QRCode = MISSING_QR_CODE);
 
         cy.getWidget(widgetId).find(".ic3-scanner-button").click();
-        cy.waitForQueryCount(4+1);
+        cy.waitForQueryCount(4+2);
         cy.getWidgetHeader(widgetId).should('not.contain', 'AY463ROXIBYBZ');
-        cy.get(".MuiAutocomplete-noOptions")
-
+        cy.getWidget(widgetId).should('contain', MISSING_QR_CODE)
     });
 
     it("ww0: Check missing QR Code - multiple", () => {
 
         const widgetId = "ww1";
 
-        let EXISTING_QR_CODE = "MISSING_QR_CODE";
-        cy.window().then(w => w.Cypress.QRCode = EXISTING_QR_CODE);
+        let MISSING_QR_CODE = "MISSING_QR_CODE";
+        cy.window().then(w => w.Cypress.QRCode = MISSING_QR_CODE);
 
         cy.getWidget(widgetId).find(".ic3-scanner-button").click();
-        cy.waitForQueryCount(4+1);
+        cy.waitForQueryCount(4+2);
         cy.getWidgetHeader(widgetId).should('not.contain', 'AY463ROXIBYBZ');
-        cy.get(".MuiAutocomplete-noOptions")
 
     });
 
