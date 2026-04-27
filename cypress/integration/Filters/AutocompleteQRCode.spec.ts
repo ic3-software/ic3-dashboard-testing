@@ -78,7 +78,7 @@ describe("Filters/Autocomplete Lazy Behavior", () => {
 
         cy.getWidget(widgetId).find(".ic3-scanner-button").click();
         cy.waitForQueryCount(4+2);
-        cy.getWidgetHeader(widgetId).should('not.contain', 'AY463ROXIBYBZ');
+        cy.getWidget(widgetId).should('contain', MISSING_QR_CODE)
 
     });
 
