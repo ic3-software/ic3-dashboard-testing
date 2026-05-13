@@ -4846,7 +4846,7 @@ Cypress.Commands.add("widgetEditorEnterMdxStatement", (statement: string) => {
         .click()
         .focused()
         .keyboardDeleteAll()
-        .type(statement, {force: true})
+        .type(statement, {force: true, delay: 25})
 
     cy.wait(500);
 });
