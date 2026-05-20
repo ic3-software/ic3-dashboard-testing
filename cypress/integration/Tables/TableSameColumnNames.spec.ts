@@ -17,7 +17,7 @@ describe("Tables/Table Same Column Names", () => {
 
         cy.assertTableRowCount("ww1", 1);
         cy.assertTableCellContent("ww1", 0, 0, "true")
-        cy.assertTableCellContent("ww1", 0, 1, "2")
+        cy.assertTableCellContent("ww1", 0, 1, "-32,767")
 
         cy.assertTableRowCount("ww3", 1);
         cy.assertTableCellContent("ww3", 0, 0, "1")

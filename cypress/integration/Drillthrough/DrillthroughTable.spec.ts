@@ -16,7 +16,7 @@ describe("Drillthrough/Drillthrough Table", () => {
         for (let row = 670; row < 679; row++) {
             cy.assertTableValue("ww0", row - 670, 0, "" + row);
             cy.assertTableValue("ww0", row - 670, 1, "Marseille");
-            cy.assertTableValue("ww0", row - 670, 2, "2");
+            cy.assertTableValue("ww0", row - 670, 2, "-32,767");
         }
 
     })
