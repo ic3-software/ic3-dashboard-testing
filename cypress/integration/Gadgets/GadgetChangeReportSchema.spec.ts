@@ -3,7 +3,7 @@ describe("Gadgets/GadgetChangeReportSchema", () => {
     beforeEach(() => {
         // Open an application, we don't care which
         cy.login();
-        cy.openAppTestReport("empty app", false, false);
+        cy.openAppTestReport("empty app", true, false);
     });
 
     it("Without changing schema", () => {
@@ -36,7 +36,7 @@ describe("Gadgets/GadgetChangeReportSchema", () => {
 
     it("Open with different schema", () => {
 
-        cy.wait(100).window().its('cypressReporting')
+        cy.window().its('cypressReporting')
             .then((reporting: any) => {
                 reporting.openReport({
                     path: 'shared:/Tests/Gadgets/Schema Change',
