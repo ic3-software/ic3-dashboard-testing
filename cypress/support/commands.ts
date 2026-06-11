@@ -461,15 +461,16 @@ const PRINT_STATUS_TIMEOUT = 30000;
 const STATOS_SELECTION_BACKGROUND_COLOR = "rgb(234, 245, 254)";
 const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
-
-function visitUrl(vURL: Partial<VisitOptions> & { url: string }) {
+function visitUrl(vURL: Partial<VisitOptions> & { url: string })
+{
     Cypress.env('url', JSON.stringify(vURL));
     cy.visit(vURL);
 }
 
 function createPrintInBrowserURL(path: string, orientation?: "portrait" | "landscape"): Partial<VisitOptions> & {
     url: string
-} {
+}
+{
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
@@ -485,28 +486,27 @@ function createPrintInBrowserURL(path: string, orientation?: "portrait" | "lands
 
             ic3printParams: JSON.stringify({
 
-                // fitToPage: "true",
+                                               // fitToPage: "true",
 
-                scale: 1.0,
+                                               scale: 1.0,
 
-                // A4
+                                               // A4
 
-                pageSizeName: "A4",
-                pageOrientation: orientation ?? "portrait",
+                                               pageSizeName: "A4",
+                                               pageOrientation: orientation ?? "portrait",
 
-                pageSizeUnits: "mm",
-                pageWidth: 210,
-                pageHeight: 297,
+                                               pageSizeUnits: "mm",
+                                               pageWidth: 210,
+                                               pageHeight: 297,
 
-                marginTop: 10,
-                marginLeft: 10,
-                marginRight: 10,
-                marginBottom: 10,
-            })
+                                               marginTop: 10,
+                                               marginLeft: 10,
+                                               marginRight: 10,
+                                               marginBottom: 10,
+                                           })
         }
     }
 }
-
 
 type WidgetBoxContentType =
     "data-cy-no-template-definition" |
@@ -531,7 +531,8 @@ type WidgetBoxContentType =
 
 type TreeMode = "control-icons";
 
-interface PdfResult {
+interface PdfResult
+{
     numpages: number;
     numrender: number;
     info: any;
@@ -540,28 +541,32 @@ interface PdfResult {
     text: string;
 }
 
-interface IOpenReport {
+interface IOpenReport
+{
     path: string;
     params: string;
 }
 
 type TableMenuOption = "Unsort" | "Sort by ASC" | "Sort by DESC" | "Hide" | "Pin to left" | "Pin to right" | "Filter"
 
-function getTableHeaderSelector(headerTitle: string, extra?: string): string {
+function getTableHeaderSelector(headerTitle: string, extra?: string): string
+{
     return ".MuiDataGrid-columnHeader[data-field='" + headerTitle + "'] " + (extra ?? "");
 }
 
-interface Cypress {
+interface Cypress
+{
     // Utils
     migrateDate(date: string | null | undefined): string | null | undefined;
 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace Cypress {
+declare namespace Cypress
+{
 
-
-    interface Chainable<Subject> {
+    interface Chainable<Subject>
+    {
 
         login(): void;
 
@@ -702,6 +707,14 @@ declare namespace Cypress {
         assertWidgetRenderStatus(widgetId: string, renderStatus: "RENDERING" | "RENDERED"): void;
 
         assertWidgetNotIntoView(widgetId: string): void;
+
+        assertWidgetGridHeight(widgetId: string, expected: number): void;
+
+        assertWidgetWidth(widgetId: string, expected: number): void;
+
+        assertWidgetHeight(widgetId: string, expected: number): void;
+
+        assertWidgetWidthP(widgetId: string, expected: number): void;
 
         // -------------------------------------------------------------------------------------------------------------
         // Switch widget
@@ -1341,16 +1354,20 @@ declare namespace Cypress {
     }
 }
 
-function fixURL(path: string): string {
-    if (path.indexOf("/") === 0) {
+function fixURL(path: string): string
+{
+    if (path.indexOf("/") === 0)
+    {
         return path.substr(1);
     }
     return path;
 }
 
-function createViewingURL(path: string | IOpenReport, userLocale?: string): Partial<VisitOptions> & { url: string } {
+function createViewingURL(path: string | IOpenReport, userLocale?: string): Partial<VisitOptions> & { url: string }
+{
 
-    if (typeof path === "string") {
+    if (typeof path === "string")
+    {
 
         return {
             url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
@@ -1386,7 +1403,8 @@ function createViewingURL(path: string | IOpenReport, userLocale?: string): Part
     }
 }
 
-function createEditingURL(path: string): Partial<VisitOptions> & { url: string } {
+function createEditingURL(path: string): Partial<VisitOptions> & { url: string }
+{
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/editor" : "/icCube/report/editor",
@@ -1398,7 +1416,8 @@ function createEditingURL(path: string): Partial<VisitOptions> & { url: string }
     }
 }
 
-function createAdminURL(path: string): Partial<VisitOptions> & { url: string } {
+function createAdminURL(path: string): Partial<VisitOptions> & { url: string }
+{
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/admin" : "/icCube/report/admin",
@@ -1407,7 +1426,8 @@ function createAdminURL(path: string): Partial<VisitOptions> & { url: string } {
     }
 }
 
-function createGadgetEditorURL(path?: string): Partial<VisitOptions> & { url: string } {
+function createGadgetEditorURL(path?: string): Partial<VisitOptions> & { url: string }
+{
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/gadgetEditor" : "/icCube/report/gadgetEditor",
@@ -1418,7 +1438,8 @@ function createGadgetEditorURL(path?: string): Partial<VisitOptions> & { url: st
     }
 }
 
-function createAppViewingURL(testAppName: string): Partial<VisitOptions> & { url: string } {
+function createAppViewingURL(testAppName: string): Partial<VisitOptions> & { url: string }
+{
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
@@ -1471,7 +1492,8 @@ Cypress.Commands.add('login', () => {
 
         cy.clearAllLocalStorage();
 
-        if (Cypress.config().baseUrl !== "http://localhost:3000") {
+        if (Cypress.config().baseUrl !== "http://localhost:3000")
+        {
 
             cy.visit("/icCube/report/console")
             cy.performLogin();
@@ -1494,7 +1516,8 @@ Cypress.Commands.add('performLogin', () => {
     // +gadget /shared/Cypress WRITE                                       -- required for GadgetChangeSettings.specs.ts
     // -----------------------------------------------------------------------------------------------------------------
 
-    if (Cypress.config().baseUrl !== "http://localhost:3000") {
+    if (Cypress.config().baseUrl !== "http://localhost:3000")
+    {
 
         cy.get("input[name='j_username']").type(Cypress.env("ic3_user"), {log: false});  // See ./cypress.env.json
         cy.get("input[name='j_password']").type(Cypress.env("ic3_password"), {log: false});
@@ -1504,10 +1527,11 @@ Cypress.Commands.add('performLogin', () => {
 
 });
 
+function forceRenderNotVisibleWidgets(doNotForceWidgetRendering?: boolean)
+{
 
-function forceRenderNotVisibleWidgets(doNotForceWidgetRendering?: boolean) {
-
-    if (doNotForceWidgetRendering === true) {
+    if (doNotForceWidgetRendering === true)
+    {
         Cypress.doNotForceWidgetRendering = true;
     }
 }
@@ -1520,13 +1544,15 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
 
     visitUrl(vURL);
 
-    if (waitForQueryStatus) {
+    if (waitForQueryStatus)
+    {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
-    if (waitForPrintStatus) {
+    if (waitForPrintStatus)
+    {
         cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
@@ -1543,7 +1569,6 @@ Cypress.Commands.add('openMdxConsole', () => {
 
 })
 
-
 Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitForQueryStatus = true, waitForPrintStatus = true,
                                               doNotForceWidgetRendering?: boolean, userLocale?: string) => {
 
@@ -1553,13 +1578,15 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
 
     visitUrl(vURL);
 
-    if (waitForQueryStatus) {
+    if (waitForQueryStatus)
+    {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
-    if (waitForPrintStatus) {
+    if (waitForPrintStatus)
+    {
         cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
@@ -1572,11 +1599,14 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
 
     cy.viewport(794 + 50, 1123 + 50) /* A4: not relevant but better when looking at the Cypress runner */;
 
-    if (path.startsWith("shared:")) {
+    if (path.startsWith("shared:"))
+    {
 
         // e.g., Printing.spec.ts is using the whole path (embedded, livedemo, ...).
 
-    } else {
+    }
+    else
+    {
 
         path = "shared:/Tests/" + path;
 
@@ -1588,13 +1618,15 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
 
     visitUrl(vURL);
 
-    if (waitForQueryStatus) {
+    if (waitForQueryStatus)
+    {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
-    if (waitForPrintStatus) {
+    if (waitForPrintStatus)
+    {
         cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
@@ -1606,20 +1638,21 @@ Cypress.Commands.add('reloadAndWait', (waitForQueryStatus = true, waitForPrintSt
 
     cy.reload();
 
-    if (waitForQueryStatus) {
+    if (waitForQueryStatus)
+    {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
-    if (waitForPrintStatus) {
+    if (waitForPrintStatus)
+    {
         cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
 });
-
 
 Cypress.Commands.add('openGadgetEditor', (path?: string) => {
 
@@ -1628,11 +1661,9 @@ Cypress.Commands.add('openGadgetEditor', (path?: string) => {
     forceRenderNotVisibleWidgets();
     visitUrl(vURL);
 
-
 });
 
 let editorMode = false;
-
 
 Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
 
@@ -1641,13 +1672,15 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
     forceRenderNotVisibleWidgets();
     visitUrl(vURL);
 
-    if (waitForQueryStatus) {
+    if (waitForQueryStatus)
+    {
         cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
-    if (waitForPrintStatus) {
+    if (waitForPrintStatus)
+    {
         cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
             .should('have.class', 'data-cy-ready')
         ;
@@ -1683,10 +1716,10 @@ Cypress.Commands.add('waitForQueryCount', (countSuccess: number, totalQueryCount
 
     // https://glebbahmutov.com/blog/cypress-tips-and-tricks/#interactive-and-headed-mode
     let waitTime = 250;
-    if (Cypress.browser.isHeaded) {
+    if (Cypress.browser.isHeaded)
+    {
         waitTime = 1000;
     }
-
 
     // -----------------------------------------------------------------------------------------------------------------
     // Try as much as possible to ensure no more than 'count' ongoing queries.
@@ -1807,8 +1840,8 @@ Cypress.Commands.add('adminAssertLocalizationTableValue', (row: number, col: num
 
     cy.get('[data-cy="localization-tags-result"]')
         .find(".MuiDataGrid-root " +
-            "div[data-rowindex='" + row + "'] " +
-            "div[data-colindex='" + col + "']")
+              "div[data-rowindex='" + row + "'] " +
+              "div[data-colindex='" + col + "']")
         .should("have.text", value ?? "")
 
 });
@@ -1874,25 +1907,31 @@ Cypress.Commands.add("getWidget", (widgetId: string, contentType?: WidgetBoxCont
 
     let checkRendering = true;
 
-    if (widgetId.startsWith("!")) {
+    if (widgetId.startsWith("!"))
+    {
         widgetId = widgetId.slice(1);
         checkRendering = false;
     }
 
     const parts = widgetId.split(":");
 
-    if (parts.length === 2) {
+    if (parts.length === 2)
+    {
         return cy.getWidgetWithNS(parts[0], parts[1], contentType);
     }
 
-    if (checkRendering) {
-        if (contentType) {
+    if (checkRendering)
+    {
+        if (contentType)
+        {
 
             cy.get('[data-cy="widget-box-' + widgetId + '"] [data-cy="render-info"][data-cy-type="' + contentType + '"]')
                 .should('have.length', 1)
             ;
 
-        } else {
+        }
+        else
+        {
 
             cy.get('[data-cy="widget-box-' + widgetId + '"] .ic3WidgetBox-header[data-cy-render-status="RENDERED"]')
                 .should('have.length', 1)
@@ -1916,7 +1955,6 @@ Cypress.Commands.add('assertWidgetMissing', (widgetId: string) => {
 
 });
 
-
 Cypress.Commands.add('assertWidgetInvisible', (widgetId: string) => {
 
     return cy.get('[data-cy="widget-box-' + widgetId + '"]')
@@ -1925,7 +1963,6 @@ Cypress.Commands.add('assertWidgetInvisible', (widgetId: string) => {
         ;
 
 });
-
 
 Cypress.Commands.add('assertWidgetVisible', (widgetId: string, visible: boolean) => {
 
@@ -1938,7 +1975,6 @@ Cypress.Commands.add('assertWidgetVisible', (widgetId: string, visible: boolean)
     // ;
 
 });
-
 
 Cypress.Commands.add('assertWidgetRenderStatus', (widgetId: string, renderStatus: "RENDERING" | "RENDERED") => {
 
@@ -1964,15 +2000,54 @@ Cypress.Commands.add('assertWidgetNotIntoView', (widgetId: string) => {
 
 });
 
+Cypress.Commands.add('assertWidgetGridHeight', (widgetId: string, expected: number) => {
+
+    cy.getWidget(widgetId)
+        .parent()
+        .parent()
+        .should("have.class", "ic3GridGrid")
+        .assertCssPx('height', expected, 0.05)
+    ;
+
+});
+
+Cypress.Commands.add('assertWidgetWidth', (widgetId: string, expected: number) => {
+
+    cy.getWidget(widgetId)
+        .assertCssPx('width', expected, 0.05)
+    ;
+
+});
+
+Cypress.Commands.add('assertWidgetHeight', (widgetId: string, expected: number) => {
+
+    cy.getWidget(widgetId)
+        .assertCssPx('height', expected, 0.05)
+    ;
+
+});
+
+Cypress.Commands.add('assertWidgetWidthP', (widgetId: string, expected: number) => {
+
+    cy.getWidget(widgetId)
+        // print scale = 0.64 => correct size = expected * 0.64
+        .assertCssPx('width', expected * 0.64, 0.005)
+    ;
+
+});
+
 Cypress.Commands.add("getWidgetWithNS", (nsId: string, widgetId: string, contentType?: WidgetBoxContentType) => {
 
-    if (contentType) {
+    if (contentType)
+    {
 
         cy.get('[data-ns-id="' + nsId + '"][data-widget-id="' + widgetId + '"] [data-cy="render-info"][data-cy-type="' + contentType + '"]')
             .should('have.length', 1)
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.get('[data-ns-id="' + nsId + '"][data-widget-id="' + widgetId + '"] .ic3WidgetBox-header[data-cy-render-status="RENDERED"]')
             .should('have.length', 1)
@@ -2062,7 +2137,6 @@ Cypress.Commands.add("assertTidyColumnCount", (widgetId: string, count: number) 
 
 });
 
-
 // -------------------------------------------------------------------------------------------------------------
 // Widget (Zoomed)
 // -------------------------------------------------------------------------------------------------------------
@@ -2123,12 +2197,15 @@ Cypress.Commands.add('clickDrilldownMenu', (widgetId: string, path: (number | st
 
     path.forEach(p => {
 
-        if (typeof p === "number") {
+        if (typeof p === "number")
+        {
             cy.get("div[data-cy='drilldown-menu']")
                 .find(`li[role="menuitem"]:nth-child(${p})`)
                 .click()
             ;
-        } else {
+        }
+        else
+        {
             cy.get("div[data-cy='drilldown-menu']")
                 .find(`li[role="menuitem"] span:contains('${p}')`)
                 .click()
@@ -2245,7 +2322,7 @@ Cypress.Commands.add("sortTable", (widgetId: string, column: number) => {
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "']")
+              ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "']")
         .click()
 
 });
@@ -2254,8 +2331,8 @@ Cypress.Commands.add("clickTableColumnMenuIcon", (widgetId: string, column: numb
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "'] " +
-            ".MuiDataGrid-menuIcon button")
+              ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "'] " +
+              ".MuiDataGrid-menuIcon button")
         .click({force: true});
 
     cy.get(".MuiDataGrid-menu .MuiMenuItem-root").contains(option).click();
@@ -2272,7 +2349,6 @@ Cypress.Commands.add("filterTableColumnWithMenuIcon", (widgetId: string, colIdx:
 
 });
 
-
 Cypress.Commands.add("clickTableRow", (widgetId: string, rowIdx: number) => {
 
     cy.getWidget(widgetId)
@@ -2285,8 +2361,8 @@ Cypress.Commands.add("clickTableCell", (widgetId: string, rowIdx: number, colIdx
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-rowindex='" + rowIdx + "'] " +
-            "div[data-colindex='" + colIdx + "']")
+              "div[data-rowindex='" + rowIdx + "'] " +
+              "div[data-colindex='" + colIdx + "']")
         .click({ctrlKey: ctrl})
 
 });
@@ -2295,9 +2371,9 @@ Cypress.Commands.add("clickTableCellDrilldown", (widgetId: string, rowIdx: numbe
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-rowindex='" + rowIdx + "'] " +
-            "div[data-colindex='" + colIdx + "'] " +
-            "div.Ic3TableCellDrilldown-iconDiv")
+              "div[data-rowindex='" + rowIdx + "'] " +
+              "div[data-colindex='" + colIdx + "'] " +
+              "div.Ic3TableCellDrilldown-iconDiv")
         .click();
 
 });
@@ -2341,7 +2417,6 @@ Cypress.Commands.add("getTableHeaderZoomed", (widgetId: string, headerTitle: str
 
 });
 
-
 Cypress.Commands.add("clickTableHeaderMenu", (widgetId: string, headerTitle: string, menuOption: string) => {
 
     cy.getTableHeader(widgetId, headerTitle)
@@ -2351,7 +2426,6 @@ Cypress.Commands.add("clickTableHeaderMenu", (widgetId: string, headerTitle: str
         .get(".MuiDataGrid-menu .MuiMenuItem-root").contains(menuOption).click()
 
 });
-
 
 Cypress.Commands.add("assertTableRowCount", (widgetId: string, count: number) => {
 
@@ -2367,7 +2441,6 @@ Cypress.Commands.add("assertTableColCount", (widgetId: string, count: number) =>
     ;
 
 });
-
 
 Cypress.Commands.add("assertTableDetails", (pageNb: number, widgetId: string, withBoxHeader: boolean,
                                             withTableHeader: boolean, height: number, rowCount: number,
@@ -2396,8 +2469,8 @@ Cypress.Commands.add("assertTableValue", (widgetId: string, row: number, col: nu
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-rowindex='" + row + "'] " +
-            "div[data-colindex='" + col + "'] span")
+              "div[data-rowindex='" + row + "'] " +
+              "div[data-colindex='" + col + "'] span")
         .should("have.text", value ?? "")
 
 });
@@ -2406,8 +2479,8 @@ Cypress.Commands.add("assertShowDataTableCellContent", (widgetId: string, row: n
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-rowindex='" + row + "'] " +
-            "div[data-colindex='" + col + "']")
+              "div[data-rowindex='" + row + "'] " +
+              "div[data-colindex='" + col + "']")
         .should("have.text", value ?? "")
 
 });
@@ -2422,8 +2495,8 @@ Cypress.Commands.add("assertTableCellOnError", (widgetId: string, rowIdx: number
 
     cy.getWidget(widgetId)
         .find("div[data-rowindex='" + rowIdx + "'] " +
-            "div[data-colindex='" + colIdx + "'] " +
-            "span[data-cy='ic3-cell-error']")
+              "div[data-colindex='" + colIdx + "'] " +
+              "span[data-cy='ic3-cell-error']")
 
 });
 
@@ -2435,21 +2508,23 @@ Cypress.Commands.add("assertTableColumnsEqual", (widgetId: string, expectedWidge
     cy.assertTableRowCount(expectedWidgetId, rowCount);
     cy.assertTableColCount(expectedWidgetId, colCount);
 
-    for (let col = 0; col < colCount; col++) {
-        for (let row = 0; row < rowCount; row++) {
+    for (let col = 0; col < colCount; col++)
+    {
+        for (let row = 0; row < rowCount; row++)
+        {
 
             cy.getWidget(expectedWidgetId)
                 .find(".ic3WidgetBox-content " +
-                    "div[data-rowindex='" + row + "'] " +
-                    "div[data-colindex='" + col + "'] " +
-                    "span")
+                      "div[data-rowindex='" + row + "'] " +
+                      "div[data-colindex='" + col + "'] " +
+                      "span")
                 .then($expectedSpan => {
 
                     cy.getWidget(widgetId)
                         .find(".ic3WidgetBox-content " +
-                            "div[data-rowindex='" + row + "'] " +
-                            "div[data-colindex='" + col + "'] " +
-                            "span")
+                              "div[data-rowindex='" + row + "'] " +
+                              "div[data-colindex='" + col + "'] " +
+                              "span")
                         .should("have.text", $expectedSpan.text())
                 })
             ;
@@ -2464,27 +2539,27 @@ Cypress.Commands.add("assertTableColumnEqual", (widgetId: string, expectedWidget
     cy.assertTableRowCount(widgetId, rowCount);
     cy.assertTableRowCount(expectedWidgetId, rowCount);
 
-    for (let row = 0; row < rowCount; row++) {
+    for (let row = 0; row < rowCount; row++)
+    {
 
         cy.getWidget(expectedWidgetId)
             .find(".ic3WidgetBox-content " +
-                "div[data-rowindex='" + row + "'] " +
-                "div[data-colindex='" + colIdx + "'] " +
-                "span")
+                  "div[data-rowindex='" + row + "'] " +
+                  "div[data-colindex='" + colIdx + "'] " +
+                  "span")
             .then($expectedSpan => {
 
                 cy.getWidget(widgetId)
                     .find(".ic3WidgetBox-content " +
-                        "div[data-rowindex='" + row + "'] " +
-                        "div[data-colindex='" + colIdx + "'] " +
-                        "span")
+                          "div[data-rowindex='" + row + "'] " +
+                          "div[data-colindex='" + colIdx + "'] " +
+                          "span")
                     .should("have.text", $expectedSpan.text())
             });
 
     }
 
 });
-
 
 const path = require("path");
 const downloadsFolder = Cypress.config("downloadsFolder");
@@ -2524,9 +2599,13 @@ Cypress.Commands.add("pdfTextShould", {prevSubject: true}, (subject, chainer: st
         const text = pdfResult?.text;
 
         if (chainer === "contain")
+        {
             expect(text).to.contains(value)
+        }
         else
+        {
             throw new Error("chainer not supported " + chainer)
+        }
 
     })
 
@@ -2547,10 +2626,11 @@ Cypress.Commands.add("assertTableSingleRowSelected", (widgetId: string, rowIdx: 
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let rr = 0; rr < rowCount; rr++) {
+        for (let rr = 0; rr < rowCount; rr++)
+        {
             rr === rowIdx
-                ? cy.assertTableRowSelected($w, rowIdx)
-                : cy.assertTableRowNotSelected($w, rr)
+            ? cy.assertTableRowSelected($w, rowIdx)
+            : cy.assertTableRowNotSelected($w, rr)
             ;
         }
 
@@ -2560,13 +2640,16 @@ Cypress.Commands.add("assertTableSingleRowSelected", (widgetId: string, rowIdx: 
 
 Cypress.Commands.add("assertTableRowSelected", (widgetId: string | $widget, rowIdx: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
             .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
@@ -2578,13 +2661,16 @@ Cypress.Commands.add("assertTableRowSelected", (widgetId: string | $widget, rowI
 
 Cypress.Commands.add("assertTableRowNotSelected", (widgetId: string | $widget, rowIdx: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
             .should("not.have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content div[data-rowindex='${rowIdx}'] div[role='gridcell']`)
@@ -2612,7 +2698,7 @@ Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: num
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-colindex='" + colIdx + "'][role='gridcell']")
+              "div[data-colindex='" + colIdx + "'][role='gridcell']")
         .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -2645,7 +2731,7 @@ Cypress.Commands.add("assertTableColumnNotSelected", (widgetId: string, colIdx: 
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-            "div[data-colindex='" + colIdx + "'][role='gridcell']")
+              "div[data-colindex='" + colIdx + "'][role='gridcell']")
         .should("not.have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -2662,7 +2748,6 @@ Cypress.Commands.add("sortPivotTable", (widgetId: string, column: number, row = 
 
 });
 
-
 Cypress.Commands.add("assertNoDrilldownPivotTableLeftHeader", (widgetId: string, row: number, col: number) => {
 
     // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
@@ -2670,7 +2755,6 @@ Cypress.Commands.add("assertNoDrilldownPivotTableLeftHeader", (widgetId: string,
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-left-header div[data-vr='${row}'][data-vc='${col}']`)
         .find(':is(svg.ic3-pt-icon-none,svg.ic3-pt-empty-drilldown)')
-
 
 });
 Cypress.Commands.add("assertDrilldownPivotTableLeftHeader", (widgetId: string, row: number, col: number) => {
@@ -2795,7 +2879,7 @@ Cypress.Commands.add("assertCssPx", {prevSubject: true}, (prevSubject: Chainable
         .should(cssValue => {
             const value = String(cssValue);
             expect(value).to.include('px');
-            // Adres rounding issues.
+            // Address rounding issues.
             const valueNumber = Number.parseFloat(String(value).substring(0, value.length - 2));
             expect(valueNumber).to.be.within(expectedValue * (1 - precision), expectedValue * (1 + precision));
         });
@@ -2827,13 +2911,16 @@ Cypress.Commands.add("assertPivotTableLeftHeader", (widgetId: string, row: numbe
 
     // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
 
-    if (!Array.isArray(value)) {
+    if (!Array.isArray(value))
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content .ic3-pt-left-header div[data-vr='${row}'][data-vc='${col}']`)
             .invoke("attr", "data-name").should("eq", value);
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId).then($widget => {
 
@@ -2861,11 +2948,14 @@ Cypress.Commands.add("assertPivotTableTopHeader", (widgetId: string, row: number
 
 Cypress.Commands.add("assertPivotTableCell", (widgetId: string, row: number, col: number, value: string | string[]) => {
 
-    if (!Array.isArray(value)) {
+    if (!Array.isArray(value))
+    {
 
         cy.getWidget(widgetId).contains(`.ic3WidgetBox-content .ic3-pt-rows .ic3-pt-row[ic3-row-idx='${row}'] div:nth-child(${col + 1}) span`, new RegExp("^" + value + "$"))
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId).then($widget => {
 
@@ -2925,10 +3015,13 @@ Cypress.Commands.add("assertPivotTableColumnsEqual", (widgetId: string, expected
     cy.getWidget(expectedWidgetId).then($expectedWidget => {
         cy.getWidget(widgetId).then($widget => {
 
-            for (let col = 0; col < colCount; col++) {
-                for (let row = 0; row < rowCount; row++) {
+            for (let col = 0; col < colCount; col++)
+            {
+                for (let row = 0; row < rowCount; row++)
+                {
 
-                    if (col === 0) {
+                    if (col === 0)
+                    {
 
                         // left header
 
@@ -2942,7 +3035,9 @@ Cypress.Commands.add("assertPivotTableColumnsEqual", (widgetId: string, expected
 
                             })
 
-                    } else {
+                    }
+                    else
+                    {
 
                         // cells
 
@@ -2972,14 +3067,17 @@ Cypress.Commands.add("assertPivotTableColumnsEqual", (widgetId: string, expected
 
 Cypress.Commands.add("assertRepetitionWidgetDetails", (pageNb: number, widgetId: string, withBoxHeader: boolean, height: number, rowCount: number) => {
 
-    if (withBoxHeader) {
+    if (withBoxHeader)
+    {
 
         cy.get(`[data-cy-page-nb='${pageNb}']`)
             .find(`.ic3WidgetBox-withHeader[data-widget-id='${widgetId}']`)
             .should("have.length", 1)
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.get(`[data-cy-page-nb='${pageNb}']`)
             .find(`.ic3WidgetBox-withoutHeader[data-widget-id='${widgetId}']`)
@@ -3001,21 +3099,23 @@ Cypress.Commands.add("assertRepetitionWidgetDetails", (pageNb: number, widgetId:
 
 });
 
-
 Cypress.Commands.add("assertRepetitionWidgetRowColumnCount", (pageNb: number, widgetId: string, nestedWidgetId: string, rowCount: number, columnCount: number, rows?: string[], columns?: string[]) => {
 
     cy.get('[data-cy="widget-box-' + widgetId + '"] .ic3WidgetBox-header[data-cy-render-status="RENDERED"]')
         .should('have.length', 1 + rowCount * columnCount)
     ;
 
-    for (let rr = 0; rr < rowCount; rr++) {
-        for (let cc = 0; cc < columnCount; cc++) {
+    for (let rr = 0; rr < rowCount; rr++)
+    {
+        for (let cc = 0; cc < columnCount; cc++)
+        {
 
             cy.get(`[data-widget-id^='${widgetId}~:Rep-${nestedWidgetId}-R:${rr}-C:${cc}']`)
                 .should("have.length", 1)
             ;
 
-            if (rows && columns) {
+            if (rows && columns)
+            {
 
                 const r = rows[rr];
                 const c = columns[cc];
@@ -3052,12 +3152,15 @@ Cypress.Commands.add("assertButtonSelected", (widgetId: string, label: string) =
 
 Cypress.Commands.add("assertButtonsSelected", (widgetId: string, labels?: string[]) => {
 
-    if (!labels || labels.length === 0) {
+    if (!labels || labels.length === 0)
+    {
         cy.getWidget(widgetId)
             .find(".ic3WidgetBox-content")
             .find(`button.ic3-selected`)
             .should("have.length", 0)
-    } else {
+    }
+    else
+    {
         labels.forEach(label => cy.assertButtonSelected(widgetId, label));
     }
 
@@ -3120,7 +3223,8 @@ Cypress.Commands.add("assertCheckboxSelected", (widgetId: string, ...labels: str
             .should("have.class", "Mui-checked")
     });
 
-    if (labels.length === 0) {
+    if (labels.length === 0)
+    {
         cy.getWidget(widgetId)
             .find(".ic3WidgetBox-content .Mui-checked").should('not.exist')
     }
@@ -3203,7 +3307,8 @@ Cypress.Commands.add("assertDropdownOptions", (widgetId: string, labels: string[
 
     cy.openDropdown(widgetId);
 
-    if (search) {
+    if (search)
+    {
         cy.getWidget(widgetId)
             .find("input")
             .clear()
@@ -3272,14 +3377,17 @@ Cypress.Commands.add("selectDropdownFromPopup", (widgetId: string, label: string
 
 Cypress.Commands.add("assertDropdownSingleSelection", (widgetId: string, label: string | null) => {
 
-    if (label != null) {
+    if (label != null)
+    {
 
         cy.getWidget(widgetId)
             .find("input")
             .should("have.value", label)
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find("input")
@@ -3295,7 +3403,8 @@ Cypress.Commands.add("assertDropdownSingleSelection", (widgetId: string, label: 
 
 Cypress.Commands.add("assertDropdownMultiSelection", (widgetId: string, labels: string[]) => {
 
-    if (labels.length > 0) {
+    if (labels.length > 0)
+    {
 
         labels.forEach(label => {
 
@@ -3305,7 +3414,9 @@ Cypress.Commands.add("assertDropdownMultiSelection", (widgetId: string, labels: 
 
         })
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy^="filter-c-ac-"]`)
@@ -3320,7 +3431,8 @@ Cypress.Commands.add("assertDropdownMultiSelection", (widgetId: string, labels: 
 
 Cypress.Commands.add("selectTree", (widgetId: string, treeMode: TreeMode, label: string) => {
 
-    if (treeMode === "control-icons") {
+    if (treeMode === "control-icons")
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3328,7 +3440,9 @@ Cypress.Commands.add("selectTree", (widgetId: string, treeMode: TreeMode, label:
             .click()
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3341,7 +3455,8 @@ Cypress.Commands.add("selectTree", (widgetId: string, treeMode: TreeMode, label:
 
 Cypress.Commands.add("expandTree", (widgetId: string, treeMode: TreeMode, label: string) => {
 
-    if (treeMode === "control-icons") {
+    if (treeMode === "control-icons")
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3350,7 +3465,9 @@ Cypress.Commands.add("expandTree", (widgetId: string, treeMode: TreeMode, label:
             .click()
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3365,14 +3482,17 @@ Cypress.Commands.add("expandTree", (widgetId: string, treeMode: TreeMode, label:
 
 Cypress.Commands.add("assertTreeExists", (widgetId: string, treeMode: TreeMode, label: string) => {
 
-    if (treeMode === "control-icons") {
+    if (treeMode === "control-icons")
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
             .should("have.length", 1)
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3385,7 +3505,8 @@ Cypress.Commands.add("assertTreeExists", (widgetId: string, treeMode: TreeMode, 
 
 Cypress.Commands.add("assertTreeSelection", (widgetId: string, treeMode: TreeMode, labels: string[]) => {
 
-    if (labels.length > 0) {
+    if (labels.length > 0)
+    {
 
         labels.forEach(label => {
 
@@ -3396,7 +3517,9 @@ Cypress.Commands.add("assertTreeSelection", (widgetId: string, treeMode: TreeMod
 
         });
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find(".ic3LazyTreeView-itemRoot.ic3-selected")
@@ -3436,7 +3559,8 @@ Cypress.Commands.add("selectTreeWithAutocompleteFromPopup", (widgetId: string, t
 
     labels.forEach(label => {
 
-        if (treeMode === "control-icons") {
+        if (treeMode === "control-icons")
+        {
 
             cy.get("div.MuiAutocomplete-popper[role='presentation']")
                 .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3444,7 +3568,9 @@ Cypress.Commands.add("selectTreeWithAutocompleteFromPopup", (widgetId: string, t
                 .click()
             ;
 
-        } else {
+        }
+        else
+        {
 
             cy.get("div.MuiAutocomplete-popper[role='presentation']")
                 .find(`[data-cy='ic-checkbox'][data-name='${label}']`)
@@ -3463,14 +3589,17 @@ Cypress.Commands.add("assertTreeWithAutocompleteSingleSelection", (widgetId: str
 
     // first the input widget
 
-    if (label != null) {
+    if (label != null)
+    {
 
         cy.getWidget(widgetId)
             .find("input")
             .should("have.value", label)
         ;
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find("input")
@@ -3488,7 +3617,8 @@ Cypress.Commands.add("assertTreeWithAutocompleteSingleSelection", (widgetId: str
 
     const labels = label != null ? [label] : [];
 
-    if (labels.length > 0) {
+    if (labels.length > 0)
+    {
 
         labels.forEach(label => {
 
@@ -3499,7 +3629,9 @@ Cypress.Commands.add("assertTreeWithAutocompleteSingleSelection", (widgetId: str
 
         });
 
-    } else {
+    }
+    else
+    {
 
         cy.get("div.MuiAutocomplete-popper[role='presentation']")
             .find(".ic3LazyTreeView-itemRoot.ic3-selected")
@@ -3516,7 +3648,8 @@ Cypress.Commands.add("assertTreeWithAutocompleteMultiSelection", (widgetId: stri
 
     // first the input widget
 
-    if (labels.length > 0) {
+    if (labels.length > 0)
+    {
 
         labels.forEach(label => {
 
@@ -3526,7 +3659,9 @@ Cypress.Commands.add("assertTreeWithAutocompleteMultiSelection", (widgetId: stri
 
         })
 
-    } else {
+    }
+    else
+    {
 
         cy.getWidget(widgetId)
             .find(`[data-cy^="filter-c-ac-"]`)
@@ -3539,7 +3674,8 @@ Cypress.Commands.add("assertTreeWithAutocompleteMultiSelection", (widgetId: stri
 
     cy.openDropdown(widgetId);
 
-    if (labels.length > 0) {
+    if (labels.length > 0)
+    {
 
         labels.forEach(label => {
 
@@ -3550,7 +3686,9 @@ Cypress.Commands.add("assertTreeWithAutocompleteMultiSelection", (widgetId: stri
 
         });
 
-    } else {
+    }
+    else
+    {
 
         cy.get("div.MuiAutocomplete-popper[role='presentation']")
             .find(".ic3LazyTreeView-itemRoot.ic3-selected")
@@ -3595,7 +3733,8 @@ Cypress.Commands.add("assertSliderSelected", (widgetId: string, ...labels: strin
             .should("have.class", "MuiSlider-markLabelActive")
     })
 
-    if (labels.length === 0) {
+    if (labels.length === 0)
+    {
 
         cy.getWidget(widgetId)
             .find(".ic3WidgetBox-content .ic3FilterSlider-EmptySelection")
@@ -3641,18 +3780,22 @@ Cypress.Commands.add("assertSlider", (widgetId: string, labels: string[]) => {
 
 });
 
-function setDateOnMuiDatePicker($div: any, date: string) {
+function setDateOnMuiDatePicker($div: any, date: string)
+{
 
-    if (date) {
+    if (date)
+    {
 
         const gotoStart = editorMode
-            ? "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
-            : "{ctrl}a{del}";
+                          ? "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
+                          : "{ctrl}a{del}";
 
         cy.wrap($div).find('input').type(gotoStart)
             .type(date);
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap($div).find('input').type("{ctrl}a{del}")
 
@@ -3662,17 +3805,25 @@ function setDateOnMuiDatePicker($div: any, date: string) {
     cy.clickOutside();
 }
 
-function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last") {
+function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last")
+{
 
-    if (date) {
+    if (date)
+    {
         // Mui is somehow capturing the enter , so we need to apply on tab :-(
         if (where === "first")
+        {
             cy.wrap($div).find('input').eq(0).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
                 .type(date + "{enter}");
+        }
         else
+        {
             cy.wrap($div).find('input').eq(1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
                 .type(date).realPress("Tab");
-    } else {
+        }
+    }
+    else
+    {
         cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
     }
 
@@ -3698,17 +3849,18 @@ Cypress.Commands.add("selectDatePickerRangeToFromInput", (widgetId: string, date
 
 });
 
-function assertDate(widgetId: string, tag: string, _date: string | null, nthChild?: number) {
+function assertDate(widgetId: string, tag: string, _date: string | null, nthChild?: number)
+{
 
     const date = Cypress.migrateDate(_date ?? "");
 
     // https://mui.com/x/react-date-pickers/base-concepts/#testing-caveats
     const cleanText = (s: string) => s.replace(/\u200e|\u2066|\u2067|\u2068|\u2069/g, '');
 
-
     cy.getWidget(widgetId)
         .then((cc: any) => {
-            if (date == null || date?.length > 4) {
+            if (date == null || date?.length > 4)
+            {
                 return cc.find('[' + tag + '="' + date + '"]')// retry wait
             }
             return cc;
@@ -3728,7 +3880,6 @@ Cypress.Commands.add("assertDatePicker", (widgetId: string, date: string | null)
 
 });
 
-
 Cypress.Commands.add("assertDatePickerRangeFrom", (widgetId: string, date: string | null) => {
 
     assertDate(widgetId, "data-cy-from-date", date, 0);
@@ -3736,7 +3887,6 @@ Cypress.Commands.add("assertDatePickerRangeFrom", (widgetId: string, date: strin
 });
 
 Cypress.Commands.add("assertDatePickerRangeTo", (widgetId: string, date: string | null) => {
-
 
     assertDate(widgetId, "data-cy-to-date", date, 1);
 
@@ -3920,12 +4070,15 @@ Cypress.Commands.add("assertFilterPanelItemIntermediate", (widgetId: string, ind
         .click()
     ;
 
-    if (isFakeHierarchy) {
+    if (isFakeHierarchy)
+    {
         cy.get("[data-cy='search-content']")
             .find(`div[data-cy="fp-item-${itemIndex}"] div.ic3-RegItem-hasDescendantsIcon`)
             .should('have.length', 1);
 
-    } else {
+    }
+    else
+    {
         cy.get("[data-cy='search-content']")
             .find(`div[data-cy="fp-item-${itemIndex}"] input[data-indeterminate="true"]`)
             .should('have.length', 1);
@@ -3937,13 +4090,16 @@ Cypress.Commands.add("assertFilterPanelItemIntermediate", (widgetId: string, ind
 
 Cypress.Commands.add("panelFilterClear", (widgetId: string, index: number) => {
 
-    if (index === -1) {
+    if (index === -1)
+    {
         cy.getWidget(widgetId)
             .find("[data-cy='clear-filter']")
             .click()
             .get("[data-cy='filters'] [data-cy='filter-item']")
             .eq(0)
-    } else {
+    }
+    else
+    {
         cy.getWidget(widgetId)
             .get("[data-cy='filters'] [data-cy='filter-item']")
             .eq(index)
@@ -3982,7 +4138,6 @@ Cypress.Commands.add("panelFilterSetDateFieldValue", (widgetId: string, index: n
     cy.panelFilterSetDateTimeFieldValue(widgetId, index, date, true)
 
 });
-
 
 Cypress.Commands.add("panelFilterSetDateTimeFieldValue", (widgetId: string, index: number, date: string, isDate = false) => {
 
@@ -4155,13 +4310,16 @@ Cypress.Commands.add("assertSelectedSingleChartBarInGroup", (widgetId: string, g
 // -------------------------------------------------------------------------------------------------------------
 
 Cypress.Commands.add('donutClickSlice', (widgetId: string | $widget, slice: number) => {
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1) g[role='menuitem']:nth-child(${slice}) path`)
             .click({force: true})
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1) g[role='menuitem']:nth-child(${slice}) path`)
@@ -4183,10 +4341,11 @@ Cypress.Commands.add('donutAssertSingleSliceSelected', (widgetId: string, slice:
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let ss = 1; ss <= sliceCount; ss++) {
+        for (let ss = 1; ss <= sliceCount; ss++)
+        {
             ss === slice
-                ? cy.donutAssertSliceSelected($w, ss)
-                : cy.donutAssertSliceNotSelected($w, ss)
+            ? cy.donutAssertSliceSelected($w, ss)
+            : cy.donutAssertSliceNotSelected($w, ss)
             ;
         }
 
@@ -4196,19 +4355,20 @@ Cypress.Commands.add('donutAssertSingleSliceSelected', (widgetId: string, slice:
 
 Cypress.Commands.add('donutAssertSliceSelected', (widgetId: string | $widget, slice: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
             .invoke('attr', "fill").should('eq', STATOS_SELECTION_COLOR_HEX)
 
-
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
             .invoke('attr', "fill").should('eq', STATOS_SELECTION_COLOR_HEX)
-
 
     }
 
@@ -4216,13 +4376,16 @@ Cypress.Commands.add('donutAssertSliceSelected', (widgetId: string | $widget, sl
 
 Cypress.Commands.add('donutAssertSliceNotSelected', (widgetId: string | $widget, slice: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
             .invoke('attr', "fill").should('not.eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${slice})`)
@@ -4256,10 +4419,11 @@ Cypress.Commands.add('columnAssertSingleColumnSelected', (widgetId: string, colu
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let ss = 1; ss <= columnCount; ss++) {
+        for (let ss = 1; ss <= columnCount; ss++)
+        {
             ss === column
-                ? cy.columnAssertColumnSelected($w, ss)
-                : cy.columnAssertColumnNotSelected($w, ss)
+            ? cy.columnAssertColumnSelected($w, ss)
+            : cy.columnAssertColumnNotSelected($w, ss)
             ;
         }
 
@@ -4269,13 +4433,16 @@ Cypress.Commands.add('columnAssertSingleColumnSelected', (widgetId: string, colu
 
 Cypress.Commands.add('columnAssertColumnSelected', (widgetId: string | $widget, column: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
             .invoke('attr', "fill").should('eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
@@ -4287,13 +4454,16 @@ Cypress.Commands.add('columnAssertColumnSelected', (widgetId: string | $widget, 
 
 Cypress.Commands.add('columnAssertColumnNotSelected', (widgetId: string | $widget, column: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
             .invoke('attr', "fill").should('not.eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
@@ -4327,10 +4497,11 @@ Cypress.Commands.add('histogramAssertSingleColumnSelected', (widgetId: string, c
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let ss = 1; ss <= columnCount; ss++) {
+        for (let ss = 1; ss <= columnCount; ss++)
+        {
             ss === column
-                ? cy.columnAssertColumnSelected($w, ss)
-                : cy.columnAssertColumnNotSelected($w, ss)
+            ? cy.columnAssertColumnSelected($w, ss)
+            : cy.columnAssertColumnNotSelected($w, ss)
             ;
         }
 
@@ -4340,13 +4511,16 @@ Cypress.Commands.add('histogramAssertSingleColumnSelected', (widgetId: string, c
 
 Cypress.Commands.add('histogramAssertColumnSelected', (widgetId: string | $widget, column: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
             .invoke('attr', "fill").should('eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
@@ -4358,13 +4532,16 @@ Cypress.Commands.add('histogramAssertColumnSelected', (widgetId: string | $widge
 
 Cypress.Commands.add('histogramAssertColumnNotSelected', (widgetId: string | $widget, column: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
             .invoke('attr', "fill").should('not.eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${column})`)
@@ -4426,10 +4603,11 @@ Cypress.Commands.add('areaAssertSinglePointSelected', (widgetId: string, point: 
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let pp = 1; pp <= pointCount; pp++) {
+        for (let pp = 1; pp <= pointCount; pp++)
+        {
             pp === point
-                ? cy.areaAssertPointSelected($w, pp)
-                : cy.areaAssertPointNotSelected($w, pp)
+            ? cy.areaAssertPointSelected($w, pp)
+            : cy.areaAssertPointNotSelected($w, pp)
             ;
         }
 
@@ -4439,14 +4617,17 @@ Cypress.Commands.add('areaAssertSinglePointSelected', (widgetId: string, point: 
 
 Cypress.Commands.add('areaAssertPointSelected', (widgetId: string | $widget, point: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
             .eq(point - 1)
             .closest("g[fill='" + STATOS_SELECTION_COLOR_HEX + "']")
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
@@ -4459,14 +4640,17 @@ Cypress.Commands.add('areaAssertPointSelected', (widgetId: string | $widget, poi
 
 Cypress.Commands.add('areaAssertPointNotSelected', (widgetId: string | $widget, point: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
             .eq(point - 1)
             .closest("g[fill='#00d4ea']" /* default color */)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
@@ -4502,10 +4686,11 @@ Cypress.Commands.add('bubbleAssertSingleBubbleSelected', (widgetId: string, bubb
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let pp = 1; pp <= bubbleCount; pp++) {
+        for (let pp = 1; pp <= bubbleCount; pp++)
+        {
             pp === bubble
-                ? cy.bubbleAssertBubbleSelected($w, pp)
-                : cy.bubbleAssertBubbleNotSelected($w, pp)
+            ? cy.bubbleAssertBubbleSelected($w, pp)
+            : cy.bubbleAssertBubbleNotSelected($w, pp)
             ;
         }
 
@@ -4515,13 +4700,16 @@ Cypress.Commands.add('bubbleAssertSingleBubbleSelected', (widgetId: string, bubb
 
 Cypress.Commands.add('bubbleAssertBubbleSelected', (widgetId: string | $widget, bubble: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
             .eq(bubble - 1)
             .closest("g[fill='" + STATOS_SELECTION_COLOR_HEX + "']")
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
@@ -4533,14 +4721,17 @@ Cypress.Commands.add('bubbleAssertBubbleSelected', (widgetId: string | $widget, 
 
 Cypress.Commands.add('bubbleAssertBubbleNotSelected', (widgetId: string | $widget, bubble: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
             .eq(bubble - 1)
             .closest("g[fill='#00d4ea']" /* default color */)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
@@ -4576,10 +4767,11 @@ Cypress.Commands.add('scatterAssertSinglePointSelected', (widgetId: string, poin
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let pp = 1; pp <= pointCount; pp++) {
+        for (let pp = 1; pp <= pointCount; pp++)
+        {
             pp === point
-                ? cy.scatterAssertPointSelected($w, pp)
-                : cy.scatterAssertPointNotSelected($w, pp)
+            ? cy.scatterAssertPointSelected($w, pp)
+            : cy.scatterAssertPointNotSelected($w, pp)
             ;
         }
 
@@ -4589,14 +4781,17 @@ Cypress.Commands.add('scatterAssertSinglePointSelected', (widgetId: string, poin
 
 Cypress.Commands.add('scatterAssertPointSelected', (widgetId: string | $widget, point: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
             .eq(point - 1)
             .closest("g[fill='" + STATOS_SELECTION_COLOR_HEX + "']")
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
@@ -4609,14 +4804,17 @@ Cypress.Commands.add('scatterAssertPointSelected', (widgetId: string | $widget, 
 
 Cypress.Commands.add('scatterAssertPointNotSelected', (widgetId: string | $widget, point: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
             .eq(point - 1)
             .closest("g[fill='#00d4ea']" /* default color */)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g circle`)
@@ -4651,10 +4849,11 @@ Cypress.Commands.add('treeMapAssertSingleRectangleSelected', (widgetId: string, 
 
     cy.getWidget(widgetId).then($w => {
 
-        for (let ss = 1; ss <= rectangleCount; ss++) {
+        for (let ss = 1; ss <= rectangleCount; ss++)
+        {
             ss === rectangle
-                ? cy.treeMapAssertRectangleSelected($w, ss)
-                : cy.treeMapAssertRectangleNotSelected($w, ss)
+            ? cy.treeMapAssertRectangleSelected($w, ss)
+            : cy.treeMapAssertRectangleNotSelected($w, ss)
             ;
         }
 
@@ -4664,13 +4863,16 @@ Cypress.Commands.add('treeMapAssertSingleRectangleSelected', (widgetId: string, 
 
 Cypress.Commands.add('treeMapAssertRectangleSelected', (widgetId: string | $widget, rectangle: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
             .invoke('attr', "fill").should('eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
@@ -4682,13 +4884,16 @@ Cypress.Commands.add('treeMapAssertRectangleSelected', (widgetId: string | $widg
 
 Cypress.Commands.add('treeMapAssertRectangleNotSelected', (widgetId: string | $widget, rectangle: number) => {
 
-    if (typeof widgetId === "string") {
+    if (typeof widgetId === "string")
+    {
 
         cy.getWidget(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
             .invoke('attr', "fill").should('not.eq', STATOS_SELECTION_COLOR_HEX)
 
-    } else {
+    }
+    else
+    {
 
         cy.wrap(widgetId)
             .find(`.ic3WidgetBox-content svg g[role='group']:nth-child(1)  g[role='menuitem']:nth-child(${rectangle})`)
@@ -4744,7 +4949,8 @@ Cypress.Commands.add("keyShift", (cb: (() => void)) => {
 
 });
 
-function assertEventWithText(value: string | null, widgetId: string, tag: string, isNotEvent?: boolean) {
+function assertEventWithText(value: string | null, widgetId: string, tag: string, isNotEvent?: boolean)
+{
 
     const htmlElem = tag === "mdx" ? "h6" : "h5";
     let preTag = isNotEvent ? "" : "Event ";
@@ -4759,7 +4965,6 @@ Cypress.Commands.add("assertEventWithText", (widgetId: string, tag: string, valu
     assertEventWithText(value, widgetId, tag, true);
 
 });
-
 
 Cypress.Commands.add("assertEventValue", (widgetId: string, value: string | null = null) => {
 
@@ -4798,7 +5003,6 @@ Cypress.Commands.add("assertEventAsSet", (widgetId: string, value: string | null
 
 });
 
-
 Cypress.Commands.add("addWidgetAndOpenEditor", (widgetType: string, posX = 100, posY = 100) => {
 
     cy.get("[data-cy='appMenu-button-newWidget']").click();
@@ -4815,9 +5019,12 @@ Cypress.Commands.add("addWidgetAndOpenEditor", (widgetType: string, posX = 100, 
 
 Cypress.Commands.add("widgetEditorOpen", (widgetId: string) => {
 
-    if (widgetId.startsWith("wg")) {
+    if (widgetId.startsWith("wg"))
+    {
         cy.clickUserMenu(widgetId, 'editGadget');
-    } else {
+    }
+    else
+    {
         cy.clickUserMenu(widgetId, 'editWidget');
     }
 
@@ -4835,7 +5042,6 @@ Cypress.Commands.add("widgetEditorTabNotExists", (tabName: string) => {
     cy.get('.ic3App-drawer [data-cy="' + tabName + '"]').should('not.exist');
 
 });
-
 
 Cypress.Commands.add("widgetEditorEnterMdxStatement", (statement: string) => {
 
@@ -4933,46 +5139,59 @@ Cypress.Commands.add("keyboardDeleteAll", {
 }, (element) => {
 
     if (Cypress.platform === 'darwin')
+    {
         return cy.wrap(element).type('{command}a{del}')
+    }
     else
+    {
         return cy.wrap(element).type('{ctrl}a{del}')
+    }
 });
 
 Cypress.Commands.add("widgetEditorMdxTreeFilter", (filter: string) => {
 
     if (filter)
+    {
         cy.get('.ic3WidgetEditorQueryPanel-Filter input').clear().type(filter);
+    }
     else
+    {
         cy.get('.ic3WidgetEditorQueryPanel-Filter input').clear();
+    }
 });
 
 Cypress.Commands.add("widgetEditorFilter", (filter: string) => {
 
     if (filter)
+    {
         cy.get('.ic3EditorFilterBar-searchFilter input').clear().type(filter);
+    }
     else
+    {
         cy.get('.ic3EditorFilterBar-searchFilter input').clear();
+    }
 });
 
 Cypress["migrateDate"] = (date: string | undefined | null) => {
 
     if (!date || !date.startsWith("0") || date.includes("/") || date.includes("-"))
+    {
         return date;
+    }
     return date.substring(1);
 }
-
 
 /**
  * For MacOS compatibility
  */
 const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 Cypress.Commands.overwrite('type', (originalFn: any, element: any, text: string, options: any) => {
-    if (isMac && text && text.includes("{ctrl}")) {
+    if (isMac && text && text.includes("{ctrl}"))
+    {
         text = text.replace("{ctrl}", "{cmd}")
     }
     return originalFn(element, text, options)
 })
-
 
 Cypress.Commands.add('clickPrintButton', (widgetId: string) => {
 

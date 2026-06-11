@@ -10,20 +10,14 @@ describe("Others/ViewerGridLayoutPositioning", () => {
         cy.waitForQueryCount(0);
 
         // sizes to full width because ww14 and ww13 are invisible
-        assertSizing("ww12", 1504);
+        cy.assertWidgetWidth("ww12", 1504);
 
         // divide space of invisible widgets equally for this row
-        assertSizing("ww2", 432);
-        assertSizing("ww7", 370);
-        assertSizing("ww8", 307);
-        assertSizing("ww9", 370);
+        cy.assertWidgetWidth("ww2", 432);
+        cy.assertWidgetWidth("ww7", 370);
+        cy.assertWidgetWidth("ww8", 307);
+        cy.assertWidgetWidth("ww9", 370);
 
     });
 
 });
-
-function assertSizing(widget: string, expected: number) {
-    cy.getWidget(widget)
-        .assertCssPx('width', expected, 0.05)
-    ;
-}

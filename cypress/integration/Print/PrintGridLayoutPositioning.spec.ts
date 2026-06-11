@@ -10,22 +10,14 @@ describe("Print/printGridLayoutI", () => {
         cy.waitForQueryCount(0);
 
         // sizes to full width because ww14 and ww13 are invisible
-        assertSizing("ww12", 1121);
+        cy.assertWidgetWidthP("ww12", 1121);
 
         // divide space of invisible widgets equally for this row
-        assertSizing("ww2", 320);
-        assertSizing("ww7", 275);
-        assertSizing("ww8", 229);
-        assertSizing("ww9", 275);
+        cy.assertWidgetWidthP("ww2", 320);
+        cy.assertWidgetWidthP("ww7", 275);
+        cy.assertWidgetWidthP("ww8", 229);
+        cy.assertWidgetWidthP("ww9", 275);
 
     });
 
 });
-
-function assertSizing(widget: string, expected: number) {
-    // print scale = 0.64
-    // correct size = expected * 0.64
-    cy.getWidget(widget)
-        .assertCssPx('width', expected * 0.64, 0.005)
-    ;
-}
