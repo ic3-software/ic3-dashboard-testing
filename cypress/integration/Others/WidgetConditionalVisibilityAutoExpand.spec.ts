@@ -16,7 +16,7 @@ describe("Others/Widget Conditional Visibility AutoExpand", () => {
         // Hides ww1
         cy.selectDropdownFromInput("ww0", "2008")
         cy.assertWidgetInvisible("ww1")
-        cy.assertWidgetDetails(0, "ww2", 0, 0, 748, 147);
+        cy.assertWidgetDetails(0, "ww2", 0, 0, 1504, 147);
 
     })
 
