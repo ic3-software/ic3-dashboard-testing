@@ -20,7 +20,7 @@ describe("Visibility/VisibilityResize05", () => {
 
         // ww2 invisible => ww3 | ww4 are using the whole horizontal space.
         cy.assertWidgetWidth("ww3", 1504);
-        cy.assertWidgetWidth("ww5", 1504);
+        cy.assertWidgetWidth("ww4", 1504);
 
         // ww3 | ww4 unchanged
         cy.assertWidgetHeight("ww3", 64);
