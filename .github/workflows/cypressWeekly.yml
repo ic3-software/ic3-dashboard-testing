@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '42 1 * * 1'
-
+      timezone: 'Europe/Paris'
 jobs:
   build:
     runs-on: ubuntu-24.04
