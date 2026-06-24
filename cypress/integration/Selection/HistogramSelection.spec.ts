@@ -50,6 +50,7 @@ describe("Selection/Histogram Selection", () => {
             cy.selectSingleChartBarInGroup(widgetId, 0, 8);
             cy.selectSingleChartBarInGroup(widgetId, 0, 9);
         });
+        cy.wait(100);
         assertSelection(widgetId, eventWidgetId, "Marseille, Rotterdam, Madrid", "{[Geography].[Region].[City].&[MARSEILLE],[Geography].[Region].[City].&[ROTTERDAM],[Geography].[Region].[City].&[MADRID]}");
 
     });
@@ -62,12 +63,15 @@ describe("Selection/Histogram Selection", () => {
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 1, 2);
+        cy.wait(100);
         assertSelection(widgetId, eventWidgetId, "Business", "[Customer].[Customer].[Type].&[BUSINESS]");
 
         cy.selectSingleChartBarInGroup(widgetId, 1, 3);
+        cy.wait(100);
         assertSelection(widgetId, eventWidgetId, "", "");
 
         cy.selectSingleChartBarInGroup(widgetId, 0, 0);
+        cy.wait(100);
         assertSelection(widgetId, eventWidgetId, "Consumer", "[Customer].[Customer].[Type].&[CONSUMER]");
 
     });
