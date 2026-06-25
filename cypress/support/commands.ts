@@ -485,24 +485,24 @@ function createPrintInBrowserURL(path: string, orientation?: "portrait" | "lands
 
             ic3printParams: JSON.stringify({
 
-                                               // fitToPage: "true",
+                // fitToPage: "true",
 
-                                               scale: 1.0,
+                scale: 1.0,
 
-                                               // A4
+                // A4
 
-                                               pageSizeName: "A4",
-                                               pageOrientation: orientation ?? "portrait",
+                pageSizeName: "A4",
+                pageOrientation: orientation ?? "portrait",
 
-                                               pageSizeUnits: "mm",
-                                               pageWidth: 210,
-                                               pageHeight: 297,
+                pageSizeUnits: "mm",
+                pageWidth: 210,
+                pageHeight: 297,
 
-                                               marginTop: 10,
-                                               marginLeft: 10,
-                                               marginRight: 10,
-                                               marginBottom: 10,
-                                           })
+                marginTop: 10,
+                marginLeft: 10,
+                marginRight: 10,
+                marginBottom: 10,
+            })
         }
     }
 }
@@ -557,6 +557,10 @@ interface Cypress {
 
 }
 
+interface OpenAppTestReportOpts {
+    withMyPluginTheme?: boolean;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
 
@@ -572,7 +576,7 @@ declare namespace Cypress {
          * @param waitForQueryStatus defaulted to true
          * @param waitForPrintStatus defaulted to true
          */
-        openAppTestReport(testAppName: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
+        openAppTestReport(testAppName: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, opts?: OpenAppTestReportOpts): void;
 
         /**
          * @param path               as displayed in the editor report info minus "shared:/Tests/"
@@ -1426,13 +1430,14 @@ function createGadgetEditorURL(path?: string): Partial<VisitOptions> & { url: st
     }
 }
 
-function createAppViewingURL(testAppName: string): Partial<VisitOptions> & { url: string } {
+function createAppViewingURL(testAppName: string, withMyPluginTheme = false): Partial<VisitOptions> & { url: string } {
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
 
         qs: {
             ic3app: "shared:/" + fixURL("Cypress - " + testAppName),
+            ["ic3cypress.withMyPluginTheme"]: withMyPluginTheme ? "1" : "0",
         }
     }
 }
@@ -1520,9 +1525,9 @@ function forceRenderNotVisibleWidgets(doNotForceWidgetRendering?: boolean) {
     }
 }
 
-Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStatus = true, waitForPrintStatus = true) => {
+Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStatus = true, waitForPrintStatus = true, opts?: OpenAppTestReportOpts) => {
 
-    const vURL = createAppViewingURL(testAppName);
+    const vURL = createAppViewingURL(testAppName, opts?.withMyPluginTheme);
 
     forceRenderNotVisibleWidgets();
 
@@ -1815,8 +1820,8 @@ Cypress.Commands.add('adminAssertLocalizationTableValue', (row: number, col: num
 
     cy.get('[data-cy="localization-tags-result"]')
         .find(".MuiDataGrid-root " +
-              "div[data-rowindex='" + row + "'] " +
-              "div[data-colindex='" + col + "']")
+            "div[data-rowindex='" + row + "'] " +
+            "div[data-colindex='" + col + "']")
         .should("have.text", value ?? "")
 
 });
@@ -2289,7 +2294,7 @@ Cypress.Commands.add("sortTable", (widgetId: string, column: number) => {
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "']")
+            ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "']")
         .click()
 
 });
@@ -2298,8 +2303,8 @@ Cypress.Commands.add("clickTableColumnMenuIcon", (widgetId: string, column: numb
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "'] " +
-              ".MuiDataGrid-menuIcon button")
+            ".MuiDataGrid-columnHeader[aria-colindex='" + (column + 1) + "'] " +
+            ".MuiDataGrid-menuIcon button")
         .click({force: true});
 
     cy.get(".MuiDataGrid-menu .MuiMenuItem-root").contains(option).click();
@@ -2329,8 +2334,8 @@ Cypress.Commands.add("clickTableCell", (widgetId: string, rowIdx: number, colIdx
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              "div[data-rowindex='" + rowIdx + "'] " +
-              "div[data-colindex='" + colIdx + "']")
+            "div[data-rowindex='" + rowIdx + "'] " +
+            "div[data-colindex='" + colIdx + "']")
         .click({ctrlKey: ctrl})
 
 });
@@ -2339,9 +2344,9 @@ Cypress.Commands.add("clickTableCellDrilldown", (widgetId: string, rowIdx: numbe
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              "div[data-rowindex='" + rowIdx + "'] " +
-              "div[data-colindex='" + colIdx + "'] " +
-              "div.Ic3TableCellDrilldown-iconDiv")
+            "div[data-rowindex='" + rowIdx + "'] " +
+            "div[data-colindex='" + colIdx + "'] " +
+            "div.Ic3TableCellDrilldown-iconDiv")
         .click();
 
 });
@@ -2440,8 +2445,8 @@ Cypress.Commands.add("assertTableValue", (widgetId: string, row: number, col: nu
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              "div[data-rowindex='" + row + "'] " +
-              "div[data-colindex='" + col + "'] span")
+            "div[data-rowindex='" + row + "'] " +
+            "div[data-colindex='" + col + "'] span")
         .should("have.text", value ?? "")
 
 });
@@ -2450,8 +2455,8 @@ Cypress.Commands.add("assertShowDataTableCellContent", (widgetId: string, row: n
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              "div[data-rowindex='" + row + "'] " +
-              "div[data-colindex='" + col + "']")
+            "div[data-rowindex='" + row + "'] " +
+            "div[data-colindex='" + col + "']")
         .should("have.text", value ?? "")
 
 });
@@ -2466,8 +2471,8 @@ Cypress.Commands.add("assertTableCellOnError", (widgetId: string, rowIdx: number
 
     cy.getWidget(widgetId)
         .find("div[data-rowindex='" + rowIdx + "'] " +
-              "div[data-colindex='" + colIdx + "'] " +
-              "span[data-cy='ic3-cell-error']")
+            "div[data-colindex='" + colIdx + "'] " +
+            "span[data-cy='ic3-cell-error']")
 
 });
 
@@ -2484,16 +2489,16 @@ Cypress.Commands.add("assertTableColumnsEqual", (widgetId: string, expectedWidge
 
             cy.getWidget(expectedWidgetId)
                 .find(".ic3WidgetBox-content " +
-                      "div[data-rowindex='" + row + "'] " +
-                      "div[data-colindex='" + col + "'] " +
-                      "span")
+                    "div[data-rowindex='" + row + "'] " +
+                    "div[data-colindex='" + col + "'] " +
+                    "span")
                 .then($expectedSpan => {
 
                     cy.getWidget(widgetId)
                         .find(".ic3WidgetBox-content " +
-                              "div[data-rowindex='" + row + "'] " +
-                              "div[data-colindex='" + col + "'] " +
-                              "span")
+                            "div[data-rowindex='" + row + "'] " +
+                            "div[data-colindex='" + col + "'] " +
+                            "span")
                         .should("have.text", $expectedSpan.text())
                 })
             ;
@@ -2512,16 +2517,16 @@ Cypress.Commands.add("assertTableColumnEqual", (widgetId: string, expectedWidget
 
         cy.getWidget(expectedWidgetId)
             .find(".ic3WidgetBox-content " +
-                  "div[data-rowindex='" + row + "'] " +
-                  "div[data-colindex='" + colIdx + "'] " +
-                  "span")
+                "div[data-rowindex='" + row + "'] " +
+                "div[data-colindex='" + colIdx + "'] " +
+                "span")
             .then($expectedSpan => {
 
                 cy.getWidget(widgetId)
                     .find(".ic3WidgetBox-content " +
-                          "div[data-rowindex='" + row + "'] " +
-                          "div[data-colindex='" + colIdx + "'] " +
-                          "span")
+                        "div[data-rowindex='" + row + "'] " +
+                        "div[data-colindex='" + colIdx + "'] " +
+                        "span")
                     .should("have.text", $expectedSpan.text())
             });
 
@@ -2593,8 +2598,8 @@ Cypress.Commands.add("assertTableSingleRowSelected", (widgetId: string, rowIdx: 
 
         for (let rr = 0; rr < rowCount; rr++) {
             rr === rowIdx
-            ? cy.assertTableRowSelected($w, rowIdx)
-            : cy.assertTableRowNotSelected($w, rr)
+                ? cy.assertTableRowSelected($w, rowIdx)
+                : cy.assertTableRowNotSelected($w, rr)
             ;
         }
 
@@ -2656,7 +2661,7 @@ Cypress.Commands.add("assertTableColumnSelected", (widgetId: string, colIdx: num
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              "div[data-colindex='" + colIdx + "'][role='gridcell']")
+            "div[data-colindex='" + colIdx + "'][role='gridcell']")
         .should("have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -2689,7 +2694,7 @@ Cypress.Commands.add("assertTableColumnNotSelected", (widgetId: string, colIdx: 
 
     cy.getWidget(widgetId)
         .find(".ic3WidgetBox-content " +
-              "div[data-colindex='" + colIdx + "'][role='gridcell']")
+            "div[data-colindex='" + colIdx + "'][role='gridcell']")
         .should("not.have.css", "background-color", STATOS_SELECTION_BACKGROUND_COLOR);
 
 });
@@ -3690,8 +3695,8 @@ function setDateOnMuiDatePicker($div: any, date: string) {
     if (date) {
 
         const gotoStart = editorMode
-                          ? "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
-                          : "{ctrl}a{del}";
+            ? "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
+            : "{ctrl}a{del}";
 
         cy.wrap($div).find('input').type(gotoStart)
             .type(date);
@@ -4229,8 +4234,8 @@ Cypress.Commands.add('donutAssertSingleSliceSelected', (widgetId: string, slice:
 
         for (let ss = 1; ss <= sliceCount; ss++) {
             ss === slice
-            ? cy.donutAssertSliceSelected($w, ss)
-            : cy.donutAssertSliceNotSelected($w, ss)
+                ? cy.donutAssertSliceSelected($w, ss)
+                : cy.donutAssertSliceNotSelected($w, ss)
             ;
         }
 
@@ -4302,8 +4307,8 @@ Cypress.Commands.add('columnAssertSingleColumnSelected', (widgetId: string, colu
 
         for (let ss = 1; ss <= columnCount; ss++) {
             ss === column
-            ? cy.columnAssertColumnSelected($w, ss)
-            : cy.columnAssertColumnNotSelected($w, ss)
+                ? cy.columnAssertColumnSelected($w, ss)
+                : cy.columnAssertColumnNotSelected($w, ss)
             ;
         }
 
@@ -4373,8 +4378,8 @@ Cypress.Commands.add('histogramAssertSingleColumnSelected', (widgetId: string, c
 
         for (let ss = 1; ss <= columnCount; ss++) {
             ss === column
-            ? cy.columnAssertColumnSelected($w, ss)
-            : cy.columnAssertColumnNotSelected($w, ss)
+                ? cy.columnAssertColumnSelected($w, ss)
+                : cy.columnAssertColumnNotSelected($w, ss)
             ;
         }
 
@@ -4472,8 +4477,8 @@ Cypress.Commands.add('areaAssertSinglePointSelected', (widgetId: string, point: 
 
         for (let pp = 1; pp <= pointCount; pp++) {
             pp === point
-            ? cy.areaAssertPointSelected($w, pp)
-            : cy.areaAssertPointNotSelected($w, pp)
+                ? cy.areaAssertPointSelected($w, pp)
+                : cy.areaAssertPointNotSelected($w, pp)
             ;
         }
 
@@ -4548,8 +4553,8 @@ Cypress.Commands.add('bubbleAssertSingleBubbleSelected', (widgetId: string, bubb
 
         for (let pp = 1; pp <= bubbleCount; pp++) {
             pp === bubble
-            ? cy.bubbleAssertBubbleSelected($w, pp)
-            : cy.bubbleAssertBubbleNotSelected($w, pp)
+                ? cy.bubbleAssertBubbleSelected($w, pp)
+                : cy.bubbleAssertBubbleNotSelected($w, pp)
             ;
         }
 
@@ -4622,8 +4627,8 @@ Cypress.Commands.add('scatterAssertSinglePointSelected', (widgetId: string, poin
 
         for (let pp = 1; pp <= pointCount; pp++) {
             pp === point
-            ? cy.scatterAssertPointSelected($w, pp)
-            : cy.scatterAssertPointNotSelected($w, pp)
+                ? cy.scatterAssertPointSelected($w, pp)
+                : cy.scatterAssertPointNotSelected($w, pp)
             ;
         }
 
@@ -4697,8 +4702,8 @@ Cypress.Commands.add('treeMapAssertSingleRectangleSelected', (widgetId: string, 
 
         for (let ss = 1; ss <= rectangleCount; ss++) {
             ss === rectangle
-            ? cy.treeMapAssertRectangleSelected($w, ss)
-            : cy.treeMapAssertRectangleNotSelected($w, ss)
+                ? cy.treeMapAssertRectangleSelected($w, ss)
+                : cy.treeMapAssertRectangleNotSelected($w, ss)
             ;
         }
 

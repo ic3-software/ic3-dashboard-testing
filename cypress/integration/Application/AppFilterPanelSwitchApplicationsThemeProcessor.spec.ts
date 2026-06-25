@@ -15,7 +15,7 @@ describe("Application/Switch Applications Theme Processor", () => {
         PluginThemeUtils.enablePluginTheme();
 
         cy.login();
-        cy.openAppTestReport("FilterPanel theme processor");
+        cy.openAppTestReport("FilterPanel theme processor", undefined, undefined, {withMyPluginTheme: true});
     });
 
     it("Theme processor", () => {
