@@ -575,6 +575,7 @@ declare namespace Cypress {
          * @param testAppName        as displayed in the editor report info minus "shared:Cypress - "
          * @param waitForQueryStatus defaulted to true
          * @param waitForPrintStatus defaulted to true
+         * @param opts OpenAppTestReportOpts
          */
         openAppTestReport(testAppName: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, opts?: OpenAppTestReportOpts): void;
 
@@ -1437,7 +1438,7 @@ function createAppViewingURL(testAppName: string, withMyPluginTheme = false): Pa
 
         qs: {
             ic3app: "shared:/" + fixURL("Cypress - " + testAppName),
-            ["ic3cypress.withMyPluginTheme"]: withMyPluginTheme ? "1" : "0",
+            ...(withMyPluginTheme ? {["ic3cypress.withMyPluginTheme"]: "1"} : {}),
         }
     }
 }
