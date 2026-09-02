@@ -1,13 +1,13 @@
-const fs = require('fs')
-const path = require('path')
-const pdf = require('pdf-parse')
+import path from "path";
+import fs from "fs";
+import pdf from "pdf-parse";
 
-export const readPdf = (pathToPdf: string) => {
-    return new Promise((resolve) => {
-        const pdfPath = path.resolve(pathToPdf)
-        let dataBuffer = fs.readFileSync(pdfPath)
-        pdf(dataBuffer).then(function (toto: any) {
-            resolve(toto)
-        })
-    })
+export async function readPdf(pathToPdf: string) {
+    const pdf = require('pdf-parse');
+    const fs = require('fs');
+    const path = require('path')
+
+    const pdfPath = path.resolve(pathToPdf)
+    const dataBuffer = fs.readFileSync(pdfPath);
+    return await pdf(dataBuffer);
 }
