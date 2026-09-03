@@ -463,7 +463,7 @@ const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
 
 function visitUrl(vURL: Partial<VisitOptions> & { url: string }) {
-    Cypress.env('url', JSON.stringify(vURL));
+    Cypress.expose('url', JSON.stringify(vURL));
     cy.visit(vURL);
 }
 
@@ -472,7 +472,7 @@ function createPrintInBrowserURL(path: string, orientation?: "portrait" | "lands
 } {
 
     return {
-        url: Cypress.config().baseUrl === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
+        url: Cypress.config("baseUrl") === "http://localhost:3000" ? "/viewer" : "/icCube/report/viewer",
 
         qs: {
             // ic3appLocalUrl: "dft",
@@ -1510,9 +1510,13 @@ Cypress.Commands.add('performLogin', () => {
 
     if (Cypress.config().baseUrl !== "http://localhost:3000") {
 
-        cy.get("input[name='j_username']").type(Cypress.env("ic3_user"), {log: false});  // See ./cypress.env.json
-        cy.get("input[name='j_password']").type(Cypress.env("ic3_password"), {log: false});
-        cy.get("button[type='submit']").click();
+        const user = Cypress.expose("ic3_user");   // non-sensitive → expose
+
+        cy.env(["ic3_password"]).then(({ ic3_password }) => {  // sensitive → cy.env()
+            cy.get("input[name='j_username']").type(user, { log: false });
+            cy.get("input[name='j_password']").type(ic3_password, { log: false });
+            cy.get("button[type='submit']").click();
+        });
 
     }
 
@@ -5042,22 +5046,23 @@ Cypress.Commands.add('setBrowserTimeZone', (timeZone: ValidTimeZones) => {
 
 Cypress.Commands.add("sendRestAPI", (url: string, params: any) => {
 
-    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
+    const user = Cypress.expose("ic3_user");
 
-    return cy.wrap(fetch(url, {
+    return cy.env(["ic3_password"]).then(({ ic3_password }) => {
+        const CREDENTIALS = `${user}:${ic3_password}`;
 
-        credentials: "omit",
-
-        body: JSON.stringify(params),
-
-        method: 'POST',
-
-        headers: {
-            "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
-            "Content-Type": "application/json"
-        }
-
-    }).then(response => response.text()));
+        return cy.wrap(
+            fetch(url, {
+                credentials: "omit",
+                body: JSON.stringify(params),
+                method: "POST",
+                headers: {
+                    "X-Authorization": btoa(CREDENTIALS),
+                    "Content-Type": "application/json",
+                },
+            }).then((response) => response.text())
+        );
+    });
 
 });
 
