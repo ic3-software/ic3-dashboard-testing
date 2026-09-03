@@ -4,6 +4,9 @@ describe("Gadgets/GadgetChangeReportSchema", () => {
         // Open an application, we don't care which
         cy.login();
         cy.openAppTestReport("empty app", true, false);
+
+        // Wait for the app to be loaded before opening the report.
+        cy.get("[data-cy='reportAppMenuIcon']");
     });
 
     it("Without changing schema", () => {
