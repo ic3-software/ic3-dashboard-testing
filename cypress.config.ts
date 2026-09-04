@@ -15,7 +15,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/*.spec.ts"
+            "cypress/**/*.spec.ts"
         ],
 
         viewportWidth: 1600,
