@@ -4,7 +4,7 @@ import * as path from 'path';
 /**
  * Ensure the PDF file has been fully downloaded (flushed): ensure the file size is constant over a period of time.
  */
-async function waitForFile(filePath: string, {checks = 3, intervalMs = 200, timeoutMs = 15000} = {}) {
+async function waitForFile(filePath: string, {checks = 3, intervalMs = 1000, timeoutMs = 15000} = {}) {
 
     const start = Date.now();
 
@@ -64,6 +64,15 @@ export async function readPdf(pathToPdf: string) {
 
     const dataBuffer = fs.readFileSync(pdfPath);
 
-    return await pdf(dataBuffer);
+    try {
+
+        return await pdf(dataBuffer);
+
+    } catch (error) {
+
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`PDF error ${pdfPath} ${dataBuffer.byteLength} : ${message}`, {cause: error});
+
+    }
 
 }
