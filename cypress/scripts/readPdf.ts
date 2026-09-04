@@ -60,7 +60,11 @@ export async function readPdf(pathToPdf: string) {
 
     // More likely the PDF is not ready yet (not fully flushed?).
 
+    const waitStartMS = Date.now();
+
     await waitForFile(pdfPath);
+
+    const waitMS = Date.now() - waitStartMS;
 
     const dataBuffer = fs.readFileSync(pdfPath);
 
@@ -71,7 +75,20 @@ export async function readPdf(pathToPdf: string) {
     } catch (error) {
 
         const message = error instanceof Error ? error.message : String(error);
-        throw new Error(`PDF error ${pdfPath} ${dataBuffer.byteLength} : ${message}`, {cause: error});
+
+        const header = dataBuffer.subarray(0, 8).toString('latin1');
+        const tail = dataBuffer.subarray(-32).toString('latin1').replace(/\s+/g, ' ').trim();
+
+        throw new Error(
+            [
+                `PDF error ${pdfPath}`,
+                `size=${dataBuffer.byteLength}B`,
+                `waited=${waitMS}ms`,
+                `header=${header}`,
+                `tail=${tail}`,
+                `error=${message}`,
+            ].join(' | '), {cause: error}
+        );
 
     }
 
