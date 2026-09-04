@@ -31,3 +31,12 @@ jobs:
           CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
           CYPRESS_GITHUB_ACTIONS: true
           CYPRESS_NO_PASSING: true
+
+      - name: Upload corrupt PDF artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrupt-pdfs
+          path: '**/downloads/_corrupt-pdfs/**'
+          if-no-files-found: ignore
+          retention-days: 14

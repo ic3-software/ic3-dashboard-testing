@@ -74,6 +74,11 @@ export async function readPdf(pathToPdf: string) {
 
     } catch (error) {
 
+        const debugDir = path.join(path.dirname(pdfPath), '_corrupt-pdfs');
+        fs.mkdirSync(debugDir, { recursive: true });
+        const debugPath = path.join(debugDir, `${Date.now()}-${path.basename(pdfPath)}`);
+        fs.copyFileSync(pdfPath, debugPath);
+
         const message = error instanceof Error ? error.message : String(error);
 
         const header = dataBuffer.subarray(0, 8).toString('latin1');
