@@ -1,4 +1,4 @@
-describe("PrintPdf/PrintPdf Table", () => {
+describe("PrintPdf/Chained Filters", () => {
 
     beforeEach(() => {
         cy.login();
