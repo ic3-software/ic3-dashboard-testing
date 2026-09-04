@@ -532,11 +532,7 @@ type WidgetBoxContentType =
 type TreeMode = "control-icons";
 
 interface PdfResult {
-    numpages: number;
-    numrender: number;
-    info: any;
-    metadata: any;
-    version: string;
+    total: number;
     text: string;
 }
 
@@ -2587,7 +2583,7 @@ Cypress.Commands.add("pdfAssertNumberOfPages", {prevSubject: true}, (subject, co
     return cy.wrap(subject).then((_pdfResult: any) => {
         const pdfResult = _pdfResult as PdfResult;
 
-        expect(pdfResult?.numpages).to.be.eq(count, "Wrong number of pages, expected " + count + " , got '" + pdfResult?.numpages)
+        expect(pdfResult?.total).to.be.eq(count, "Wrong number of pages, expected " + count + " , got '" + pdfResult?.total)
 
     })
 
