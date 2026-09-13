@@ -23,16 +23,71 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import Timeoutable = Cypress.Timeoutable;
-import VisitOptions = Cypress.VisitOptions;
-import Loggable = Cypress.Loggable;
-import ClickOptions = Cypress.ClickOptions;
-import Chainable = Cypress.Chainable;
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Cypress 16 upgrade notes (see https://docs.cypress.io/app/references/migration-guide)
+//
+//  - Cypress.env() has been REMOVED. Sensitive values (ic3_user / ic3_password) are now read asynchronously via
+//    cy.env(); non-sensitive debug values (the visited url) are published via Cypress.expose().
+//    cypress.env.json / the `env` config key still work, they are just no longer readable from the browser.
+//  - cy.type() keystrokeDelay default changed from 10ms to 0ms. Set `keystrokeDelay: 10` in cypress.config.ts,
+//    the MUI date pickers / CodeMirror typing below rely on it.
+//  - The Electron browser is deprecated. cypress-real-events and cypress-cdp both need a Chromium CDP
+//    connection, so set `defaultBrowser: 'chrome'` in cypress.config.ts.
+//  - visibilityStrategy defaults to 'modern'. If assertWidgetInvisible() regresses, temporarily set
+//    `visibilityStrategy: 'legacy'`.
+//  - Node.js 22.x / 24.x / 26+ required.
+//
+// cypress-real-events 1.15.1 has no API changes; realMouseMove now keeps the mouse button pressed while moving,
+// which lets resizeTableColumnWidth() use real events instead of synthetic triggers.
+//
+// TypeScript 7.0 upgrade notes (see https://www.typescriptlang.org/docs/handbook/release-notes/typescript-6-0.html)
+//
+//  - `strict` is now true by default, so nullable values (Cypress.config().baseUrl, migrateDate()) are
+//    guarded and previously-implicit `any` parameters are annotated.
+//  - `types` now defaults to []. tsconfig.json must list what this file needs:
+//        "types": ["cypress", "cypress-real-events", "node"]
+//    and `require` / the Node `path` module are no longer implicitly available here.
+//  - `module` defaults to esnext, which makes this file a module: the command declarations are now
+//    inside `declare global { namespace Cypress { ... } }` so they actually merge with Cypress' types.
+//  - `import X = Cypress.Y` alias syntax replaced with plain `type` aliases.
+//  - Other tsconfig keys removed in 7.0 that this project may still set: baseUrl, outFile,
+//    target: es5, downlevelIteration, moduleResolution node/classic, esModuleInterop: false.
+// ---------------------------------------------------------------------------------------------------------------------
 
-require('cypress-real-events/support')
-require('cypress-cdp')
+import 'cypress-real-events/support';
+import 'cypress-cdp';
+
+// This file has imports, so it is a module. Under TypeScript 7 a bare `declare namespace Cypress`
+// inside a module creates a *local* namespace that never merges with the global one, so the custom
+// command declarations below live in `declare global { namespace Cypress { ... } }`.
+export {};
+
+// TypeScript 7: `import X = Cypress.Y` alias syntax replaced by plain type aliases, which are
+// unambiguous now that `module` defaults to `esnext`.
+type Timeoutable = Cypress.Timeoutable;
+type VisitOptions = Cypress.VisitOptions;
+type Loggable = Cypress.Loggable;
+type ClickOptions = Cypress.ClickOptions;
 
 type $widget = any;
+
+/**
+ * `Cypress.config().baseUrl` is `string | null`; under `strict` (on by default in TypeScript 7)
+ * it cannot be concatenated directly.
+ */
+function baseUrl(): string {
+    return Cypress.config("baseUrl") ?? "";
+}
+
+/**
+ * TypeScript 7: `types` defaults to `[]`, so `require` and the Node `path` module are no longer
+ * implicitly declared. The download path is built explicitly instead.
+ */
+function downloadPath(fileName: string): string {
+    const folder = Cypress.config("downloadsFolder");
+    return `${folder.replace(/[\\/]+$/, "")}/${fileName}`;
+}
 
 type ValidTimeZones =
     "Africa/Abidjan"
@@ -463,7 +518,11 @@ const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
 
 
 function visitUrl(vURL: Partial<VisitOptions> & { url: string }) {
-    Cypress.env('url', JSON.stringify(vURL));
+
+    // Cypress 16: Cypress.env() has been removed. This value is debug-only metadata (no secret),
+    // so it is published synchronously with Cypress.expose() instead.
+    Cypress.expose('url', JSON.stringify(vURL));
+
     cy.visit(vURL);
 }
 
@@ -547,812 +606,832 @@ function getTableHeaderSelector(headerTitle: string, extra?: string): string {
     return ".MuiDataGrid-columnHeader[data-field='" + headerTitle + "'] " + (extra ?? "");
 }
 
-interface Cypress {
-    // Utils
-    migrateDate(date: string | null | undefined): string | null | undefined;
-
-}
-
 interface OpenAppTestReportOpts {
     withMyPluginTheme?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace Cypress {
+declare global {
 
-
-    interface Chainable<Subject> {
-
-        login(): void;
-
-        performLogin(): void;
+    namespace Cypress {
 
         /**
-         * @param testAppName        as displayed in the editor report info minus "shared:Cypress - "
-         * @param waitForQueryStatus defaulted to true
-         * @param waitForPrintStatus defaulted to true
-         * @param opts OpenAppTestReportOpts
+         * Cypress 16: this augmentation used to be declared as a stand-alone (and therefore dead) interface
+         * outside of the namespace. It now correctly augments the global `Cypress` object.
          */
-        openAppTestReport(testAppName: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, opts?: OpenAppTestReportOpts): void;
+        interface Cypress {
+
+            // Utils
+            migrateDate(date: string | null | undefined): string | null | undefined;
+
+            // Read by the application to decide whether off-screen widgets must be rendered.
+            doNotForceWidgetRendering?: boolean;
+
+        }
 
         /**
-         * @param path               as displayed in the editor report info minus "shared:/Tests/"
-         * @param waitForQueryStatus defaulted to true
-         * @param waitForPrintStatus defaulted to true
-         * @param userLocale open the report in this locale
+         * Note the `= any` default: interface merging requires the type parameter list to be identical
+         * to Cypress' own `Chainable<Subject = any>` declaration.
          */
-        openMdxConsole(): void;
+        interface Chainable<Subject = any> {
 
-        openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean,
-                             userLocale?: string): void;
+            login(): void;
 
-        openPrintInBrowserTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, orientation?: "portrait" | "landscape"): void;
+            performLogin(): void;
 
-        reloadAndWait(waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
+            /**
+             * @param testAppName        as displayed in the editor report info minus "shared:Cypress - "
+             * @param waitForQueryStatus defaulted to true
+             * @param waitForPrintStatus defaulted to true
+             * @param opts OpenAppTestReportOpts
+             */
+            openAppTestReport(testAppName: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, opts?: OpenAppTestReportOpts): void;
 
-        openGadgetEditor(path?: string): void
+            /**
+             * @param path               as displayed in the editor report info minus "shared:/Tests/"
+             * @param waitForQueryStatus defaulted to true
+             * @param waitForPrintStatus defaulted to true
+             * @param userLocale open the report in this locale
+             */
+            openMdxConsole(): void;
 
-        /**
-         * @param path               as displayed in the editor report info minus "shared:/Tests/"
-         * @param waitForQueryStatus defaulted to true
-         * @param waitForPrintStatus defaulted to true
-         */
-        openEditorTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
+            openViewerTestReport(path: string | IOpenReport, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, doNotForceWidgetRendering?: boolean,
+                                 userLocale?: string): void;
 
-        /**
-         * @param count number of queries on success
-         * @param countTotal total number of queries (including waiting). Default = count.
-         */
-        waitForQueryCount(count: number, countTotal?: number): void;
+            openPrintInBrowserTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean, orientation?: "portrait" | "landscape"): void;
 
-        waitForChartRendering(count: number): void;
+            reloadAndWait(waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
-        assertRenderedCharts(count: number): void;
+            openGadgetEditor(path?: string): void
 
-        waitForBoxContentHook(count: number): void;
+            /**
+             * @param path               as displayed in the editor report info minus "shared:/Tests/"
+             * @param waitForQueryStatus defaulted to true
+             * @param waitForPrintStatus defaulted to true
+             */
+            openEditorTestReport(path: string, waitForQueryStatus?: boolean, waitForPrintStatus?: boolean): void;
 
-        setChartRendering(alias: string): void;
+            /**
+             * @param count number of queries on success
+             * @param countTotal total number of queries (including waiting). Default = count.
+             */
+            waitForQueryCount(count: number, countTotal?: number): void;
 
-        setBoxContentHook(alias: string): void;
+            waitForChartRendering(count: number): void;
 
-        waitForQueryStatusForLargeDashboard(): void;
+            assertRenderedCharts(count: number): void;
 
-        waitForQueryStatus(): Chainable<Subject>;
+            waitForBoxContentHook(count: number): void;
 
-        waitForPrintStatus(): Chainable<Subject>;
+            setChartRendering(alias: string): void;
 
-        switchQueryEditorLimits(): void;
+            setBoxContentHook(alias: string): void;
 
-        refreshDashboard(): void;
+            waitForQueryStatusForLargeDashboard(): void;
 
-        clickNextPage(): void;
+            waitForQueryStatus(): Chainable<Subject>;
 
-        clickPreviousPage(): void;
+            waitForPrintStatus(): Chainable<Subject>;
 
-        /**
-         * Click in the editor top left icon.
-         */
-        switchEditorToQuickViewMode(): void;
+            switchQueryEditorLimits(): void;
 
-        switchEditorToEditViewMode(): void;
+            refreshDashboard(): void;
 
-        clickOpenMoreTopMenu(): void;
+            clickNextPage(): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Localization & administration
-        // -------------------------------------------------------------------------------------------------------------
+            clickPreviousPage(): void;
 
-        openAdministration(): void;
+            /**
+             * Click in the editor top left icon.
+             */
+            switchEditorToQuickViewMode(): void;
 
-        adminSetDashboardFilter(filter: string): void;
+            switchEditorToEditViewMode(): void;
 
-        adminGenerateTags(): void;
+            clickOpenMoreTopMenu(): void;
 
-        adminTestFilter(): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Localization & administration
+            // -------------------------------------------------------------------------------------------------------------
 
-        adminAssertTagsTestResult(text: string): void;
+            openAdministration(): void;
 
-        adminAssertLocalizationRowCount(count: number): void;
+            adminSetDashboardFilter(filter: string): void;
 
-        adminAssertLocalizationColumnCount(count: number): void;
+            adminGenerateTags(): void;
 
-        adminAssertLocalizationTableValue(row: number, col: number, value: string | null): void;
+            adminTestFilter(): void;
 
-        adminAssertLocalizationTableTags(reportPath: string, tags: string[]): void;
+            adminAssertTagsTestResult(text: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Layout
-        // -------------------------------------------------------------------------------------------------------------
+            adminAssertLocalizationRowCount(count: number): void;
 
-        assertPageCount(count: number): void;
+            adminAssertLocalizationColumnCount(count: number): void;
 
-        assertWidgetDetails(pageNb: number, widgetId: string, left: number, top: number, width: number, height: number): void;
+            adminAssertLocalizationTableValue(row: number, col: number, value: string | null): void;
 
-        assertWidgetDetailsEx(pageNb: number, widgetId: string, left: number, top: number, width: number, height: number): void;
+            adminAssertLocalizationTableTags(reportPath: string, tags: string[]): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Widget
-        // -------------------------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------------------------
+            // Layout
+            // -------------------------------------------------------------------------------------------------------------
 
-        getWidget(widgetId: string, contentType?: WidgetBoxContentType): Chainable<Subject>;
+            assertPageCount(count: number): void;
 
-        getWidgetWithNS(nsId: string, widgetId: string, contentType?: WidgetBoxContentType): Chainable<Subject>;
+            assertWidgetDetails(pageNb: number, widgetId: string, left: number, top: number, width: number, height: number): void;
 
-        getWidgetHeader(widgetId: string): Chainable<Subject>;
+            assertWidgetDetailsEx(pageNb: number, widgetId: string, left: number, top: number, width: number, height: number): void;
 
-        assertWidgetHeader(widgetId: string, header: string): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Widget
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertWidgetHeaderSelection(widgetId: string, selection: string): void;
+            getWidget(widgetId: string, contentType?: WidgetBoxContentType): Chainable<Subject>;
 
-        assertWidgetQueryLoading(widgetId: string): void;
+            getWidgetWithNS(nsId: string, widgetId: string, contentType?: WidgetBoxContentType): Chainable<Subject>;
 
-        clickWidgetHeader(widgetId: string): Chainable<Subject>;
+            getWidgetHeader(widgetId: string): Chainable<Subject>;
 
-        assertWidgetDataOnError(widgetId: string): void;
+            assertWidgetHeader(widgetId: string, header: string): void;
 
-        assertWidgetNoData(widgetId: string): void;
+            assertWidgetHeaderSelection(widgetId: string, selection: string): void;
 
-        assertWidgetWaiting(widgetId: string): void;
+            assertWidgetQueryLoading(widgetId: string): void;
 
-        assertWidgetMissing(widgetId: string): void;
+            clickWidgetHeader(widgetId: string): Chainable<Subject>;
 
-        assertWidgetInvisible(widgetId: string): void;
+            assertWidgetDataOnError(widgetId: string): void;
 
-        assertWidgetVisible(widgetId: string, visible: boolean): void;
+            assertWidgetNoData(widgetId: string): void;
 
-        assertWidgetRenderStatus(widgetId: string, renderStatus: "RENDERING" | "RENDERED"): void;
+            assertWidgetWaiting(widgetId: string): void;
 
-        assertWidgetNotIntoView(widgetId: string): void;
+            assertWidgetMissing(widgetId: string): void;
 
-        assertWidgetGridHeight(widgetId: string, expected: number): void;
+            assertWidgetInvisible(widgetId: string): void;
 
-        assertWidgetWidth(widgetId: string, expected: number): void;
+            assertWidgetVisible(widgetId: string, visible: boolean): void;
 
-        assertWidgetHeight(widgetId: string, expected: number): void;
+            assertWidgetRenderStatus(widgetId: string, renderStatus: "RENDERING" | "RENDERED"): void;
 
-        assertWidgetWidthP(widgetId: string, expected: number): void;
+            assertWidgetNotIntoView(widgetId: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Switch widget
-        // -------------------------------------------------------------------------------------------------------------
+            assertWidgetGridHeight(widgetId: string, expected: number): void;
 
-        clickSwitch(widgetId: string): void;
+            assertWidgetWidth(widgetId: string, expected: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Tidy Table
-        // -------------------------------------------------------------------------------------------------------------
+            assertWidgetHeight(widgetId: string, expected: number): void;
 
-        assertTidyRowCount(widgetId: string, count: number): void;
+            assertWidgetWidthP(widgetId: string, expected: number): void;
 
-        assertTidyColumnCount(widgetId: string, count: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Switch widget
+            // -------------------------------------------------------------------------------------------------------------
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Widget (Zoomed)
-        // -------------------------------------------------------------------------------------------------------------
+            clickSwitch(widgetId: string): void;
 
-        getZoomedWidget(widgetId: string): Chainable<Subject>;
+            // -------------------------------------------------------------------------------------------------------------
+            // Tidy Table
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertZoomedHeader(widgetId: string, header: string): void;
+            assertTidyRowCount(widgetId: string, count: number): void;
 
-        closeZoomedWidget(widgetId: string): void;
+            assertTidyColumnCount(widgetId: string, count: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Drilldown
-        // -------------------------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------------------------
+            // Widget (Zoomed)
+            // -------------------------------------------------------------------------------------------------------------
 
-        clickDrilldownBack(widgetId: string, levels?: number): void;
+            getZoomedWidget(widgetId: string): Chainable<Subject>;
 
-        clickDrilldownLevel(widgetId: string, level: number): void;
+            assertZoomedHeader(widgetId: string, header: string): void;
 
-        clickDrilldownMenu(widgetId: string, path: (number | string)[]): void;
+            closeZoomedWidget(widgetId: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // User Menu
-        // -------------------------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------------------------
+            // Drilldown
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertUserMenuVisibility(widgetId: string, option: string, isVisible: boolean): void;
+            clickDrilldownBack(widgetId: string, levels?: number): void;
 
-        clickUserMenu(widgetId: string, option: string, nsId?: string): void;
+            clickDrilldownLevel(widgetId: string, level: number): void;
 
-        clickUserMenuShowData(widgetId: string): void;
+            clickDrilldownMenu(widgetId: string, path: (number | string)[]): void;
 
-        clickUserMenuBack(widgetId: string): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // User Menu
+            // -------------------------------------------------------------------------------------------------------------
 
-        clickUserMenuClearSelection(widgetId: string): void;
+            assertUserMenuVisibility(widgetId: string, option: string, isVisible: boolean): void;
 
-        clickUserMenuToInitialState(widgetId: string): void;
+            clickUserMenu(widgetId: string, option: string, nsId?: string): void;
 
-        clickUserMenuClearSorting(widgetId: string): void;
+            clickUserMenuShowData(widgetId: string): void;
 
-        clickUserMenuZoom(widgetId: string, isInZoom?: boolean): void;
+            clickUserMenuBack(widgetId: string): void;
 
-        exportToExcel(widgetId: string): void;
+            clickUserMenuClearSelection(widgetId: string): void;
 
-        clickUserMenuRefreshQuery(widgetId: string): void;
+            clickUserMenuToInitialState(widgetId: string): void;
 
-        clickUserMenuAddEventToQueries(widgetId: string): void;
+            clickUserMenuClearSorting(widgetId: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Report App.
-        // -------------------------------------------------------------------------------------------------------------
+            clickUserMenuZoom(widgetId: string, isInZoom?: boolean): void;
 
-        appClickMenu(index: number): void;
+            exportToExcel(widgetId: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Table
-        // -------------------------------------------------------------------------------------------------------------
+            clickUserMenuRefreshQuery(widgetId: string): void;
 
-        sortTable(widgetId: string, column: number): void;
+            clickUserMenuAddEventToQueries(widgetId: string): void;
 
-        clickTableColumnMenuIcon(widgetId: string, column: number, option: TableMenuOption): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Report App.
+            // -------------------------------------------------------------------------------------------------------------
 
-        filterTableColumnWithMenuIcon(widgetId: string, colIdx: number, filter: string): void;
+            appClickMenu(index: number): void;
 
-        clickTableHeaderMenu(widgetId: string, headerTitle: string, menuOption: TableMenuOption): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Table
+            // -------------------------------------------------------------------------------------------------------------
 
-        clickTableRow(widgetId: string, rowIdx: number): void;
+            sortTable(widgetId: string, column: number): void;
 
-        clickTableCell(widgetId: string, rowIdx: number, colIdx: number, ctrl?: boolean): void;
+            clickTableColumnMenuIcon(widgetId: string, column: number, option: TableMenuOption): void;
 
-        clickTableCellDrilldown(widgetId: string, rowIdx: number, colIdx: number): void;
+            filterTableColumnWithMenuIcon(widgetId: string, colIdx: number, filter: string): void;
 
-        clickHeaderCheckbox(widgetId: string): void;
+            clickTableHeaderMenu(widgetId: string, headerTitle: string, menuOption: TableMenuOption): void;
 
-        getTableHeader(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
+            clickTableRow(widgetId: string, rowIdx: number): void;
 
-        getTableHeaderZoomed(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
+            clickTableCell(widgetId: string, rowIdx: number, colIdx: number, ctrl?: boolean): void;
 
-        assertTableRowCount(widgetId: string, count: number): void;
+            clickTableCellDrilldown(widgetId: string, rowIdx: number, colIdx: number): void;
 
-        assertTableColCount(widgetId: string, count: number): void;
+            clickHeaderCheckbox(widgetId: string): void;
 
-        assertTableDomRowCount(widgetId: string, count: number): void;
+            getTableHeader(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
 
-        assertTableDomColCount(widgetId: string, count: number): void;
+            getTableHeaderZoomed(widgetId: string, headerTitle: string, extra?: string): Chainable<Subject>;
 
-        assertTableDetails(pageNb: number, widgetId: string, withBoxHeader: boolean, withTableHeader: boolean,
-                           height: number, rowCount: number, headerCount?: number): void;
+            assertTableRowCount(widgetId: string, count: number): void;
 
-        assertTableValue(widgetId: string, row: number, col: number, value: string | null): void;
+            assertTableColCount(widgetId: string, count: number): void;
 
-        assertTableCellContent(widgetId: string, rowIdx: number, colIdx: number, cellValue: string): void;
+            assertTableDomRowCount(widgetId: string, count: number): void;
 
-        assertTableCellOnError(widgetId: string, rowIdx: number, colIdx: number): void;
+            assertTableDomColCount(widgetId: string, count: number): void;
 
-        assertTableColumnsEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colCount: number): void;
+            assertTableDetails(pageNb: number, widgetId: string, withBoxHeader: boolean, withTableHeader: boolean,
+                               height: number, rowCount: number, headerCount?: number): void;
 
-        assertTableColumnEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colIdx: number): void;
+            assertTableValue(widgetId: string, row: number, col: number, value: string | null): void;
 
-        assertTableSingleRowSelected(widgetId: string, rowIdx: number, rowCount: number): void;
+            assertTableCellContent(widgetId: string, rowIdx: number, colIdx: number, cellValue: string): void;
 
-        assertTableRowSelected(widgetId: string | $widget, rowIdx: number): void;
+            assertTableCellOnError(widgetId: string, rowIdx: number, colIdx: number): void;
 
-        assertTableRowNotSelected(widgetId: string | $widget, rowIdx: number): void;
+            assertTableColumnsEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colCount: number): void;
 
-        assertTableColumnSelected(widgetId: string, colIdx: number): void;
+            assertTableColumnEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colIdx: number): void;
 
-        assertTableColumnTitle(widgetId: string, colIdx: number, expectedTitle: string): void;
+            assertTableSingleRowSelected(widgetId: string, rowIdx: number, rowCount: number): void;
 
-        assertTableColumnHeader(widgetId: string, colIdx: number, expectedTitle: string): void;
+            assertTableRowSelected(widgetId: string | $widget, rowIdx: number): void;
 
-        assertTableCellSelected(widgetId: string, rowIdx: number, cellIdx: number): void;
+            assertTableRowNotSelected(widgetId: string | $widget, rowIdx: number): void;
 
-        assertTableCellBold(widgetId: string, rowIdx: number, cellIdx: number): void;
+            assertTableColumnSelected(widgetId: string, colIdx: number): void;
 
-        assertTableHeaderBold(widgetId: string, title: string): void;
+            assertTableColumnTitle(widgetId: string, colIdx: number, expectedTitle: string): void;
 
-        assertTableColumnNotSelected(widgetId: string, colIdx: number): void;
+            assertTableColumnHeader(widgetId: string, colIdx: number, expectedTitle: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Widget > 'show data' Table
-        // -------------------------------------------------------------------------------------------------------------
+            assertTableCellSelected(widgetId: string, rowIdx: number, cellIdx: number): void;
 
-        assertShowDataTableCellContent(widgetId: string, rowIdx: number, colIdx: number, cellValue: string): void;
+            assertTableCellBold(widgetId: string, rowIdx: number, cellIdx: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Pivot Table
-        // -------------------------------------------------------------------------------------------------------------
+            assertTableHeaderBold(widgetId: string, title: string): void;
 
-        sortPivotTable(widgetId: string, column: number, row?: number): void;
+            assertTableColumnNotSelected(widgetId: string, colIdx: number): void;
 
-        assertNoDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Widget > 'show data' Table
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
+            assertShowDataTableCellContent(widgetId: string, rowIdx: number, colIdx: number, cellValue: string): void;
 
-        drilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Pivot Table
+            // -------------------------------------------------------------------------------------------------------------
 
-        drilldownPivotTableTopHeader(widgetId: string, row: number, col: number): void;
+            sortPivotTable(widgetId: string, column: number, row?: number): void;
 
-        scrollPivotTable(widgetId: string, distance: number): void;
+            assertNoDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
-        selectPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
+            assertDrilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
-        selectPivotTableTopHeader(widgetId: string, row: number, col: number): void;
+            drilldownPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
-        selectPivotTableCell(widgetId: string, row: number, col: number): void;
+            drilldownPivotTableTopHeader(widgetId: string, row: number, col: number): void;
 
-        assertPivotTableRowCount(widgetId: string, count: number): void;
+            scrollPivotTable(widgetId: string, distance: number): void;
 
-        assertPivotTableColCount(widgetId: string, count: number): void;
+            selectPivotTableLeftHeader(widgetId: string, row: number, col: number): void;
 
-        assertPivotTableDetails(pageNb: number, widgetId: string, withBoxHeader: boolean, withTableHeader: boolean, height: number, rowCount: number): void;
+            selectPivotTableTopHeader(widgetId: string, row: number, col: number): void;
 
-        assertPivotTableLeftHeader(widgetId: string, row: number, col: number, value: string | string[]): void;
+            selectPivotTableCell(widgetId: string, row: number, col: number): void;
 
-        assertPivotTableTopHeader(widgetId: string, row: number, col: number, value: string): void;
+            assertPivotTableRowCount(widgetId: string, count: number): void;
 
-        assertPivotTableCell(widgetId: string, row: number, col: number, value: string | string[]): void;
+            assertPivotTableColCount(widgetId: string, count: number): void;
 
-        assertPivotTableCellSelected(widgetId: string, row: number, col: number): void;
+            assertPivotTableDetails(pageNb: number, widgetId: string, withBoxHeader: boolean, withTableHeader: boolean, height: number, rowCount: number): void;
 
-        assertPivotTableNoCellSelected(widgetId: string): void;
+            assertPivotTableLeftHeader(widgetId: string, row: number, col: number, value: string | string[]): void;
 
-        assertPivotTableCellOnError(widgetId: string, row: number, col: number): void;
+            assertPivotTableTopHeader(widgetId: string, row: number, col: number, value: string): void;
 
-        assertPivotTableColumnsEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colCount: number): void;
+            assertPivotTableCell(widgetId: string, row: number, col: number, value: string | string[]): void;
 
-        assertPivotTableCellBold(widgetId: string, row: number, col: number): void;
+            assertPivotTableCellSelected(widgetId: string, row: number, col: number): void;
 
-        assertPivotTableTopHeaderBold(widgetId: string, row: number, col: number): void;
+            assertPivotTableNoCellSelected(widgetId: string): void;
 
-        assertPivotTableLeftHeaderBold(widgetId: string, row: number, col: number): void;
+            assertPivotTableCellOnError(widgetId: string, row: number, col: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Repetition Widget
-        // -------------------------------------------------------------------------------------------------------------
+            assertPivotTableColumnsEqual(widgetId: string, expectedWidgetId: string, rowCount: number, colCount: number): void;
 
-        assertRepetitionWidgetDetails(pageNb: number, widgetId: string, withBoxHeader: boolean, height: number, rowCount: number): void;
+            assertPivotTableCellBold(widgetId: string, row: number, col: number): void;
 
-        assertRepetitionWidgetRowColumnCount(pageNb: number, widgetId: string, nestedWidgetId: string, rowCount: number, columnCount: number, rows?: string[], columns?: string[]): void;
+            assertPivotTableTopHeaderBold(widgetId: string, row: number, col: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Buttons
-        // -------------------------------------------------------------------------------------------------------------
+            assertPivotTableLeftHeaderBold(widgetId: string, row: number, col: number): void;
 
-        selectButton(widgetId: string, label: string, options?: Partial<ClickOptions>): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Repetition Widget
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertButtonSelected(widgetId: string, label: string): void;
+            assertRepetitionWidgetDetails(pageNb: number, widgetId: string, withBoxHeader: boolean, height: number, rowCount: number): void;
 
-        assertButtonsSelected(widgetId: string, labels?: string[]): void;
+            assertRepetitionWidgetRowColumnCount(pageNb: number, widgetId: string, nestedWidgetId: string, rowCount: number, columnCount: number, rows?: string[], columns?: string[]): void;
 
-        assertButtonNotSelected(widgetId: string, ...label: string[]): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Buttons
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertButtons(widgetId: string, labels: string[]): void;
+            selectButton(widgetId: string, label: string, options?: Partial<ClickOptions>): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Checkbox
-        // -------------------------------------------------------------------------------------------------------------
+            assertButtonSelected(widgetId: string, label: string): void;
 
-        selectCheckbox(widgetId: string, label: string): void;
+            assertButtonsSelected(widgetId: string, labels?: string[]): void;
 
-        assertCheckboxSelected(widgetId: string, ...label: string[]): void;
+            assertButtonNotSelected(widgetId: string, ...label: string[]): void;
 
-        assertCheckboxNotSelected(widgetId: string, label: string): void;
+            assertButtons(widgetId: string, labels: string[]): void;
 
-        assertCheckboxes(widgetId: string, labels: string[]): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Checkbox
+            // -------------------------------------------------------------------------------------------------------------
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Dropdown (autocomplete)
-        // -------------------------------------------------------------------------------------------------------------
+            selectCheckbox(widgetId: string, label: string): void;
 
-        clearDropdown(widgetId: string): void;
+            assertCheckboxSelected(widgetId: string, ...label: string[]): void;
 
-        openDropdown(widgetId: string): void;
+            assertCheckboxNotSelected(widgetId: string, label: string): void;
 
-        closeDropdown(widgetId: string): void;
+            assertCheckboxes(widgetId: string, labels: string[]): void;
 
-        assertDropdownOptions(widgetId: string, labels: string[], search?: string): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Dropdown (autocomplete)
+            // -------------------------------------------------------------------------------------------------------------
 
-        selectDropdownFromInput(widgetId: string, label: string): void;
+            clearDropdown(widgetId: string): void;
 
-        selectDropdownFromInputLazy(widgetId: string, label: string): void;
+            openDropdown(widgetId: string): void;
 
-        selectDropdownFromPopup(widgetId: string, label: string): void;
+            closeDropdown(widgetId: string): void;
 
-        assertDropdownSingleSelection(widgetId: string, label: string | null): void;
+            assertDropdownOptions(widgetId: string, labels: string[], search?: string): void;
 
-        assertDropdownMultiSelection(widgetId: string, labels: string[]): void;
+            selectDropdownFromInput(widgetId: string, label: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Tree (w/ or wo/ autocomplete)
-        // -------------------------------------------------------------------------------------------------------------
+            selectDropdownFromInputLazy(widgetId: string, label: string): void;
 
-        /**
-         * Control Icons active.
-         */
-        selectTree(widgetId: string, treeMode: TreeMode, label: string): void;
+            selectDropdownFromPopup(widgetId: string, label: string): void;
 
-        expandTree(widgetId: string, treeMode: TreeMode, label: string): void;
+            assertDropdownSingleSelection(widgetId: string, label: string | null): void;
 
-        assertTreeExists(widgetId: string, treeMode: TreeMode, label: string): void;
+            assertDropdownMultiSelection(widgetId: string, labels: string[]): void;
 
-        assertTreeSelection(widgetId: string, treeMode: TreeMode, labels: string[]): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Tree (w/ or wo/ autocomplete)
+            // -------------------------------------------------------------------------------------------------------------
 
-        openTreeDropdown(widgetId: string): void;
+            /**
+             * Control Icons active.
+             */
+            selectTree(widgetId: string, treeMode: TreeMode, label: string): void;
 
-        closeTreeDropdown(widgetId: string): void;
+            expandTree(widgetId: string, treeMode: TreeMode, label: string): void;
 
-        selectTreeWithAutocompleteFromPopup(widgetId: string, treeMode: TreeMode, labels: string[], close?: boolean): void;
+            assertTreeExists(widgetId: string, treeMode: TreeMode, label: string): void;
 
-        assertTreeWithAutocompleteSingleSelection(widgetId: string, treeMode: TreeMode, label: string | null): void;
+            assertTreeSelection(widgetId: string, treeMode: TreeMode, labels: string[]): void;
 
-        assertTreeWithAutocompleteMultiSelection(widgetId: string, treeMode: TreeMode, labels: string[]): void;
+            openTreeDropdown(widgetId: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Slider
-        // -------------------------------------------------------------------------------------------------------------
+            closeTreeDropdown(widgetId: string): void;
 
-        selectSlider(widgetId: string, label: string): void;
+            selectTreeWithAutocompleteFromPopup(widgetId: string, treeMode: TreeMode, labels: string[], close?: boolean): void;
 
-        assertSliderWithoutSelection(widgetId: string): void;
+            assertTreeWithAutocompleteSingleSelection(widgetId: string, treeMode: TreeMode, label: string | null): void;
 
-        assertSliderSelected(widgetId: string, ...label: string[]): void;
+            assertTreeWithAutocompleteMultiSelection(widgetId: string, treeMode: TreeMode, labels: string[]): void;
 
-        assertSliderNotSelected(widgetId: string, label: string): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Slider
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertSlider(widgetId: string, labels: string[]): void;
+            selectSlider(widgetId: string, label: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Date Picker
-        // -------------------------------------------------------------------------------------------------------------
+            assertSliderWithoutSelection(widgetId: string): void;
 
-        selectDatePickerFromInput(widgetId: string, date: string): void;
+            assertSliderSelected(widgetId: string, ...label: string[]): void;
 
-        datePickerChooseShortcut(widgetId: string, shortcut: string): void;
+            assertSliderNotSelected(widgetId: string, label: string): void;
 
-        // selectTodayDateFromPopup(widgetId: string): void;
+            assertSlider(widgetId: string, labels: string[]): void;
 
-        assertDatePicker(widgetId: string, date: string | null): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Date Picker
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertDatePickerRangeFrom(widgetId: string, date: string | null): void;
+            selectDatePickerFromInput(widgetId: string, date: string): void;
 
-        assertDatePickerRangeTo(widgetId: string, date: string | null): void;
+            datePickerChooseShortcut(widgetId: string, shortcut: string): void;
 
-        selectDatePickerRangeFromFromInput(widgetId: string, date: string): void;
+            // selectTodayDateFromPopup(widgetId: string): void;
 
-        selectDatePickerRangeToFromInput(widgetId: string, date: string): void;
+            assertDatePicker(widgetId: string, date: string | null): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter: Filter Panel
-        // -------------------------------------------------------------------------------------------------------------
+            assertDatePickerRangeFrom(widgetId: string, date: string | null): void;
 
-        assertFilterPanelCount(widgetId: string, filterCount: number): void;
+            assertDatePickerRangeTo(widgetId: string, date: string | null): void;
 
-        assertFilterPanelItems(widgetId: string, filterNames: string[]): void;
+            selectDatePickerRangeFromFromInput(widgetId: string, date: string): void;
 
-        assertFilterPanelSimpleItemsActive(widgetId: string, index: number, itemsActive: string[], itemsInactive: string[]): void;
+            selectDatePickerRangeToFromInput(widgetId: string, date: string): void;
 
-        assertFilterPanelSelectionItems(widgetId: string, index: number, items: string[]): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter: Filter Panel
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertFilterPanelValue(widgetId: string, value: string, index?: number): void;
+            assertFilterPanelCount(widgetId: string, filterCount: number): void;
 
-        assertFilterPanelBetween(widgetId: string, start: string, end: string, index?: number): void;
+            assertFilterPanelItems(widgetId: string, filterNames: string[]): void;
 
-        assertFilterPanelItemIntermediate(widgetId: string, index: number, itemIndex: number, isFakeHierarchy?: boolean): void;
+            assertFilterPanelSimpleItemsActive(widgetId: string, index: number, itemsActive: string[], itemsInactive: string[]): void;
 
-        panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
+            assertFilterPanelSelectionItems(widgetId: string, index: number, items: string[]): void;
 
-        panelFilterSaveView(widgetId: string, viewName: string): void;
+            assertFilterPanelValue(widgetId: string, value: string, index?: number): void;
 
-        panelFilterLoadView(widgetId: string, viewName: string): void;
+            assertFilterPanelBetween(widgetId: string, start: string, end: string, index?: number): void;
 
-        panelFilterClear(widgetId: string, index: number): void;
+            assertFilterPanelItemIntermediate(widgetId: string, index: number, itemIndex: number, isFakeHierarchy?: boolean): void;
 
-        panelFilterSetDefaultFilter(widgetId: string): void;
+            panelFilterAdd(widgetId: string, field: string, selectIdx?: number): void;
 
-        panelFilterRemove(widgetId: string, index: number): void;
+            panelFilterSaveView(widgetId: string, viewName: string): void;
 
-        panelFilterSelectOperatorFromInput(widgetId: string, index: number, operator: string): void;
+            panelFilterLoadView(widgetId: string, viewName: string): void;
 
-        panelFilterSetTextFieldValue(widgetId: string, index: number, value: string): void;
+            panelFilterClear(widgetId: string, index: number): void;
 
-        panelFilterSetDateTimeFieldValue(widgetId: string, index: number, value: string, isDate?: boolean): void;
+            panelFilterSetDefaultFilter(widgetId: string): void;
 
-        panelFilterSetDateFieldValue(widgetId: string, index: number, value: string): void;
+            panelFilterRemove(widgetId: string, index: number): void;
 
-        panelFilterSetSelection(widgetId: string, index: number, values: (string | RegExp)[]): void;
+            panelFilterSelectOperatorFromInput(widgetId: string, index: number, operator: string): void;
 
-        panelFilterIsAnyOfSearchAndSelectAll(widgetId: string, index: number, search: string): void;
+            panelFilterSetTextFieldValue(widgetId: string, index: number, value: string): void;
 
-        panelFilterSetSelectionSimple(widgetId: string, index: number, values: string | RegExp): void;
+            panelFilterSetDateTimeFieldValue(widgetId: string, index: number, value: string, isDate?: boolean): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Filter panel : single
-        // -------------------------------------------------------------------------------------------------------------
+            panelFilterSetDateFieldValue(widgetId: string, index: number, value: string): void;
 
-        singlePanelFilterSetSelection(widgetId: string, values: (string | RegExp)[]): void;
+            panelFilterSetSelection(widgetId: string, index: number, values: (string | RegExp)[]): void;
 
-        assertSinglePanelFilterSelectionItems(widgetId: string, values: string[]): void;
+            panelFilterIsAnyOfSearchAndSelectAll(widgetId: string, index: number, search: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Bar
-        // -------------------------------------------------------------------------------------------------------------
+            panelFilterSetSelectionSimple(widgetId: string, index: number, values: string | RegExp): void;
 
-        selectSingleChartBarInGroup(widgetBoxId: string, group: number, child: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Filter panel : single
+            // -------------------------------------------------------------------------------------------------------------
 
-        assertSelectedSingleChartBarInGroup(widgetBoxId: string, group: number, child: number): void;
+            singlePanelFilterSetSelection(widgetId: string, values: (string | RegExp)[]): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Donut
-        // -------------------------------------------------------------------------------------------------------------
+            assertSinglePanelFilterSelectionItems(widgetId: string, values: string[]): void;
 
-        donutClickSlice(widgetId: string | $widget, slice: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Bar
+            // -------------------------------------------------------------------------------------------------------------
 
-        donutAssertSliceCount(widgetId: string, count: number): void;
+            selectSingleChartBarInGroup(widgetBoxId: string, group: number, child: number): void;
 
-        donutAssertSingleSliceSelected(widgetId: string, slice: number, sliceCount: number): void;
+            assertSelectedSingleChartBarInGroup(widgetBoxId: string, group: number, child: number): void;
 
-        donutAssertSliceSelected(widgetId: string | $widget, slice: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Donut
+            // -------------------------------------------------------------------------------------------------------------
 
-        donutAssertSliceNotSelected(widgetId: string | $widget, slice: number): void;
+            donutClickSlice(widgetId: string | $widget, slice: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Column
-        // -------------------------------------------------------------------------------------------------------------
+            donutAssertSliceCount(widgetId: string, count: number): void;
 
-        columnClickColumn(widgetId: string, column: number): void;
+            donutAssertSingleSliceSelected(widgetId: string, slice: number, sliceCount: number): void;
 
-        columnAssertColumnCount(widgetId: string, count: number): void;
+            donutAssertSliceSelected(widgetId: string | $widget, slice: number): void;
 
-        columnAssertSingleColumnSelected(widgetId: string, column: number, columnCount: number): void;
+            donutAssertSliceNotSelected(widgetId: string | $widget, slice: number): void;
 
-        columnAssertColumnSelected(widgetId: string | $widget, column: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Column
+            // -------------------------------------------------------------------------------------------------------------
 
-        columnAssertColumnNotSelected(widgetId: string | $widget, column: number): void;
+            columnClickColumn(widgetId: string, column: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Histogram
-        // -------------------------------------------------------------------------------------------------------------
+            columnAssertColumnCount(widgetId: string, count: number): void;
 
-        histogramClickColumn(widgetId: string, column: number): void;
+            columnAssertSingleColumnSelected(widgetId: string, column: number, columnCount: number): void;
 
-        histogramAssertColumnCount(widgetId: string, count: number): void;
+            columnAssertColumnSelected(widgetId: string | $widget, column: number): void;
 
-        histogramAssertSingleColumnSelected(widgetId: string, column: number, columnCount: number): void;
+            columnAssertColumnNotSelected(widgetId: string | $widget, column: number): void;
 
-        histogramAssertColumnSelected(widgetId: string | $widget, column: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Histogram
+            // -------------------------------------------------------------------------------------------------------------
 
-        histogramAssertColumnNotSelected(widgetId: string | $widget, column: number): void;
+            histogramClickColumn(widgetId: string, column: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: GeoMap
-        // -------------------------------------------------------------------------------------------------------------
+            histogramAssertColumnCount(widgetId: string, count: number): void;
 
-        geomapClickColorArea(widgetId: string, color: string, index: number): void;
+            histogramAssertSingleColumnSelected(widgetId: string, column: number, columnCount: number): void;
 
-        geomapAssertColorAreaCount(widgetId: string, color: string, count: number): void;
+            histogramAssertColumnSelected(widgetId: string | $widget, column: number): void;
 
-        geomapAssertSelectionColorAreaCount(widgetId: string, count: number): void;
+            histogramAssertColumnNotSelected(widgetId: string | $widget, column: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Area
-        // -------------------------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: GeoMap
+            // -------------------------------------------------------------------------------------------------------------
 
-        areaClickPoint(widgetId: string, point: number): void;
+            geomapClickColorArea(widgetId: string, color: string, index: number): void;
 
-        areaAssertPointCount(widgetId: string, count: number): void;
+            geomapAssertColorAreaCount(widgetId: string, color: string, count: number): void;
 
-        areaAssertSinglePointSelected(widgetId: string, point: number, pointCount: number): void;
+            geomapAssertSelectionColorAreaCount(widgetId: string, count: number): void;
 
-        areaAssertPointSelected(widgetId: string | $widget, point: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Area
+            // -------------------------------------------------------------------------------------------------------------
 
-        areaAssertPointNotSelected(widgetId: string | $widget, point: number): void;
+            areaClickPoint(widgetId: string, point: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Bubble
-        // -------------------------------------------------------------------------------------------------------------
+            areaAssertPointCount(widgetId: string, count: number): void;
 
-        bubbleClickBubble(widgetId: string, bubble: number): void;
+            areaAssertSinglePointSelected(widgetId: string, point: number, pointCount: number): void;
 
-        bubbleAssertBubbleCount(widgetId: string, count: number): void;
+            areaAssertPointSelected(widgetId: string | $widget, point: number): void;
 
-        bubbleAssertSingleBubbleSelected(widgetId: string, bubble: number, bubbleCount: number): void;
+            areaAssertPointNotSelected(widgetId: string | $widget, point: number): void;
 
-        bubbleAssertBubbleSelected(widgetId: string | $widget, bubble: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Bubble
+            // -------------------------------------------------------------------------------------------------------------
 
-        bubbleAssertBubbleNotSelected(widgetId: string | $widget, bubble: number): void;
+            bubbleClickBubble(widgetId: string, bubble: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Scatter Plot
-        // -------------------------------------------------------------------------------------------------------------
+            bubbleAssertBubbleCount(widgetId: string, count: number): void;
 
-        scatterClickPoint(widgetId: string, point: number): void;
+            bubbleAssertSingleBubbleSelected(widgetId: string, bubble: number, bubbleCount: number): void;
 
-        scatterAssertPointCount(widgetId: string, count: number): void;
+            bubbleAssertBubbleSelected(widgetId: string | $widget, bubble: number): void;
 
-        scatterAssertSinglePointSelected(widgetId: string, point: number, pointCount: number): void;
+            bubbleAssertBubbleNotSelected(widgetId: string | $widget, bubble: number): void;
 
-        scatterAssertPointSelected(widgetId: string | $widget, point: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Scatter Plot
+            // -------------------------------------------------------------------------------------------------------------
 
-        scatterAssertPointNotSelected(widgetId: string | $widget, point: number): void;
+            scatterClickPoint(widgetId: string, point: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: TreeMap
-        // -------------------------------------------------------------------------------------------------------------
+            scatterAssertPointCount(widgetId: string, count: number): void;
 
-        treeMapClickRectangle(widgetId: string, rectangle: number): void;
+            scatterAssertSinglePointSelected(widgetId: string, point: number, pointCount: number): void;
 
-        treeMapAssertRectangleCount(widgetId: string, count: number): void;
+            scatterAssertPointSelected(widgetId: string | $widget, point: number): void;
 
-        treeMapAssertSingleRectangleSelected(widgetId: string, rectangle: number, rectangleCount: number): void;
+            scatterAssertPointNotSelected(widgetId: string | $widget, point: number): void;
 
-        treeMapAssertRectangleSelected(widgetId: string | $widget, rectangle: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: TreeMap
+            // -------------------------------------------------------------------------------------------------------------
 
-        treeMapAssertRectangleNotSelected(widgetId: string | $widget, rectangle: number): void;
+            treeMapClickRectangle(widgetId: string, rectangle: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Chart: Sankey
-        // -------------------------------------------------------------------------------------------------------------
+            treeMapAssertRectangleCount(widgetId: string, count: number): void;
 
-        sankeyClickArea(widgetId: string, area: string): void;
+            treeMapAssertSingleRectangleSelected(widgetId: string, rectangle: number, rectangleCount: number): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Misc.
-        // -------------------------------------------------------------------------------------------------------------
+            treeMapAssertRectangleSelected(widgetId: string | $widget, rectangle: number): void;
 
-        clickOutside(): Chainable<Subject>;
+            treeMapAssertRectangleNotSelected(widgetId: string | $widget, rectangle: number): void;
 
-        keyCtrl(cb: () => void): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Chart: Sankey
+            // -------------------------------------------------------------------------------------------------------------
 
-        keyShift(cb: () => void): void;
+            sankeyClickArea(widgetId: string, area: string): void;
 
-        assertCssPx(cssProperty: string, expectedValue: number, precision?: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Misc.
+            // -------------------------------------------------------------------------------------------------------------
 
-        /**
-         * Assuming the widget contains a marked down:
-         * <pre>
-         *      ##### Event tag : @{event}!
-         * </pre>
-         */
-        assertEventWithText(widgetId: string, tag: string, value: string | null): void;
+            clickOutside(): Chainable<Subject>;
 
-        /**
-         * Assuming the widget contains a marked down:
-         * <pre>
-         *      ##### Event value : @{event}!
-         * </pre>
-         */
-        assertEventValue(widgetId: string, value: string | null): void;
+            keyCtrl(cb: () => void): void;
 
-        /**
-         * Assuming the widget contains a marked down:
-         * <pre>
-         *      ##### Event value : @{event}!
-         * </pre>
-         *
-         * uses migrateDate
-         */
-        assertDateEventValue(widgetId: string, value: string | null): void;
+            keyShift(cb: () => void): void;
 
-        /**
-         * Assuming the widget contains a marked down:
-         * <pre>
-         *      ##### Event mdx : @{event:mdx}!
-         * </pre>
-         */
-        assertEventMdx(widgetId: string, value: string | null): void;
+            assertCssPx(cssProperty: string, expectedValue: number, precision?: number): Chainable<Subject>;
 
-        /**
-         * Assuming the widget contains a marked down:
-         * <pre>
-         *      ##### Event key : @{event:mdx}!
-         * </pre>
-         */
-        assertEventKey(widgetId: string, value: string | null): void;
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
+             *      ##### Event tag : @{event}!
+             * </pre>
+             */
+            assertEventWithText(widgetId: string, tag: string, value: string | null): void;
 
-        /**
-         * Assuming the widget contains a marked down:
-         * <pre>
-         *      ##### Event set : @{event:mdx}!
-         * </pre>
-         */
-        assertEventAsSet(widgetId: string, value: string | null): void;
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
+             *      ##### Event value : @{event}!
+             * </pre>
+             */
+            assertEventValue(widgetId: string, value: string | null): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Widget Editor
-        // -------------------------------------------------------------------------------------------------------------
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
+             *      ##### Event value : @{event}!
+             * </pre>
+             *
+             * uses migrateDate
+             */
+            assertDateEventValue(widgetId: string, value: string | null): void;
 
-        addWidgetAndOpenEditor(widgetType: "ic3.FilterAutocomplete" | "ic3.FilterButtons" | "ic3.PivotTable" | "ic3.Table" | string, posX?: number, posY?: number): void;
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
+             *      ##### Event mdx : @{event:mdx}!
+             * </pre>
+             */
+            assertEventMdx(widgetId: string, value: string | null): void;
 
-        widgetEditorOpen(widgetId: string): void;
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
+             *      ##### Event key : @{event:mdx}!
+             * </pre>
+             */
+            assertEventKey(widgetId: string, value: string | null): void;
 
-        widgetCopy(widgetId: string): void;
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
+             *      ##### Event set : @{event:mdx}!
+             * </pre>
+             */
+            assertEventAsSet(widgetId: string, value: string | null): void;
 
-        widgetPaste(): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Widget Editor
+            // -------------------------------------------------------------------------------------------------------------
 
-        widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
+            addWidgetAndOpenEditor(widgetType: "ic3.FilterAutocomplete" | "ic3.FilterButtons" | "ic3.PivotTable" | "ic3.Table" | string, posX?: number, posY?: number): void;
 
-        widgetEditorTabNotExists(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
+            widgetEditorOpen(widgetId: string): void;
 
-        widgetEditorEnterMdxStatement(mdxStatement: string): void;
+            widgetCopy(widgetId: string): void;
 
-        widgetEditorQueryBuilderAssertNode(dropAxis: string, nodeName: string): void;
+            widgetPaste(): void;
 
-        widgetEditorOpenOptionGroup(name: "groupSelection" | "widgetIcons" | "widgetActionsGroup" | "columns"): void;
+            widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
 
-        widgetEditorChangeOption(input: string, option: string): void;
+            widgetEditorTabNotExists(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
 
-        widgetEditorAssertOption(input: string, option: string): void;
+            widgetEditorEnterMdxStatement(mdxStatement: string): void;
 
-        widgetEditorChangeTextOption(name: string, newValue: string): void;
+            widgetEditorQueryBuilderAssertNode(dropAxis: string, nodeName: string): void;
 
-        widgetEditorChangeBoolean(name: string): void;
+            widgetEditorOpenOptionGroup(name: "groupSelection" | "widgetIcons" | "widgetActionsGroup" | "columns"): void;
 
-        widgetEditorApplyAndClose(): void;
+            widgetEditorChangeOption(input: string, option: string): void;
 
-        widgetEditorApply(): void;
+            widgetEditorAssertOption(input: string, option: string): void;
 
-        widgetEditorClose(): void;
+            widgetEditorChangeTextOption(name: string, newValue: string): void;
 
-        widgetEditorChangeCube(cubeName: string): void;
+            widgetEditorChangeBoolean(name: string): void;
 
-        widgetEditorMdxTreeHasNode(nodeName: string): void;
+            widgetEditorApplyAndClose(): void;
 
-        widgetEditorMdxTreeFilter(filterText: string): void;
+            widgetEditorApply(): void;
 
-        widgetEditorFilter(filterText: string): void;
+            widgetEditorClose(): void;
 
-        paste(payload: string): Chainable<Subject>;
+            widgetEditorChangeCube(cubeName: string): void;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Exported files : XLS, CSV, PDF
-        // -------------------------------------------------------------------------------------------------------------
+            widgetEditorMdxTreeHasNode(nodeName: string): void;
 
-        /**
-         * returns an existing file from the download folder  (binary  blob format)
-         */
-        readFileFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<Subject>;
+            widgetEditorMdxTreeFilter(filterText: string): void;
 
-        /**
-         * returns a string with the content of the pdf
-         */
-        readPdfFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<PdfResult>;
+            widgetEditorFilter(filterText: string): void;
 
-        pdfAssertOccurrences(tag: string, count: number): Chainable<Subject>;
+            paste(payload: string): Chainable<Subject>;
 
-        pdfAssertNumberOfPages(count: number): Chainable<Subject>;
+            // -------------------------------------------------------------------------------------------------------------
+            // Exported files : XLS, CSV, PDF
+            // -------------------------------------------------------------------------------------------------------------
 
-        pdfTextShould(chainer: string, value: string): Chainable<Subject>;
+            /**
+             * returns an existing file from the download folder  (binary  blob format)
+             */
+            readFileFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<Subject>;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // CDP
-        // -------------------------------------------------------------------------------------------------------------
+            /**
+             * returns a string with the content of the pdf
+             */
+            readPdfFromDownload(fileName: string, options?: Partial<Loggable & Timeoutable>): Chainable<PdfResult>;
 
-        setBrowserTimeZone(timeZone: ValidTimeZones): Chainable<Subject>;
+            pdfAssertOccurrences(tag: string, count: number): Chainable<Subject>;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Keyboard
-        // -------------------------------------------------------------------------------------------------------------
+            pdfAssertNumberOfPages(count: number): Chainable<Subject>;
 
-        /**
-         * {ctrl}a{del}
-         */
-        keyboardDeleteAll(): Chainable<Subject>;
+            pdfTextShould(chainer: string, value: string): Chainable<Subject>;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Print Button
-        // -------------------------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------------------------
+            // CDP
+            // -------------------------------------------------------------------------------------------------------------
 
-        clickPrintButton(widgetId: string): void;
+            setBrowserTimeZone(timeZone: ValidTimeZones): Chainable<Subject>;
 
-        // -------------------------------------------------------------------------------------------------------------
-        // REST API
-        // -------------------------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------------------------
+            // Keyboard
+            // -------------------------------------------------------------------------------------------------------------
 
-        sendRestAPI(url: string, params: any): Chainable<Subject>;
+            /**
+             * {ctrl}a{del}
+             */
+            keyboardDeleteAll(): Chainable<Subject>;
 
-        loadSchema(schemaName: string): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // Print Button
+            // -------------------------------------------------------------------------------------------------------------
 
-        unloadSchema(schemaName: string): void;
+            clickPrintButton(widgetId: string): void;
 
-        resizeTableColumnWidth(widgetId: string, headerTitle: string, sizePx: number): void;
+            // -------------------------------------------------------------------------------------------------------------
+            // REST API
+            // -------------------------------------------------------------------------------------------------------------
+
+            /**
+             * Cypress 16: credentials are read asynchronously via cy.env(), the command still yields the raw
+             * response body as a string.
+             */
+            sendRestAPI(url: string, params: any): Chainable<string>;
+
+            loadSchema(schemaName: string): void;
+
+            unloadSchema(schemaName: string): void;
+
+            resizeTableColumnWidth(widgetId: string, headerTitle: string, sizePx: number): void;
+
+        }
 
     }
+
 }
 
 function fixURL(path: string): string {
     if (path.indexOf("/") === 0) {
-        return path.substr(1);
+        return path.slice(1);
     }
     return path;
 }
@@ -1407,7 +1486,7 @@ function createEditingURL(path: string): Partial<VisitOptions> & { url: string }
     }
 }
 
-function createAdminURL(path: string): Partial<VisitOptions> & { url: string } {
+function createAdminURL(): Partial<VisitOptions> & { url: string } {
 
     return {
         url: Cypress.config().baseUrl === "http://localhost:3000" ? "/admin" : "/icCube/report/admin",
@@ -1504,13 +1583,19 @@ Cypress.Commands.add('performLogin', () => {
     // +gadget /shared/Cypress WRITE                                       -- required for GadgetChangeSettings.specs.ts
     // -----------------------------------------------------------------------------------------------------------------
 
-    if (Cypress.config().baseUrl !== "http://localhost:3000") {
+    if (Cypress.config().baseUrl === "http://localhost:3000") {
+        return;
+    }
 
-        cy.get("input[name='j_username']").type(Cypress.env("ic3_user"), {log: false});  // See ./cypress.env.json
-        cy.get("input[name='j_password']").type(Cypress.env("ic3_password"), {log: false});
+    // Cypress 16: Cypress.env() has been removed. Credentials are sensitive, so they are read via cy.env()
+    // which keeps them in the Node process and off the command log. See ./cypress.env.json.
+    cy.env(['ic3_user', 'ic3_password']).then(({ic3_user, ic3_password}) => {
+
+        cy.get("input[name='j_username']").type(String(ic3_user), {log: false});
+        cy.get("input[name='j_password']").type(String(ic3_password), {log: false});
         cy.get("button[type='submit']").click();
 
-    }
+    });
 
 });
 
@@ -1767,7 +1852,8 @@ Cypress.Commands.add('clickOpenMoreTopMenu', () => {
 
 Cypress.Commands.add('openAdministration', () => {
 
-    const vURL = createAdminURL(path);
+    // Note: used to pass the node `path` module by mistake; createAdminURL() ignores its argument anyway.
+    const vURL = createAdminURL();
     visitUrl(vURL);
 
 });
@@ -1929,6 +2015,8 @@ Cypress.Commands.add('assertWidgetMissing', (widgetId: string) => {
 
 Cypress.Commands.add('assertWidgetInvisible', (widgetId: string) => {
 
+    // Cypress 16: visibilityStrategy defaults to 'modern' which no longer takes ancestor overflow clipping
+    // or transform-based hiding into account. Set `visibilityStrategy: 'legacy'` if this regresses.
     return cy.get('[data-cy="widget-box-' + widgetId + '"]')
         .should('have.length', 1)
         .should('be.not.visible')
@@ -2532,12 +2620,9 @@ Cypress.Commands.add("assertTableColumnEqual", (widgetId: string, expectedWidget
 });
 
 
-const path = require("path");
-const downloadsFolder = Cypress.config("downloadsFolder");
-
 Cypress.Commands.add("readFileFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
 
-    return cy.readFile(path.join(downloadsFolder, fileName), null, options ?? {timeout: PRINT_STATUS_TIMEOUT}).should("exist")
+    return cy.readFile(downloadPath(fileName), null, options ?? {timeout: PRINT_STATUS_TIMEOUT}).should("exist")
 });
 
 Cypress.Commands.add("readPdfFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
@@ -2545,11 +2630,11 @@ Cypress.Commands.add("readPdfFromDownload", (fileName: string, options?: Partial
     // wait for the file to exists before reading it
     cy.readFileFromDownload(fileName, options);
 
-    return cy.task('readPdf', path.join(downloadsFolder, fileName));
+    return cy.task('readPdf', downloadPath(fileName));
 
 });
 
-Cypress.Commands.add("pdfAssertOccurrences", {prevSubject: true}, (subject, tag: string, count: number) => {
+Cypress.Commands.add("pdfAssertOccurrences", {prevSubject: true}, (subject: any, tag: string, count: number) => {
 
     return cy.wrap(subject).then((_pdfResult: any) => {
         const pdfResult = _pdfResult as PdfResult;
@@ -2563,7 +2648,7 @@ Cypress.Commands.add("pdfAssertOccurrences", {prevSubject: true}, (subject, tag:
 
 });
 
-Cypress.Commands.add("pdfTextShould", {prevSubject: true}, (subject, chainer: string, value: string) => {
+Cypress.Commands.add("pdfTextShould", {prevSubject: true}, (subject: any, chainer: string, value: string) => {
 
     return cy.wrap(subject).then((_pdfResult: any) => {
         const pdfResult = _pdfResult as PdfResult;
@@ -2578,7 +2663,7 @@ Cypress.Commands.add("pdfTextShould", {prevSubject: true}, (subject, chainer: st
 
 });
 
-Cypress.Commands.add("pdfAssertNumberOfPages", {prevSubject: true}, (subject, count: number) => {
+Cypress.Commands.add("pdfAssertNumberOfPages", {prevSubject: true}, (subject: any, count: number) => {
 
     return cy.wrap(subject).then((_pdfResult: any) => {
         const pdfResult = _pdfResult as PdfResult;
@@ -2834,7 +2919,7 @@ Cypress.Commands.add("assertPivotTableColCount", (widgetId: string, count: numbe
 
 });
 
-Cypress.Commands.add("assertCssPx", {prevSubject: true}, (prevSubject: Chainable<any>, cssProperty: string, expectedValue: number, precision = 0.001) => {
+Cypress.Commands.add("assertCssPx", {prevSubject: true}, (prevSubject: JQuery<HTMLElement>, cssProperty: string, expectedValue: number, precision = 0.001) => {
 
     return cy.wrap(prevSubject)
         .should("have.css", cssProperty)
@@ -3687,6 +3772,13 @@ Cypress.Commands.add("assertSlider", (widgetId: string, labels: string[]) => {
 
 });
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Cypress 16: cy.type() keystrokeDelay now defaults to 0ms. The MUI pickers below need a small delay to keep up,
+// hence the explicit KEYSTROKE_DELAY (also set `keystrokeDelay: 10` in cypress.config.ts for the whole suite).
+// ---------------------------------------------------------------------------------------------------------------------
+
+const KEYSTROKE_DELAY = 10;
+
 function setDateOnMuiDatePicker($div: any, date: string) {
 
     if (date) {
@@ -3695,12 +3787,12 @@ function setDateOnMuiDatePicker($div: any, date: string) {
             ? "{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}{leftArrow}"
             : "{ctrl}a{del}";
 
-        cy.wrap($div).find('input').type(gotoStart)
-            .type(date);
+        cy.wrap($div).find('input').type(gotoStart, {delay: KEYSTROKE_DELAY})
+            .type(date, {delay: KEYSTROKE_DELAY});
 
     } else {
 
-        cy.wrap($div).find('input').type("{ctrl}a{del}")
+        cy.wrap($div).find('input').type("{ctrl}a{del}", {delay: KEYSTROKE_DELAY})
 
     }
 
@@ -3713,13 +3805,13 @@ function setDateOnMuiDatePickerR($div: any, date: string, where: "first" | "last
     if (date) {
         // Mui is somehow capturing the enter , so we need to apply on tab :-(
         if (where === "first")
-            cy.wrap($div).find('input').eq(0).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
-                .type(date + "{enter}");
+            cy.wrap($div).find('input').eq(0).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}", {delay: KEYSTROKE_DELAY})
+                .type(date + "{enter}", {delay: KEYSTROKE_DELAY});
         else
-            cy.wrap($div).find('input').eq(1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
-                .type(date).realPress("Tab");
+            cy.wrap($div).find('input').eq(1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}", {delay: KEYSTROKE_DELAY})
+                .type(date, {delay: KEYSTROKE_DELAY}).realPress("Tab");
     } else {
-        cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}")
+        cy.wrap($div).find('input').eq(where === "first" ? 0 : 1).type("{leftArrow}{del}{leftArrow}{del}{leftArrow}{del}", {delay: KEYSTROKE_DELAY})
     }
 
 }
@@ -3754,7 +3846,8 @@ function assertDate(widgetId: string, tag: string, _date: string | null, nthChil
 
     cy.getWidget(widgetId)
         .then((cc: any) => {
-            if (date == null || date?.length > 4) {
+            // strictNullChecks (on by default in TypeScript 7): guard the optional length.
+            if (date == null || (date.length ?? 0) > 4) {
                 return cc.find('[' + tag + '="' + date + '"]')// retry wait
             }
             return cc;
@@ -3874,11 +3967,10 @@ Cypress.Commands.add("assertFilterPanelItems", (widgetId: string, filterNames: s
 
 Cypress.Commands.add("assertFilterPanelSimpleItemsActive", (widgetId: string, index: number, itemsActive: string[], itemsInactive: string[]) => {
 
-    const filter = cy.getWidget(widgetId)
+    cy.getWidget(widgetId)
         .find("[data-cy='filter-item']")
-        .eq(index);
-
-    filter.find("[data-cy='search-content']")
+        .eq(index)
+        .find("[data-cy='search-content']")
         .find('p')
         .should("have.length", itemsActive.length + itemsInactive.length);
 
@@ -3906,12 +3998,10 @@ Cypress.Commands.add("assertFilterPanelSimpleItemsActive", (widgetId: string, in
 
 Cypress.Commands.add("assertFilterPanelSelectionItems", (widgetId: string, index: number, items: string[]) => {
 
-    const filter = cy.getWidget(widgetId)
+    cy.getWidget(widgetId)
         .find("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-    ;
-
-    filter.find("[data-cy='value-selector-text']")
+        .find("[data-cy='value-selector-text']")
         .find(".MuiInputBase-root")
         .click()
     ;
@@ -3956,12 +4046,10 @@ Cypress.Commands.add("assertFilterPanelBetween", (widgetId: string, start: strin
 Cypress.Commands.add("assertFilterPanelItemIntermediate", (widgetId: string, index: number, itemIndex: number,
                                                            isFakeHierarchy = false): void => {
 
-    const filter = cy.getWidget(widgetId)
+    cy.getWidget(widgetId)
         .find("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-    ;
-
-    filter.find("[data-cy='value-selector-text']")
+        .find("[data-cy='value-selector-text']")
         .find(".MuiInputBase-root")
         .click()
     ;
@@ -4064,12 +4152,10 @@ Cypress.Commands.add("panelFilterSetDefaultFilter", (widgetId: string) => {
 
 Cypress.Commands.add("panelFilterSetSelection", (widgetId: string, index: number, values: (string | RegExp)[]) => {
 
-    const filter = cy.getWidget(widgetId)
+    cy.getWidget(widgetId)
         .find("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-    ;
-
-    filter.find("[data-cy='value-selector-text']")
+        .find("[data-cy='value-selector-text']")
         .find(".MuiInputBase-root")
         .click()
     ;
@@ -4090,12 +4176,10 @@ Cypress.Commands.add("panelFilterSetSelection", (widgetId: string, index: number
 
 Cypress.Commands.add("panelFilterIsAnyOfSearchAndSelectAll", (widgetId: string, index: number, search: string) => {
 
-    const filter = cy.getWidget(widgetId)
+    cy.getWidget(widgetId)
         .find("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-    ;
-
-    filter.find("[data-cy='value-selector-text']")
+        .find("[data-cy='value-selector-text']")
         .find(".MuiInputBase-root")
         .click()
     ;
@@ -4160,15 +4244,16 @@ Cypress.Commands.add("assertSinglePanelFilterSelectionItems", (widgetId: string,
 });
 
 Cypress.Commands.add("panelFilterSetSelectionSimple", (widgetId: string, index: number, value: string | RegExp) => {
-    const filter = cy.getWidget(widgetId)
+
+    cy.getWidget(widgetId)
         .get("[data-cy='filters'] [data-cy='filter-item']")
         .eq(index)
-    ;
-    filter.find("[data-cy='search-content']")
+        .find("[data-cy='search-content']")
         .find('p')
         .contains(value)
         .click()
     ;
+
 });
 
 // -------------------------------------------------------------------------------------------------------------
@@ -4976,7 +5061,7 @@ Cypress.Commands.add("widgetEditorMdxTreeHasNode", (text: string) => {
 
 Cypress.Commands.add("keyboardDeleteAll", {
     prevSubject: true,
-}, (element) => {
+}, (element: any) => {
 
     if (Cypress.platform === 'darwin')
         return cy.wrap(element).type('{command}a{del}')
@@ -5000,7 +5085,7 @@ Cypress.Commands.add("widgetEditorFilter", (filter: string) => {
         cy.get('.ic3EditorFilterBar-searchFilter input').clear();
 });
 
-Cypress["migrateDate"] = (date: string | undefined | null) => {
+Cypress.migrateDate = (date: string | undefined | null) => {
 
     if (!date || !date.startsWith("0") || date.includes("/") || date.includes("-"))
         return date;
@@ -5009,12 +5094,15 @@ Cypress["migrateDate"] = (date: string | undefined | null) => {
 
 
 /**
- * For MacOS compatibility
+ * For MacOS compatibility.
+ *
+ * Note: navigator.platform is frozen in modern Chromium, Cypress.platform is the reliable source.
  */
-const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+const isMac = Cypress.platform === 'darwin';
+
 Cypress.Commands.overwrite('type', (originalFn: any, element: any, text: string, options: any) => {
     if (isMac && text && text.includes("{ctrl}")) {
-        text = text.replace("{ctrl}", "{cmd}")
+        text = text.replaceAll("{ctrl}", "{cmd}")
     }
     return originalFn(element, text, options)
 })
@@ -5030,6 +5118,7 @@ Cypress.Commands.add('clickPrintButton', (widgetId: string) => {
 
 Cypress.Commands.add('setBrowserTimeZone', (timeZone: ValidTimeZones) => {
 
+    // CDP only: run with Chrome / Chromium / Edge (the Electron browser is deprecated in Cypress 16).
     return cy.CDP('Emulation.setTimezoneOverride', {
         timezoneId: timeZone
     });
@@ -5038,29 +5127,34 @@ Cypress.Commands.add('setBrowserTimeZone', (timeZone: ValidTimeZones) => {
 
 Cypress.Commands.add("sendRestAPI", (url: string, params: any) => {
 
-    const CREDENTIALS = Cypress.env("ic3_user") + ":" + Cypress.env("ic3_password");
+    // Cypress 16: Cypress.env() has been removed, credentials are read asynchronously and never logged.
+    return cy.env(['ic3_user', 'ic3_password']).then(({ic3_user, ic3_password}) => {
 
-    return cy.wrap(fetch(url, {
+        const credentials = btoa(`${String(ic3_user)}:${String(ic3_password)}`);
 
-        credentials: "omit",
+        return cy.wrap(fetch(url, {
 
-        body: JSON.stringify(params),
+            credentials: "omit",
 
-        method: 'POST',
+            body: JSON.stringify(params),
 
-        headers: {
-            "X-Authorization": Buffer.from(CREDENTIALS).toString("base64"),
-            "Content-Type": "application/json"
-        }
+            method: 'POST',
 
-    }).then(response => response.text()));
+            headers: {
+                "X-Authorization": credentials,
+                "Content-Type": "application/json"
+            }
+
+        }).then(response => response.text()), {log: false});
+
+    });
 
 });
 
 Cypress.Commands.add('loadSchema', (schemaName: string) => {
 
     cy.sendRestAPI(
-        Cypress.config().baseUrl + "/icCube/api/console/admin/LoadSchema",
+        baseUrl() + "/icCube/api/console/admin/LoadSchema",
         {
             "schemaName": schemaName,
         }
@@ -5071,7 +5165,7 @@ Cypress.Commands.add('loadSchema', (schemaName: string) => {
 Cypress.Commands.add('unloadSchema', (schemaName: string) => {
 
     cy.sendRestAPI(
-        Cypress.config().baseUrl + "/icCube/api/console/admin/UnloadSchema",
+        baseUrl() + "/icCube/api/console/admin/UnloadSchema",
         {
             "schemaName": schemaName,
         }
@@ -5090,23 +5184,42 @@ Cypress.Commands.add("datePickerChooseShortcut", (widgetId: string, shortcut: st
 
 });
 
+
 Cypress.Commands.add('resizeTableColumnWidth', (widgetId: string, headerTitle: string, sizePx: number) => {
-    cy.getWidget(widgetId).get(`.MuiDataGrid-columnHeader[data-field='${headerTitle}'] .MuiDataGrid-columnSeparator--resizable`)
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Kept on synthetic triggers on purpose.
+    //
+    // The real-events equivalent (realMouseDown / realMouseMove / realMouseUp) does not drive the MUI DataGrid
+    // resize: realMouseMove computes its coordinates from the subject's *current* bounding box, and the separator
+    // moves with the column as the drag progresses, so the pointer ends up chasing the handle instead of dragging
+    // it. The synthetic triggers below pin absolute clientX/clientY for the whole gesture.
+    // -----------------------------------------------------------------------------------------------------------------
+
+    cy.getWidget(widgetId)
+        .get(`.MuiDataGrid-columnHeader[data-field='${headerTitle}'] .MuiDataGrid-columnSeparator--resizable`)
         .then(($el) => {
+
             const rect = $el[0].getBoundingClientRect();
+
+            const startX = rect.x + rect.width / 2;
+            const startY = rect.y + rect.height / 2;
+
             cy.wrap($el)
                 .trigger('mousedown', {
                     button: 0,
-                    clientX: rect.x + rect.width / 2,
-                    clientY: rect.y + rect.height / 2,
+                    clientX: startX,
+                    clientY: startY,
                     force: true
                 })
                 .trigger('mousemove', {
                     button: 0,
-                    clientX: rect.x + rect.width / 2 + sizePx,
-                    clientY: rect.y + rect.height / 2,
+                    clientX: startX + sizePx,
+                    clientY: startY,
                     force: true
                 })
                 .trigger('mouseup', {force: true});
+
         });
+
 });
