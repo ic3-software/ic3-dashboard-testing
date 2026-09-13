@@ -11,7 +11,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "**/PrintPdf*.spec.ts",
+            "cypress/**/*.spec.ts",
         ],
 
         retries: {
