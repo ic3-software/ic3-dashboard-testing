@@ -1,5 +1,5 @@
-// @ts-ignore
-import readXlsxFile, {Row} from "read-excel-file";
+import { readSheet } from "read-excel-file/universal";
+import type { Row } from "read-excel-file/universal";
 
 export {};
 
@@ -20,14 +20,16 @@ describe("Tables/ExportToExcelDatetime", () => {
 
        cy.exportToExcel("ww0");
 
-        cy.readFile(path.join(downloadsFolder, "modifiedTidy.xlsx"), null).should("exist").then((blob) => {
+        cy.readFile(path.join(downloadsFolder, "modifiedTidy.xlsx"), null).should("exist").then((buffer) => {
 
-            readXlsxFile(blob).then((rows: Row[]) => {
+            const blob = new Blob([buffer as any]);
 
-                expect(rows.length).to.eq(2);  // Including header
-                expect(rows[0].length).to.eq(2);
-                expect(rows[1][0].toString()).to.eq(new Date(Date.UTC(2018, 2, 25)).toString());
-                expect(rows[1][1].toString()).to.eq(new Date(Date.UTC(2020, 9, 4, 10, 50, 11, 640)).toString());
+            readSheet(blob).then((rows: Row[]) => {
+
+                expect(rows.length).to.eq(11);
+                expect(rows[9].length).to.eq(3);
+                expect((rows[10] as any)[1].toString()).to.eq(new Date(Date.UTC(2018, 2, 25)).toString());
+                expect((rows[10] as any)[2].toString()).to.eq(new Date(Date.UTC(2020, 9, 4, 10, 50, 11, 640)).toString());
 
             })
 

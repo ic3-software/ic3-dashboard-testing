@@ -1,6 +1,3 @@
-// @ts-ignore
-import readXlsxFile, {Row} from "read-excel-file";
-
 export {};
 
 
