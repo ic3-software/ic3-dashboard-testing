@@ -30,9 +30,11 @@ describe("Tables/ExportToExcel", () => {
         cy.exportToExcel("ww0");
 
 
-        cy.readFileFromDownload("modifiedTidy.xlsx").then((blob) => {
+        cy.readFileFromDownload("modifiedTidy.xlsx").then((buffer) => {
 
-            readSheet(blob as any).then((rows: Row[]) => {
+            const blob = new Blob([buffer as any]);
+
+            readSheet(blob).then((rows: Row[]) => {
 
                 console.log(rows);
 
