@@ -1,5 +1,5 @@
-// @ts-ignore
-import readXlsxFile, {Row} from "read-excel-file";
+import { readSheet } from "read-excel-file/universal";
+import type { Row } from "read-excel-file/universal";
 
 export {};
 
@@ -32,7 +32,7 @@ describe("Tables/ExportToExcel", () => {
 
         cy.readFileFromDownload("modifiedTidy.xlsx").then((blob) => {
 
-            readXlsxFile(blob).then((rows: Row[]) => {
+            readSheet(blob as any).then((rows: Row[]) => {
 
                 console.log(rows);
 
