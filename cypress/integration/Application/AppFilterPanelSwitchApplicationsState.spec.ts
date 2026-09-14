@@ -52,6 +52,10 @@ describe("Application/Switch Applications State", () => {
                 // Year is not allowed → only city is loaded.
                 cy.assertFilterPanelItems(wPanel, ['City']);
                 assertPanelEvent("ww1", "// GLOBAL FILTER\nFILTERBY {[Geography].[Geography].[City].&[Cairo]&[EG]}");
+
+                // Dunno why I need that one now?
+                cy.waitForQueryCount(5);
+
             });
 
         // Now switch back again.
@@ -61,6 +65,7 @@ describe("Application/Switch Applications State", () => {
                     path: 'shared:/Cypress - FilterPanel state & allowed 1',
                 });
 
+                // cy.wait(1000)
                 cy.waitForQueryCount(6);
 
                 // Assert filter loaded from state.
@@ -75,6 +80,8 @@ describe("Application/Switch Applications State", () => {
                 reporting.openReportApp({
                     path: 'shared:/Cypress - FilterPanel state & allowed 2',
                 });
+
+                // cy.wait(1000)
                 cy.waitForQueryCount(7);
 
                 // Assert filter loaded from state.
