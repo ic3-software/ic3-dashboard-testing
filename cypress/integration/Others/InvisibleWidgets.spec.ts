@@ -22,7 +22,7 @@ describe("Others/Invisible Widgets", () => {
 
     it("Editor", () => {
 
-        cy.openViewerTestReport("Others/Invisible Widgets");
+        cy.openEditorTestReport("Others/Invisible Widgets");
         cy.waitForQueryCount(3);
 
         assertButtonsSelection("ww1", "ww0", ["Africa", "Asia & Pacific", "Europe"], ["Africa"], "Africa");
