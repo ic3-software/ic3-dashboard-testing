@@ -1,6 +1,7 @@
 # This is a basic workflow that is manually triggered #
 
 name: Cypress nightly split
+run-name: "Cypress [${{ inputs.browser || 'chrome' }}] - Spec: ${{ inputs.spec || 'all' }} - Split: ${{ inputs.split_total != '' && format('{0}/{1}', inputs.split_index, inputs.split_total) || 'none' }}"
 on:
   workflow_dispatch:
     inputs:
@@ -35,7 +36,11 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
-  
+    strategy:
+      fail-fast: false
+      matrix:
+        # Runs 3 parallel jobs for chunk 0, 1, and 2
+        split_index: [0, 1, 2, 3]
     steps:
 
       - uses: actions/checkout@v7
@@ -55,6 +60,7 @@ jobs:
           # If split_total is not defined, SPLIT is empty and cypress-split runs all specs without splitting
           SPLIT: ${{ inputs.split_total }}
           SPLIT_INDEX: ${{ inputs.split_index }}
+          SPLIT_SUMMARY: 'false'  # Suppresses the 166-row table
 
           # pass the Cypress Cloud record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
