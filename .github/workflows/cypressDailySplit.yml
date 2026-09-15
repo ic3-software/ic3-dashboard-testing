@@ -1,8 +1,33 @@
 # This is a basic workflow that is manually triggered #
 
-name: Cypress nightly
+name: Cypress nightly split
 on:
   workflow_dispatch:
+    inputs:
+      split_total:
+        description: 'Total number of chunks (leave empty to not split)'
+        required: false
+        default: ''
+        type: string
+      split_index:
+        description: 'Chunk index to run (0-based)'
+        required: false
+        default: ''
+        type: string
+      spec:
+        description: 'Spec pattern or single file to run (leave empty for full suite)'
+        required: false
+        default: ''
+        type: string
+      browser:
+        description: 'Browser to use'
+        required: false
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - electron
+          - firefox
   schedule:
     - cron: '42 0 * * 1,2,3,4,5,6'
       timezone: 'Europe/Paris'
@@ -23,12 +48,13 @@ jobs:
         with:
           config-file: cypress.config-github.ts
           config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
-          browser: chrome
+          browser: ${{ inputs.browser || 'chrome' }}
+          spec: ${{ inputs.spec || '' }}
           quiet: true
         env:
-          # cypress-split: run only the first chunk (index 0) out of 3
-          SPLIT: 2
-          SPLIT_INDEX: 0
+          # If split_total is not defined, SPLIT is empty and cypress-split runs all specs without splitting
+          SPLIT: ${{ inputs.split_total }}
+          SPLIT_INDEX: ${{ inputs.split_index }}
 
           # pass the Cypress Cloud record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
