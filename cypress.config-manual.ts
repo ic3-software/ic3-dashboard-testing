@@ -11,8 +11,7 @@ export default defineConfig({
         supportFile: "cypress/support/e2e.ts",
 
         specPattern: [
-            "cypress/**/OpenWithState.spec.ts",
-            "cypress/**/GoogleMap.spec.ts",
+            "cypress/**/*.spec.ts"
         ],
 
         retries: {
