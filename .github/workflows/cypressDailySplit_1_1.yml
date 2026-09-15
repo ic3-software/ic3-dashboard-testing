@@ -1,0 +1,40 @@
+# This is a basic workflow that is manually triggered #
+
+name: Cypress nightly
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '42 0 * * 1,2,3,4,5,6'
+      timezone: 'Europe/Paris'
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+  
+    steps:
+
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cypress on Chrome
+        uses: cypress-io/github-action@v7
+        with:
+          config-file: cypress.config-github.ts
+          config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
+          browser: chrome
+          quiet: true
+        env:
+          # cypress-split: run only the first chunk (index 0) out of 3
+          SPLIT: 2
+          SPLIT_INDEX: 0
+
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          # ic3 related environment variables
+          CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
+          CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
+          CYPRESS_GITHUB_ACTIONS: true
+          CYPRESS_NO_PASSING: true

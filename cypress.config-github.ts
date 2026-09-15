@@ -1,6 +1,8 @@
 import {defineConfig} from "cypress";
 import {readPdf} from "./cypress/scripts/readPdf";
 
+const cypressSplit = require('cypress-split')
+
 export default defineConfig({
 
     e2e: {
@@ -31,6 +33,8 @@ export default defineConfig({
 
         setupNodeEvents(on, config) {
             on('task', {readPdf})
+            cypressSplit(on, config)
+            return config   // important!
         },
     }
 })
