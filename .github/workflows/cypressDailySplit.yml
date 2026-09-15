@@ -28,9 +28,9 @@ on:
           - chrome
           - electron
           - firefox
-  schedule:
-    - cron: '42 0 * * 1,2,3,4,5,6'
-      timezone: 'Europe/Paris'
+#  schedule:
+#    - cron: '42 0 * * 1,2,3,4,5,6'
+#      timezone: 'Europe/Paris'
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -49,7 +49,7 @@ jobs:
           config-file: cypress.config-github.ts
           config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
           browser: ${{ inputs.browser || 'chrome' }}
-          spec: ${{ inputs.spec || '' }}
+          spec: ${{ inputs.spec }}
           quiet: true
         env:
           # If split_total is not defined, SPLIT is empty and cypress-split runs all specs without splitting
