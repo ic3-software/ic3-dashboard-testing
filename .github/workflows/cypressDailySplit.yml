@@ -1,7 +1,10 @@
-# This is a basic workflow that is manually triggered #
-
+# Nightly Cypress run, sharded across parallel jobs with cypress-split.
 name: Cypress nightly split
-run-name: "Cypress [${{ inputs.browser || 'chrome' }}] - Spec: ${{ inputs.spec || 'all' }} - Split: ${{  matrix.split_index }} / ${{  matrix.split_total }} "
+
+# NOTE: run-name is evaluated before any job exists, so it can only use the
+# github, inputs and vars contexts. Per-shard detail goes in the job name below.
+run-name: "Cypress [${{ inputs.browser || 'chrome' }}] - Spec: ${{ inputs.spec || 'all' }}"
+
 on:
   workflow_dispatch:
     inputs:
@@ -20,27 +23,32 @@ on:
         default: ''
         type: string
 #  schedule:
-#    - cron: '42 0 * * 1,2,3,4,5,6'
+#    - cron: '42 0 * * 1-6'
 #      timezone: 'Europe/Paris'
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
-    name: "split ${{ matrix.split_index }}"
+    # Each shard runs ~1/4 of the suite. Keep this close to the real worst case
+    # so a hung run is killed quickly instead of burning runner time.
+    timeout-minutes: 45
+    name: "split ${{ matrix.split_index }}/${{ matrix.split_total }}"
     strategy:
       fail-fast: false
       matrix:
-        # Runs 3 parallel jobs for chunk 0, 1, and 2
+        # 4 parallel shards: 0, 1, 2, 3
         split_total: [4]
         split_index: [0, 1, 2, 3]
     steps:
 
       - uses: actions/checkout@v7
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Cypress on Chrome
+      # The Cypress action installs dependencies itself and caches them,
+      # so no separate npm install step is needed.
+      - name: "Cypress run (${{ inputs.browser || 'chrome' }})"
         uses: cypress-io/github-action@v7
         with:
           config-file: cypress.config-github.ts
@@ -49,16 +57,39 @@ jobs:
           spec: ${{ inputs.spec }}
           quiet: true
         env:
-          # If split_total is not defined, SPLIT is empty and cypress-split runs all specs without splitting
+          # cypress-split: SPLIT is the number of shards, SPLIT_INDEX this shard.
           SPLIT: ${{ matrix.split_total }}
           SPLIT_INDEX: ${{ matrix.split_index }}
           SPLIT_SUMMARY: 'false'  # Suppresses the 166-row table
 
-          # pass the Cypress Cloud record key as an environment variable
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           # ic3 related environment variables
           CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
           CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
           CYPRESS_GITHUB_ACTIONS: true
           CYPRESS_NO_PASSING: true
+
+          # To record to Cypress Cloud, add `record: true` and
+          # `ci-build-id: ${{ github.run_id }}-${{ github.run_attempt }}` under
+          # `with:` above, then uncomment these. Without a shared ci-build-id the
+          # four shards show up as four separate runs in the Cloud dashboard.
+          # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          # Artifact names must be unique within a run, hence the shard index.
+          name: cypress-screenshots-split-${{ matrix.split_index }}
+          path: cypress/screenshots
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cypress-videos-split-${{ matrix.split_index }}
+          path: cypress/videos
+          if-no-files-found: ignore
+          retention-days: 7
