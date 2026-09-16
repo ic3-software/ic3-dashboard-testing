@@ -1,25 +1,10 @@
 # This is a basic workflow that is manually triggered #
 
 name: Cypress nightly split
-run-name: "Cypress [${{ inputs.browser || 'chrome' }}] - Spec: ${{ inputs.spec || 'all' }} - Split: ${{ inputs.split_total != '' && format('{0}/{1}', inputs.split_index, inputs.split_total) || 'none' }}"
+run-name: "Cypress [${{ inputs.browser || 'chrome' }}] - Spec: ${{ inputs.spec || 'all' }} - Split: ${{  matrix.split_index }} / ${{  matrix.split_total }} "
 on:
   workflow_dispatch:
     inputs:
-      split_total:
-        description: 'Total number of chunks (leave empty to not split)'
-        required: false
-        default: ''
-        type: string
-      split_index:
-        description: 'Chunk index to run (0-based)'
-        required: false
-        default: ''
-        type: string
-      spec:
-        description: 'Spec pattern or single file to run (leave empty for full suite)'
-        required: false
-        default: ''
-        type: string
       browser:
         description: 'Browser to use'
         required: false
@@ -29,6 +14,11 @@ on:
           - chrome
           - electron
           - firefox
+      spec:
+        description: 'Spec pattern or single file to run (leave empty for full suite)'
+        required: false
+        default: ''
+        type: string
 #  schedule:
 #    - cron: '42 0 * * 1,2,3,4,5,6'
 #      timezone: 'Europe/Paris'
@@ -36,10 +26,12 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
+    name: "split ${{ matrix.split_index }}"
     strategy:
       fail-fast: false
       matrix:
         # Runs 3 parallel jobs for chunk 0, 1, and 2
+        split_total: [4]
         split_index: [0, 1, 2, 3]
     steps:
 
@@ -58,8 +50,8 @@ jobs:
           quiet: true
         env:
           # If split_total is not defined, SPLIT is empty and cypress-split runs all specs without splitting
-          SPLIT: ${{ inputs.split_total }}
-          SPLIT_INDEX: ${{ inputs.split_index }}
+          SPLIT: ${{ matrix.split_total }}
+          SPLIT_INDEX: ${{ matrix.split_index }}
           SPLIT_SUMMARY: 'false'  # Suppresses the 166-row table
 
           # pass the Cypress Cloud record key as an environment variable
