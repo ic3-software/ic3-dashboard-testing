@@ -510,8 +510,8 @@ type ValidTimeZones =
     | "Pacific/Wallis";
 
 const QUERY_STATUS_TIMEOUT = 30000;
-const QUERY_COUNT_TIMEOUT = 30000;
-const PRINT_STATUS_TIMEOUT = 30000;
+const QUERY_COUNT_TIMEOUT = 31000 /* different value to troubleshoot log error */;
+const PRINT_STATUS_TIMEOUT = 32000/* different value to troubleshoot log error */;
 
 const STATOS_SELECTION_BACKGROUND_COLOR = "rgb(234, 245, 254)";
 const STATOS_SELECTION_COLOR_HEX = "#64b5f6";
@@ -1616,13 +1616,13 @@ Cypress.Commands.add('openAppTestReport', (testAppName: string, waitForQueryStat
     visitUrl(vURL);
 
     if (waitForQueryStatus) {
-        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 1})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 1})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1649,13 +1649,13 @@ Cypress.Commands.add('openViewerTestReport', (path: string | IOpenReport, waitFo
     visitUrl(vURL);
 
     if (waitForQueryStatus) {
-        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 2})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 2})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1684,13 +1684,13 @@ Cypress.Commands.add('openPrintInBrowserTestReport', (path: string, waitForQuery
     visitUrl(vURL);
 
     if (waitForQueryStatus) {
-        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 3})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 3})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1702,13 +1702,13 @@ Cypress.Commands.add('reloadAndWait', (waitForQueryStatus = true, waitForPrintSt
     cy.reload();
 
     if (waitForQueryStatus) {
-        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 4})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 4})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1737,13 +1737,13 @@ Cypress.Commands.add('openEditorTestReport', (path: string, waitForQueryStatus =
     visitUrl(vURL);
 
     if (waitForQueryStatus) {
-        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+        cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 5})
             .should('have.class', 'data-cy-ready')
         ;
     }
 
     if (waitForPrintStatus) {
-        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+        cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 5})
             .should('have.class', 'data-cy-ready')
         ;
     }
@@ -1760,7 +1760,7 @@ Cypress.Commands.add('waitForQueryStatusForLargeDashboard', () => {
 
 Cypress.Commands.add('waitForQueryStatus', () => {
 
-    return cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+    return cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 6})
         .should('have.class', 'data-cy-ready')
         ;
 
@@ -1768,7 +1768,7 @@ Cypress.Commands.add('waitForQueryStatus', () => {
 
 Cypress.Commands.add('waitForPrintStatus', () => {
 
-    return cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT})
+    return cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 6})
         .should('have.class', 'data-cy-ready')
         ;
 
@@ -1792,7 +1792,7 @@ Cypress.Commands.add('waitForQueryCount', (countSuccess: number, totalQueryCount
     const count = "" + countSuccess;
     const countTotal = "" + (totalQueryCount ?? countSuccess);
     cy.waitForQueryStatus();
-    cy.get("div.ic3AppStats").invoke('attr', 'data-cy-queries-on-success').should('eq', count, {timeout: QUERY_COUNT_TIMEOUT})
+    cy.get("div.ic3AppStats").invoke('attr', 'data-cy-queries-on-success').should('eq', count, {timeout: QUERY_COUNT_TIMEOUT + 1})
         .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
         .wait(waitTime)
         .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
@@ -2622,7 +2622,7 @@ Cypress.Commands.add("assertTableColumnEqual", (widgetId: string, expectedWidget
 
 Cypress.Commands.add("readFileFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
 
-    return cy.readFile(downloadPath(fileName), null, options ?? {timeout: PRINT_STATUS_TIMEOUT}).should("exist")
+    return cy.readFile(downloadPath(fileName), null, options ?? {timeout: PRINT_STATUS_TIMEOUT + 7}).should("exist")
 });
 
 Cypress.Commands.add("readPdfFromDownload", (fileName: string, options?: Partial<Loggable & Timeoutable>) => {
@@ -5029,7 +5029,7 @@ Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
     cy.widgetEditorApply();
     cy.wait(400);
-    cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT})
+    cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 7})
         .should('have.class', 'data-cy-ready')
     ;
     cy.widgetEditorClose();
