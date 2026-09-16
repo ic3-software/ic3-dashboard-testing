@@ -46,11 +46,13 @@ jobs:
 
       - uses: actions/checkout@v7
 
-      # The Cypress action installs dependencies itself and caches them,
-      # so no separate npm install step is needed.
+      - name: Install dependencies
+        run: npm install
+
       - name: "Cypress run (${{ inputs.browser || 'chrome' }})"
         uses: cypress-io/github-action@v7
         with:
+          install: false
           config-file: cypress.config-github.ts
           config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
           browser: ${{ inputs.browser || 'chrome' }}
