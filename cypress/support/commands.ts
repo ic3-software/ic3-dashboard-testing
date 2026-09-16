@@ -677,6 +677,8 @@ declare global {
              */
             waitForQueryCount(count: number, countTotal?: number): void;
 
+            waitForQueryCountX(debug: number, count: number, countTotal?: number): void;
+
             waitForChartRendering(count: number): void;
 
             assertRenderedCharts(count: number): void;
@@ -690,6 +692,8 @@ declare global {
             waitForQueryStatusForLargeDashboard(): void;
 
             waitForQueryStatus(): Chainable<Subject>;
+
+            waitForQueryStatusX(debug: number): Chainable<Subject>;
 
             waitForPrintStatus(): Chainable<Subject>;
 
@@ -1766,6 +1770,14 @@ Cypress.Commands.add('waitForQueryStatus', () => {
 
 });
 
+Cypress.Commands.add('waitForQueryStatusX', (debug: number) => {
+
+    return cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT - (debug * 6)})
+        .should('have.class', 'data-cy-ready')
+        ;
+
+});
+
 Cypress.Commands.add('waitForPrintStatus', () => {
 
     return cy.get('[data-cy="print-status-status"]', {timeout: PRINT_STATUS_TIMEOUT + 6})
@@ -1793,6 +1805,32 @@ Cypress.Commands.add('waitForQueryCount', (countSuccess: number, totalQueryCount
     const countTotal = "" + (totalQueryCount ?? countSuccess);
     cy.waitForQueryStatus();
     cy.get("div.ic3AppStats").invoke('attr', 'data-cy-queries-on-success').should('eq', count, {timeout: QUERY_COUNT_TIMEOUT + 1})
+        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
+        .wait(waitTime)
+        .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
+});
+
+Cypress.Commands.add('waitForQueryCountX', (debug: number, countSuccess: number, totalQueryCount?: number) => {
+
+    // https://glebbahmutov.com/blog/cypress-tips-and-tricks/#interactive-and-headed-mode
+    let waitTime = 250;
+    if (Cypress.browser.isHeaded) {
+        waitTime = 1000;
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Try as much as possible to ensure no more than 'count' ongoing queries.
+    // E.g., 18 actual queries but the test says: waitForQueryCount(9)
+    //          => this method should fail
+    // -----------------------------------------------------------------------------------------------------------------
+
+    const count = "" + countSuccess;
+    const countTotal = "" + (totalQueryCount ?? countSuccess);
+
+    cy.waitForQueryStatusX(debug);
+
+    cy.get("div.ic3AppStats").invoke('attr', 'data-cy-queries-on-success').should('eq', count, {timeout: QUERY_COUNT_TIMEOUT - (debug * 1)})
         .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
         .wait(waitTime)
         .get("div.ic3AppStats").invoke('attr', 'data-cy-queries').should('eq', countTotal)
