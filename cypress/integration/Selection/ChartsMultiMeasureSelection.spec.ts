@@ -51,6 +51,8 @@ describe("Selection/Charts Multi Measure Selection", () => {
         cy.selectSingleChartBarInGroup(widgetId, 0, 6);
         assertSelection(widgetId, eventWidgetId, "2018 Jul", "[Time].[Time].[Month].&[2018-07-01]", 6);
 
+        cy.wait(1000) // debounce logic in amCharts ?
+
         cy.selectSingleChartBarInGroup(widgetId, 1, 6);
         assertSelection(widgetId, eventWidgetId, "", "");
 
@@ -72,6 +74,8 @@ describe("Selection/Charts Multi Measure Selection", () => {
 
         cy.selectSingleChartBarInGroup(widgetId, 3, 0);
         assertSelection(widgetId, eventWidgetId, "(2018 Jan, Global South)", "([Time].[Time].[Month].&[2018-01-01],[Geography].[Classification].[Hemisphere].&[GLOBAL SOUTH])", 0, 3);
+
+        cy.wait(1000) // debounce logic in amCharts ?
 
         cy.selectSingleChartBarInGroup(widgetId, 3, 0);
         assertSelection(widgetId, eventWidgetId, "", "");

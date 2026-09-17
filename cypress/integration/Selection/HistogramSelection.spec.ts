@@ -41,6 +41,8 @@ describe("Selection/Histogram Selection", () => {
         cy.selectSingleChartBarInGroup(widgetId, 0, 2);
         assertSelection(widgetId, eventWidgetId, "Durban, Sydney, Islamabad, Brasília", "{[Geography].[Region].[City].&[DURBAN],[Geography].[Region].[City].&[SYDNEY],[Geography].[Region].[City].&[ISLAMABAD],[Geography].[Region].[City].&[BRASÍLIA]}");
 
+        cy.wait(1000) // debounce logic in amCharts ?
+
         cy.selectSingleChartBarInGroup(widgetId, 0, 2);
         assertSelection(widgetId, eventWidgetId, "", "");
 
