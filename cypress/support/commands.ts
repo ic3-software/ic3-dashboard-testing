@@ -5066,7 +5066,7 @@ Cypress.Commands.add("widgetEditorChangeBoolean", (input: string) => {
 Cypress.Commands.add("widgetEditorApplyAndClose", () => {
 
     cy.widgetEditorApply();
-    cy.wait(400);
+    cy.wait(400) /* ensure first data-cy-ready has been removed by isRunning... */;
     cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 7})
         .should('have.class', 'data-cy-ready')
     ;

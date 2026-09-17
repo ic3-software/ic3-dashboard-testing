@@ -19,6 +19,7 @@ export default defineConfig({
         excludeSpecPattern: [
             "**/ic3/**/*.spec.ts",
             "**/DatePickerRangeBehavior.spec.ts",
+            "**/GoogleMap.spec.ts",
         ],
 
         retries: {
