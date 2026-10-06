@@ -1,6 +1,6 @@
 {
   "name": "@ic3/ic3-dashboard-testing",
-  "version": "8.6.2",
+  "version": "10.0.0",
   "private": true,
   "devDependencies": {
     "@types/node": "26.5.1",
