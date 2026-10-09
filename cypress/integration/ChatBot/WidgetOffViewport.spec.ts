@@ -13,6 +13,7 @@ describe("ChatBot/widgetOffViewport", () => {
         cy.getWidget("ww0").find("div.ic3Olie-content")
             // The following text means the AI widget is ready to chat:
             //      i.e., invisible widget(s) w/ data now.
+            .find("div.ic3AIAssistant-input")
             .find("textarea")
             .should('have.attr', 'placeholder', 'Ask me anything about the dashboard.');
 
