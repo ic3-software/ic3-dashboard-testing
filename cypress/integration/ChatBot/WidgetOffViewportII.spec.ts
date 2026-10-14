@@ -10,7 +10,7 @@ describe("ChatBot/widgetOffViewport", () => {
 
         // ww0 has no linked widgets => expect all widgets of the dashboard to have their data
 
-        cy.getWidget("ww0").find("div.ic3Olie-content")
+        cy.getWidget("ww0").find("div.ic3ChatBotWidget-content")
             // The following text means the AI widget is ready to chat:
             //      i.e., invisible widget(s) w/ data now.
             .find("div.ic3AIAssistant-input")

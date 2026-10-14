@@ -10,7 +10,7 @@ describe("ChatBot/widgetOffViewport", () => {
 
         // ww0 is linked to a single widget.
 
-        cy.getWidget("ww0").find("div.ic3Olie-content")
+        cy.getWidget("ww0").find("div.ic3ChatBotWidget-content")
             // The following text means the AI widget is ready to chat:
             //      i.e., invisible widget(s) w/ data now.
             .find("div.ic3AIAssistant-input")
