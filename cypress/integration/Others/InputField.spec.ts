@@ -15,7 +15,7 @@ describe("Others/InputField", () => {
 
     beforeEach(() => {
         cy.login();
-        cy.openViewerTestReport("Others/InputField", true, false);
+        cy.openViewerTestReport("Others/Input Field", true, false);
     });
 
     it("Initial state", () => {
