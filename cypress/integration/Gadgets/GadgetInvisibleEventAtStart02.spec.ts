@@ -9,7 +9,6 @@ describe("Gadgets/GadgetInvisibleEventAtStart", () => {
     it("Table w/ expected values", () => {
 
         // Dashboard created from scratch (copy of ECRS one) w/ override of the fired event names.
-        cy.assertTableValue("ww0", 0, 0, "250.00");
 
         cy.assertTableValue("ww0", 0, 0, "13 Oct 2020");
         cy.assertTableValue("ww0", 0, 1, "9");
