@@ -394,11 +394,6 @@ export const ALL_DASHBOARDS: UxDashboardTreeNodeFolder[] =
           },
           {
             "kind": "FILE",
-            "name": "KML Maps",
-            "path": "shared:/Live Demo/Maps/KML Maps"
-          },
-          {
-            "kind": "FILE",
             "name": "Marker Maps",
             "path": "shared:/Live Demo/Maps/Marker Maps"
           }
