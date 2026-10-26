@@ -1,5 +1,34 @@
 export {};
 
+function drilldownPivotTableLeftHeaderByCaption(widgetId: string, caption: string) {
+
+    cy.getWidget(widgetId)
+        .find(".ic3WidgetBox-content .ic3-pt-left-header div[data-vc='0']")
+        .filter(`:contains('${caption}')`)
+        .first()
+        .find("svg")
+        .click()
+    ;
+
+}
+
+function assertBreadcrumb(widgetId: string, captions: string[]) {
+
+    // +1 : "All"
+    cy.getWidget(widgetId)
+        .find(".ic3WidgetBox-headerDrilldown [data-ic3-drilldown]")
+        .should("have.length", captions.length + 1)
+    ;
+
+    captions.forEach((caption, idx) => {
+        cy.getWidget(widgetId)
+            .find(`.ic3WidgetBox-headerDrilldown [data-ic3-drilldown='${captions.length - idx}']`)
+            .should("have.text", caption)
+        ;
+    });
+
+}
+
 describe("Drilldown/Drilldowns Replays", () => {
 
     beforeEach(() => {
@@ -42,5 +71,41 @@ describe("Drilldown/Drilldowns Replays", () => {
 
         cy.assertPivotTableColumnsEqual(widgetId, expectedWidgetId, 20, 2);
     })
+
+    // M-24 : the breadcrumb "back" must go to the right level once REPLAY entries sit between drilldowns.
+    it("ww0: breadcrumb back with a replay in between", () => {
+
+        const widgetId = "ww0";
+
+        cy.log("drilldown Europe");
+        drilldownPivotTableLeftHeaderByCaption(widgetId, "Europe");
+        cy.waitForQueryCount(4);
+        cy.wait(250);
+
+        cy.log("select 2020 => replay drilldown");
+        cy.selectButton("ww1", "2020");
+        cy.waitForQueryStatus();
+        cy.wait(250);
+
+        cy.log("drilldown Belgium");
+        drilldownPivotTableLeftHeaderByCaption(widgetId, "Belgium");
+        cy.waitForQueryStatus();
+        cy.wait(250);
+
+        cy.log("drilldown France");
+        drilldownPivotTableLeftHeaderByCaption(widgetId, "France");
+        cy.waitForQueryStatus();
+        cy.wait(250);
+
+        assertBreadcrumb(widgetId, ["Europe", "Belgium", "France"]);
+
+        cy.log("breadcrumb: back to Belgium");
+        cy.clickDrilldownLevel(widgetId, 2 /* Belgium */);
+        cy.waitForQueryStatus();
+        cy.wait(250);
+
+        assertBreadcrumb(widgetId, ["Europe", "Belgium"]);
+
+    });
 
 });
