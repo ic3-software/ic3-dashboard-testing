@@ -36,4 +36,13 @@ describe("Others/SaveRestoreState", () => {
 
     });
 
+    // M-8 : with a null tag set, a CSV row shorter than the header ("Initialize Filters,...") must not crash the parse
+    // (with the bug the embedded query never finishes and ww3 is never rendered).
+    // Report change needed : ww3 embedded data query, Null Tag (nullTag) = NA.
+    it("ww3: embedded CSV short row w/ null tag", () => {
+
+        cy.assertButtons("ww3", ["Clear Filters", "Initialize Filters"]);
+
+    });
+
 })
