@@ -90,6 +90,24 @@ describe("Filters/Checkboxes Behavior", () => {
 
     });
 
+    // S-5 : @{event:asSql} must not join the multi-select values into one single string.
+    // Report change needed : ww3 markdown, add the line "###### Event mdx : @{country-ww2:asSql}!".
+    it("ww2: Checkboxes - Multiple asSql", () => {
+
+        const widgetId = "ww2";
+        const eventWidgetId = "ww3";
+
+        cy.keyCtrl(() => {
+            ["China", "India"].forEach((selection) => {
+                cy.selectCheckbox(widgetId, selection);
+            });
+        });
+
+        // bug: 'China, India'
+        cy.assertEventSql(eventWidgetId, "'China','India'");
+
+    });
+
     it("ww2: Checkboxes - Multiple", () => {
 
         const widgetId = "ww2";
