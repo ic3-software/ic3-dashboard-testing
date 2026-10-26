@@ -20,4 +20,41 @@ describe("Others/ViewerGridLayoutPositioning", () => {
 
     });
 
+    it("H-4: editor arrow keys do not throw and do not block the mouse selection", () => {
+
+        // support/index.ts swallows every uncaught exception: collect them to assert on.
+        const errors: string[] = [];
+
+        cy.on("uncaught:exception", (err) => {
+            !err.message.includes("ResizeObserver") && errors.push(err.message);
+            return false;
+        });
+
+        cy.openEditorTestReport("Others/viewerGridLayout");
+        cy.waitForQueryCount(0);
+
+        cy.get('[data-cy="widget-box-ww2"]').click();
+        cy.get('[data-cy="widget-box-ww2"]').should("have.class", "ic3-widget-box-selected");
+
+        cy.get("body").type("{rightarrow}");
+        cy.get("body").type("{downarrow}");
+
+        // Keyboard move completion is performed after a 500ms timeout.
+        cy.wait(1000);
+
+        cy.then(() => expect(errors, "uncaught errors").to.be.empty);
+
+        // Mouse selection must still be working.
+        cy.get('[data-cy="widget-box-ww7"]').click();
+        cy.get('[data-cy="widget-box-ww7"]').should("have.class", "ic3-widget-box-selected");
+        cy.get('[data-cy="widget-box-ww2"]').should("not.have.class", "ic3-widget-box-selected");
+
+        cy.get('[data-cy="widget-box-ww2"]').click();
+        cy.get('[data-cy="widget-box-ww2"]').should("have.class", "ic3-widget-box-selected");
+        cy.get('[data-cy="widget-box-ww7"]').should("not.have.class", "ic3-widget-box-selected");
+
+        cy.then(() => expect(errors, "uncaught errors").to.be.empty);
+
+    });
+
 });
