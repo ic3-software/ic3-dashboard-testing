@@ -1311,6 +1311,14 @@ declare global {
             /**
              * Assuming the widget contains a marked down:
              * <pre>
+             *      ##### Event mdx : @{event:mdx}!
+             * </pre>
+             */
+            assertEventSql(widgetId: string, value: string | null): void;
+
+            /**
+             * Assuming the widget contains a marked down:
+             * <pre>
              *      ##### Event key : @{event:mdx}!
              * </pre>
              */
@@ -4952,6 +4960,13 @@ Cypress.Commands.add("assertEventMdx", (widgetId: string, value: string | null =
 
     cy.log("ASSERT-EVENT-MDX [" + widgetId + "][" + value + "]")
     assertEventWithText(value, widgetId, "mdx");
+
+});
+
+Cypress.Commands.add("assertEventSql", (widgetId: string, value: string | null = null) => {
+
+    cy.log("ASSERT-EVENT-SQL [" + widgetId + "][" + value + "]")
+    assertEventWithText(value, widgetId, "sql");
 
 });
 
