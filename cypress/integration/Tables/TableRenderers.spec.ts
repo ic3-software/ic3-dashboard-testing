@@ -73,4 +73,24 @@ describe("Tables/Table Renderers", () => {
 
     })
 
+    // H-1 : findMarkdownPrefix must not loop forever on a markdown text containing "ii" (on the buggy code the tab freezes).
+    // Report change needed : ww9, add Cell Renderer > HTML (TransfRendererHtml) on column 0 :  **Hawaii** $_currentColumn$ **Hawaiii**
+    it("ww9: markdown containing 'ii' is rendered", () => {
+
+        const widgetId = "ww9";
+
+        getTableCell(widgetId, 0, 0).find("strong")
+            .should("have.length", 2)
+            .then(strong => {
+                expect(strong.eq(0).text()).to.eq("Hawaii");
+                expect(strong.eq(1).text()).to.eq("Hawaiii");
+            });
+
+        // the value placeholder (iii...0iii...) has been replaced by the actual value
+        getTableCell(widgetId, 0, 0).invoke("text")
+            .should("match", /^Hawaii .+ Hawaiii$/)
+            .should("not.match", /iii\d/);
+
+    });
+
 });
