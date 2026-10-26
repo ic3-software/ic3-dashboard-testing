@@ -83,4 +83,20 @@ describe("Others/InputField", () => {
 
     });
 
+    // S-5 : @{event:asSql} must escape the quotes of a single value.
+    // Report change needed : ww1 markdown, add the line "###### Event mdx : @{ww0:asSql}!".
+    it("ww0: asSql escapes a single value", () => {
+
+        inputOf("ww0").type("Family{enter}");
+        cy.assertEventSql("ww1", "'Family'");
+
+        inputOf("ww0").clear().type("Children's{enter}");
+        cy.assertEventSql("ww1", "'Children''s'");
+
+        // an injection attempt is kept as a single value
+        inputOf("ww0").clear().type("x') OR ('1'='1{enter}");
+        cy.assertEventSql("ww1", "'x'') OR (''1''=''1'");
+
+    });
+
 })
