@@ -73,6 +73,29 @@ describe("Filters/DatePicker Behavior", () => {
 
     });
 
+    // M-30 : the range date picker must not swap startUName and endUName.
+    // Report change needed : ww12 option Range Unique Name (rangeToUniqueName) = `startUName`:`endUName`.
+    it("ww12: startUName/endUName are not swapped", () => {
+
+        const widgetId = "ww12";
+        const eventWidgetId = "ww13";
+
+        const today = new Date();
+
+        const from = new Date(today.getTime())
+        from.setDate(from.getDate() - 7);
+
+        const to = new Date(today.getTime());
+        to.setDate(to.getDate() + 7);
+
+        cy.selectDatePickerRangeToFromInput(widgetId, DateUtils.dateEvent(to));
+        cy.waitForQueryCount(6);
+
+        // bug: LookupDate(..to..):LookupDate(..from..)
+        cy.assertEventValue(eventWidgetId, DateUtils.mdxFromDate(from) + ":" + DateUtils.mdxFromDate(to));
+
+    });
+
     it("ww8: Date Picker with Bound", () => {
 
         let queryCount = 5;
