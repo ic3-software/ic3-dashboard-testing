@@ -27,6 +27,9 @@ describe("Editor/Empty Report", () => {
         cy.widgetEditorApplyAndClose();
         cy.waitForQueryStatus();
 
+        // The query status may still be the stale 'ready' of the empty report : wait for the actual rendering.
+        cy.getWidget("ww0").find(".ic3WidgetBox-content .ic3-pt-rows .ic3-pt-row", {timeout: 30000}).should("exist");
+
         cy.assertPivotTableRowCount("ww0", 5);
         cy.assertPivotTableColCount("ww0", 4);
 
@@ -55,6 +58,9 @@ describe("Editor/Empty Report", () => {
 
         cy.widgetEditorApplyAndClose();
         cy.waitForQueryStatus();
+
+        // Same as above : wait for the actual rendering.
+        cy.get("[data-widget-id='ww0'] .MuiDataGrid-columnHeader", {timeout: 30000}).should("exist");
 
         cy.assertTableColCount("ww0", 3)
         cy.assertTableValue("ww0", 0, 0, "Egypt")
