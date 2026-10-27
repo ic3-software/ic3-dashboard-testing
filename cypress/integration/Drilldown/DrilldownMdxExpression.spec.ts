@@ -43,20 +43,21 @@ describe("Drilldown/User Select", () => {
 
         const widgetId = "ww0";
 
-        cy.assertPivotTableRowCount(widgetId, 2);
+        cy.waitForQueryCount(2);
+        cy.assertPivotTableRowCount(widgetId, 1);
 
-        cy.drilldownPivotTableLeftHeader(widgetId, 0, 0 /* All Regions */);
+        cy.drilldownPivotTableLeftHeader(widgetId, 0, 0);
         cy.waitForQueryCount(3);
 
         // Europe (already on the axis) is not re-inserted (bug: 2 + 6 rows)
-        cy.assertPivotTableRowCount(widgetId, 2 + 5);
+        cy.assertPivotTableRowCount(widgetId, 1 + 6);
         cy.assertPivotTableLeftHeader(widgetId, 0, 0, "All Regions");
         cy.assertPivotTableLeftHeader(widgetId, 1, 0, "Africa");
         cy.assertPivotTableLeftHeader(widgetId, 2, 0, "Asia");
-        cy.assertPivotTableLeftHeader(widgetId, 3, 0, "North America");
-        cy.assertPivotTableLeftHeader(widgetId, 4, 0, "Oceania");
-        cy.assertPivotTableLeftHeader(widgetId, 5, 0, "South America");
-        cy.assertPivotTableLeftHeader(widgetId, 6, 0, "Europe");
+        cy.assertPivotTableLeftHeader(widgetId, 3, 0, "Europe");
+        cy.assertPivotTableLeftHeader(widgetId, 4, 0, "North America");
+        cy.assertPivotTableLeftHeader(widgetId, 5, 0, "Oceania");
+        cy.assertPivotTableLeftHeader(widgetId,6, 0, "South America");
 
     });
 });
