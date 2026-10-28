@@ -1435,6 +1435,11 @@ declare global {
 
             resizeTableColumnWidth(widgetId: string, headerTitle: string, sizePx: number): void;
 
+            /**
+             * Drag the column 'headerTitle' (data-field) and drop it at the position of the column 'targetHeaderTitle'.
+             */
+            reorderTableColumn(widgetId: string, headerTitle: string, targetHeaderTitle: string): void;
+
         }
 
     }
@@ -5274,5 +5279,54 @@ Cypress.Commands.add('resizeTableColumnWidth', (widgetId: string, headerTitle: s
                 .trigger('mouseup', {force: true});
 
         });
+
+});
+
+Cypress.Commands.add('reorderTableColumn', (widgetId: string, headerTitle: string, targetHeaderTitle: string) => {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // The MUI DataGrid column reordering is driven by native HTML5 drag & drop events on the header draggable
+    // container. The column is moved while dragging over the target header: the first 'dragover' only records the
+    // cursor position, the move direction is computed from the clientX of the next one (hence two 'dragover' below,
+    // entering the target from the side of the dragged column). Then 'dragend' commits the move: a dropEffect of
+    // 'none' means "dropped outside the grid" and reverts the column to its original position. Chrome ignores
+    // dropEffect assignments on a script-created DataTransfer (it is not a drag & drop one), hence defineProperty.
+    // -----------------------------------------------------------------------------------------------------------------
+
+    const dataTransfer = new DataTransfer();
+    Object.defineProperty(dataTransfer, "dropEffect", {value: "move"});
+
+    const source = `.MuiDataGrid-columnHeader[data-field='${headerTitle}'] .MuiDataGrid-columnHeaderDraggableContainer`;
+    const target = `.MuiDataGrid-columnHeader[data-field='${targetHeaderTitle}'] .MuiDataGrid-columnHeaderDraggableContainer`;
+
+    cy.getWidget(widgetId).find(source).then(($source) => {
+
+        const sourceRect = $source[0].getBoundingClientRect();
+        const sourceX = sourceRect.x + sourceRect.width / 2;
+        const sourceY = sourceRect.y + sourceRect.height / 2;
+
+        cy.wrap($source).trigger('dragstart', {dataTransfer, clientX: sourceX, clientY: sourceY, force: true});
+
+        cy.getWidget(widgetId).find(target).then(($target) => {
+
+            const targetRect = $target[0].getBoundingClientRect();
+            const targetX = targetRect.x + targetRect.width / 2;
+            const targetY = targetRect.y + targetRect.height / 2;
+
+            // Edge of the target on the side of the dragged column.
+            const enterX = sourceX > targetX ? targetRect.right - 1 : targetRect.left + 1;
+
+            cy.wrap($target)
+                .trigger('dragenter', {dataTransfer, clientX: enterX, clientY: targetY, force: true})
+                .trigger('dragover', {dataTransfer, clientX: enterX, clientY: targetY, force: true})
+                .trigger('dragover', {dataTransfer, clientX: targetX, clientY: targetY, force: true})
+                .trigger('drop', {dataTransfer, clientX: targetX, clientY: targetY, force: true});
+
+            cy.getWidget(widgetId).find(source)
+                .trigger('dragend', {dataTransfer, clientX: targetX, clientY: targetY, force: true});
+
+        });
+
+    });
 
 });

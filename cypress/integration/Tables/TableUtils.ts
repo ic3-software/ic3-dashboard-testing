@@ -9,3 +9,7 @@ export function assertTableColumnWidthZoomed(cy: Cypress.cy & CyEventEmitter, wi
 export function resizeTableColumnWidth(cy: Cypress.cy & CyEventEmitter, widgetId: string, headerTitle: string, sizePx: number) {
     cy.resizeTableColumnWidth(widgetId, headerTitle, sizePx);
 }
+
+export function reorderTableColumn(cy: Cypress.cy & CyEventEmitter, widgetId: string, headerTitle: string, targetHeaderTitle: string) {
+    cy.reorderTableColumn(widgetId, headerTitle, targetHeaderTitle);
+}
