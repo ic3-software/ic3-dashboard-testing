@@ -1344,9 +1344,9 @@ declare global {
 
             widgetPaste(): void;
 
-            widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
+            widgetEditorChangeTab(tabName: "tab-queryFilter" | "tab-query" | "tab-transformations" | "tab-interactions" | "tab-chart"): void;
 
-            widgetEditorTabNotExists(tabName: "tab-queryFilter" | "tab-query" | "tab-interactions" | "tab-chart"): void;
+            widgetEditorTabNotExists(tabName: "tab-queryFilter" | "tab-query" | "tab-transformations" | "tab-interactions" | "tab-chart"): void;
 
             widgetEditorEnterMdxStatement(mdxStatement: string): void;
 
