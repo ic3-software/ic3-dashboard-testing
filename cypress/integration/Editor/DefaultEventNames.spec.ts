@@ -21,7 +21,11 @@ describe("Editor/Default Event Names", () => {
 
         schemaBrowserDragNode("Country", "MdxBuilderFilterItems");
 
-        cy.widgetEditorApplyAndClose();
+        // Not using widgetEditorApplyAndClose: the global query status is flaky right after the drag & drop
+        // (stays not ready > 30s from time to time) : wait for the actual rendering of the new widget instead.
+        cy.widgetEditorApply();
+        cy.getWidget("ww1").find('.ic3WidgetBox-content button[data-name="China"]', {timeout: 30000-1}).should("exist");
+        cy.widgetEditorClose();
 
         cy.selectButton("ww1", "China");
         cy.assertEventValue("ww0", "China");
