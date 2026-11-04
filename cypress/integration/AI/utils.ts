@@ -858,19 +858,27 @@ export function aiDeleteConversations() {
         const conversations = createdConversations;
         createdConversations = [];
 
-        cy.log(`AI cleanup : ${conversations.length} conversation(s)`);
-
-        conversations.forEach(c => cy.request({
-            method: "POST",
-            url: `/icCube/ai/conversations/${c.id}/delete`,
-            body: {scope: c.scope},
-            failOnStatusCode: false,
-        }).then(response => {
-            // 404 : already deleted by the test itself (e.g., delete from history)
-            expect(response.status, `delete conversation ${c.id}`).to.be.oneOf([200, 202, 404]);
-        }));
+        deleteConversations("AI cleanup", conversations);
 
     });
+
+}
+
+/**
+ * 404 : already deleted (e.g., by the test itself : delete from history).
+ */
+function deleteConversations(label: string, conversations: AICreatedConversation[]) {
+
+    cy.log(`${label} : ${conversations.length} conversation(s)`);
+
+    conversations.forEach(c => cy.request({
+        method: "POST",
+        url: `/icCube/ai/conversations/${c.id}/delete`,
+        body: {scope: c.scope},
+        failOnStatusCode: false,
+    }).then(response => {
+        expect(response.status, `delete conversation ${c.id}`).to.be.oneOf([200, 202, 404]);
+    }));
 
 }
 
@@ -880,15 +888,15 @@ export function aiDeleteConversations() {
 export const AI_SCOPE_DASHBOARD_EDITOR = "dashboard-editor";
 
 /**
- * To be called in after() : deletes (server side) all the conversations of the scope owned by the test user,
- * i.e., including the ones not tracked (see aiTrackConversations()) such as the leftovers of interrupted runs.
+ * Deletes (server side) all the conversations of the scope owned by the test user, i.e., including the ones not
+ * tracked (see aiTrackConversations()) such as the leftovers of interrupted runs.
  *
- * Note : the shards of the CI run in parallel w/ the same user : another AI spec running at the same time might
- * lose its conversations.
+ * Run once before the tests (see cypress/cleanup/AICleanup.cleanup.ts) : the shards of the CI run in parallel w/ the
+ * same user, i.e., not from a spec (another AI spec running at the same time would lose its conversations).
  */
 export function aiDeleteAllConversations(scope = AI_SCOPE_DASHBOARD_EDITOR) {
 
-    // after() : the session of the last test might be gone (e.g., failed before the login).
+    // The requests are sent w/ the session cookie.
     cy.login();
 
     cy.request({
@@ -900,17 +908,7 @@ export function aiDeleteAllConversations(scope = AI_SCOPE_DASHBOARD_EDITOR) {
         const body = typeof response.body === "string" ? JSON.parse(response.body || "[]") : (response.body ?? []);
         const conversations: { id: string }[] = Array.isArray(body) ? body : [];
 
-        cy.log(`AI cleanup (${scope}) : deleting all ${conversations.length} conversation(s)`);
-
-        conversations.forEach(c => cy.request({
-            method: "POST",
-            url: `/icCube/ai/conversations/${c.id}/delete`,
-            body: {scope},
-            failOnStatusCode: false,
-        }).then(response => {
-            // 404 : deleted in between (e.g., another spec running at the same time)
-            expect(response.status, `delete conversation ${c.id}`).to.be.oneOf([200, 202, 404]);
-        }));
+        deleteConversations(`AI cleanup (${scope}) : all`, conversations.map(c => ({id: c.id, scope})));
 
     });
 

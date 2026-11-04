@@ -5,7 +5,6 @@ import {
     aiAssertMessages,
     aiAssertNotInHistory,
     aiCloseHistory,
-    aiDeleteAllConversations,
     aiDeleteConversations,
     aiDeleteFromHistory,
     aiNewChat,
@@ -54,12 +53,6 @@ describe("AI/Editor Assistant Conversations", () => {
     afterEach(() => {
 
         aiDeleteConversations();
-
-    });
-
-    after(() => {
-
-        aiDeleteAllConversations();
 
     });
 

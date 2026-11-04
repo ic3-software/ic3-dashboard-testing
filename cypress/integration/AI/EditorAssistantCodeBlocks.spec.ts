@@ -3,7 +3,6 @@ import {
     aiAssertCodeBlocks,
     aiAssertEmpty,
     aiAssertStreamingCodeBlock,
-    aiDeleteAllConversations,
     aiDeleteConversations,
     aiOpenEditorAssistant,
     aiSendMultiline,
@@ -51,12 +50,6 @@ describe("AI/Editor Assistant Code Blocks", () => {
     afterEach(() => {
 
         aiDeleteConversations();
-
-    });
-
-    after(() => {
-
-        aiDeleteAllConversations();
 
     });
 

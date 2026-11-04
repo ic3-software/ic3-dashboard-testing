@@ -22,6 +22,15 @@ on:
         required: false
         default: ''
         type: string
+      log_level:
+        description: 'normal = quiet | verbose = action logs | debug = Cypress internals'
+        required: false
+        default: 'normal'
+        type: choice
+        options:
+          - normal
+          - verbose
+          - debug
 #  schedule:
 #    - cron: '42 0 * * 1-6'
 #      timezone: 'Europe/Paris'
@@ -30,7 +39,38 @@ permissions:
   contents: read
 
 jobs:
+  # Runs once before the shards: they share the same ic3 user and server, so a
+  # cleanup done by a shard might delete the data of a test running in another one.
+  cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    name: "cleanup"
+    steps:
+
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: "Cypress cleanup (AI conversations)"
+        uses: cypress-io/github-action@v7
+        with:
+          install: false
+          config-file: cypress.config-github.ts
+          # Not matched by the regular specPattern (*.spec.ts).
+          config: baseUrl=${{ secrets.CYPRESS_BASE_URL }},specPattern=cypress/cleanup/*.cleanup.ts
+          browser: chrome
+          summary-title: "cleanup"
+        env:
+          CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
+          CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
+          CYPRESS_GITHUB_ACTIONS: true
+          CYPRESS_NO_PASSING: true
+
   build:
+    needs: cleanup
+    # A failed cleanup must not prevent the tests from running.
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-24.04
     # Each shard runs ~1/4 of the suite. Keep this close to the real worst case
     # so a hung run is killed quickly instead of burning runner time.
@@ -42,6 +82,9 @@ jobs:
         # 4 parallel shards: 0, 1, 2, 3
         split_total: [4]
         split_index: [0, 1, 2, 3]
+    env:
+      # On a scheduled run the inputs context is empty, hence the fallback.
+      LOG_LEVEL: ${{ inputs.log_level || 'normal' }}
     steps:
 
       - uses: actions/checkout@v7
@@ -57,12 +100,19 @@ jobs:
           config: baseUrl=${{ secrets.CYPRESS_BASE_URL }}
           browser: ${{ inputs.browser || 'chrome' }}
           spec: ${{ inputs.spec }}
-          quiet: true
+          quiet: ${{ env.LOG_LEVEL == 'normal' }}
+          summary-title: "split ${{ matrix.split_index }}"
         env:
+          # Empty DEBUG means no debug output at all.
+          # cypress:* is very noisy - narrow it to cypress:server:* if the
+          # logs get truncated.
+          DEBUG: ${{ env.LOG_LEVEL == 'debug' && '@cypress/github-action,cypress:*' || env.LOG_LEVEL == 'verbose' && '@cypress/github-action' || '' }}
+
           # cypress-split: SPLIT is the number of shards, SPLIT_INDEX this shard.
           SPLIT: ${{ matrix.split_total }}
           SPLIT_INDEX: ${{ matrix.split_index }}
-          SPLIT_SUMMARY: 'false'  # Suppresses the 166-row table
+          # The per-spec table: off for nightly runs, on when debugging.
+          SPLIT_SUMMARY: ${{ env.LOG_LEVEL != 'normal' }}
 
           # ic3 related environment variables
           CYPRESS_ic3_user: ${{ secrets.IC3_USER }}

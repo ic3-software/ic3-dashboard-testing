@@ -18,6 +18,24 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Deletes the leftovers (e.g., AI conversations of interrupted runs) before the tests.
+      - name: Cypress cleanup (AI conversations)
+        # A failed cleanup must not prevent the tests from running.
+        continue-on-error: true
+        uses: cypress-io/github-action@v7
+        with:
+          install: false
+          config-file: cypress.config-github.ts
+          # Not matched by the regular specPattern (*.spec.ts).
+          config: baseUrl=${{ secrets.CYPRESS_BASE_URL }},specPattern=cypress/cleanup/*.cleanup.ts
+          browser: chrome
+          quiet: true
+        env:
+          CYPRESS_ic3_user: ${{ secrets.IC3_USER }}
+          CYPRESS_ic3_password: ${{ secrets.IC3_PASSWORD }}
+          CYPRESS_GITHUB_ACTIONS: true
+          CYPRESS_NO_PASSING: true
+
       - name: Cypress on Chrome
         uses: cypress-io/github-action@v7
         with:

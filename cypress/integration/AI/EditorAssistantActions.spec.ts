@@ -9,7 +9,6 @@ import {
     aiAssertLastAction,
     aiAssertLastActionState,
     aiClickApplyAll,
-    aiDeleteAllConversations,
     aiDeleteConversations,
     aiLastAction,
     aiOpenEditorAssistant,
@@ -111,12 +110,6 @@ describe("AI/Editor Assistant Actions", () => {
     afterEach(() => {
 
         aiDeleteConversations();
-
-    });
-
-    after(() => {
-
-        aiDeleteAllConversations();
 
     });
 
