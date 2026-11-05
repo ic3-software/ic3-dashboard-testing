@@ -3,9 +3,9 @@
   "version": "10.0.0",
   "private": true,
   "devDependencies": {
-    "@ic3/reporting-api-embedded": "^9.4.3",
+    "@ic3/reporting-api-embedded": "^10.0.0",
     "@types/node": "26.5.1",
-    "cypress": "16.0.0",
+    "cypress": "16.2.1",
     "cypress-cdp": "1.6.87",
     "cypress-failed-log": "2.10.0",
     "cypress-log-to-output": "1.1.2",
