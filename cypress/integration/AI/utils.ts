@@ -1,9 +1,11 @@
 /**
  * Helpers shared by the AI specs.
  *
- * The icCube server is expected to run with the fake AI agent (icCube.xml : fakeAgent, see FakeAIAgent.java) :
+ * The icCube server is expected to run with the fake AI agent (icCubeAgent : APP_DEFAULT_LLM_MODEL=ic3::in-memory,
+ * see InMemoryLLMClient) :
  *
  *  - papagayo : a question starting with "papagayo:" is replied with the question itself (w/o the "papagayo:" prefix),
+ *  - papagayo tool calls : "papagayo: tool:NAME {args}" calls the (client-side) tool, see aiCallTool(),
  *  - the caption of a conversation is generated asynchronously from its first question (see aiCaption()),
  *  - the conversations are kept in RAM (shared by all users) : use unique questions (see aiRunId()).
  */
@@ -245,6 +247,37 @@ export function aiSendMultilineNoWait(...lines: string[]) {
     cy.get(INPUT).type("{enter}");
 
     cy.get(STOP).should("be.visible");
+
+}
+
+/**
+ * Asks the papagayo to call the tool (tool:NAME directive, see InMemoryLLMClient) : the reply is the output of the
+ * tool as a code block (json if JSON, text otherwise).
+ *
+ * @param args the arguments of the tool (if any), e.g., {widgetId: "ww0"}
+ * @return the output of the tool : parsed if JSON.
+ */
+export function aiCallTool(tool: string, args?: Record<string, string>): Cypress.Chainable<any> {
+
+    // chunk:0 : the output (e.g., an option meta) can be long, streamed word by word otherwise.
+    aiSendMultiline("chunk:0 tool:" + tool + (args ? " " + JSON.stringify(args) : ""));
+
+    return cy.get(MESSAGES).last().then($answer => {
+
+        const blocks = topLevelCodeBlocks($answer);
+
+        // e.g., an unknown tool : the error message (no code block)
+        expect(blocks, "the output of the tool " + tool + " : " + $answer.text()).to.have.length(1);
+
+        const output = blocks[0].querySelector("code")?.textContent ?? "";
+
+        try {
+            return JSON.parse(output);
+        } catch (e) {
+            return output;
+        }
+
+    });
 
 }
 
