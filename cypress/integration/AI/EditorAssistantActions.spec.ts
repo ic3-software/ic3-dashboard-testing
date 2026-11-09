@@ -10,6 +10,7 @@ import {
     aiAssertLastActionState,
     aiClickApplyAll,
     aiDeleteConversations,
+    aiExpandLastAction,
     aiLastAction,
     aiOpenEditorAssistant,
     aiReapplyLastAction,
@@ -185,6 +186,55 @@ describe("AI/Editor Assistant Actions", () => {
         cy.assertWidgetDetails(0, "ww0", 50, 500, 400, 300);
 
         // not listed : kept as is
+        assertWw1Untouched();
+
+    });
+
+    it("delete-widgets", () => {
+
+        // a third one : 2 out of 3 deleted
+        buildWidget("ww2", "ic3.Table", "AI Table");
+
+        aiSendAction({
+            action: "delete-widgets",
+            widgetIds: ["ww0", "ww2"],
+        });
+
+        aiAssertLastAction("Delete Widgets");
+
+        // a chip per widget : its title (in the details, collapsed by default)
+        aiExpandLastAction();
+        aiLastAction().should("contain.text", WW0_TITLE).and("contain.text", "AI Table");
+
+        aiApplyLastAction();
+
+        cy.get('[data-cy="widget-box-ww0"]').should("not.exist");
+        cy.get('[data-cy="widget-box-ww2"]').should("not.exist");
+
+        // not listed : kept as is
+        assertWw1Untouched();
+
+        // a single undo step
+        undo();
+
+        cy.assertWidgetHeader("ww0", "[ww0] " + WW0_TITLE);
+        cy.assertWidgetHeader("ww2", "[ww2] AI Table");
+        assertWw1Untouched();
+
+    });
+
+    it("delete-widgets : an unknown widget, nothing deleted", () => {
+
+        aiSendAction({
+            action: "delete-widgets",
+            widgetIds: ["ww0", "ww9"],
+        });
+
+        aiAssertLastAction("Delete Widgets");
+
+        aiApplyLastActionWithError("unknown widget", "ww9");
+
+        cy.assertWidgetHeader("ww0", "[ww0] " + WW0_TITLE);
         assertWw1Untouched();
 
     });

@@ -1,12 +1,16 @@
 import {
     aiApplyLastAction,
     aiApplyLastActionWithError,
+    aiApplyAll,
+    aiAssertActionCards,
+    aiAssertApplyAll,
     aiAssertEmpty,
     aiAssertLastAction,
     aiDeleteConversations,
     aiLastAction,
     aiOpenEditorAssistant,
     aiSendAction,
+    aiSendText,
     aiTrackConversations
 } from "./utils";
 import {dashboardUnselectAll, useSalesSchema} from "../Editor/utils";
@@ -50,6 +54,40 @@ function mdxFilter(set: string) {
 }
 
 const MDX_F_ARTICLES = mdxFilter("[Product].[Product].[Article].members");
+
+/**
+ * The amount per year : FILTERBY the selection of the filter publishing the event (none : no filter).
+ */
+function mdxYearsBy(eventName: string) {
+    return `SELECT [Measures].[Amount] ON 0, [Time].[Calendar].[Year].members.head(3) ON 1 FROM [Sales] FILTERBY @{${eventName}!∅}`;
+}
+
+// the article selected in the filter publishing 'article' (none : all the articles)
+const MDX_YEARS_BY_ARTICLE = mdxYearsBy("article");
+
+/**
+ * The amount of the first year (MDX_YEARS_BY_ARTICLE table).
+ */
+function amountCell(wid: string) {
+    return cy.getWidget(wid).find(".ic3WidgetBox-content div[data-rowindex='0'] div[data-colindex='1'] span");
+}
+
+/**
+ * The (mdxYearsBy) table is filtered once select() is done : a different amount.
+ */
+function assertFilteredBy(tableWid: string, select: () => void) {
+
+    cy.assertTableRowCount(tableWid, 3);
+
+    amountCell(tableWid).invoke("text").then(unfiltered => {
+
+        select();
+
+        amountCell(tableWid).should($cell => expect($cell.text()).not.to.eq(unfiltered));
+
+    });
+
+}
 
 // -- Assertions
 
@@ -105,6 +143,11 @@ function assertFilterPanelYear(wid: string) {
 interface WidgetCase {
 
     templateId: string;
+
+    /**
+     * A filter widget (group 'filter') : publishes an event.
+     */
+    filter?: true;
 
     /**
      * Undefined : a widget w/o query.
@@ -173,6 +216,7 @@ const WIDGETS: WidgetCase[] = [
 
     {
         templateId: "ic3.FilterButtons",
+        filter: true,
         mdx: MDX_F_ARTICLES,
         assertCreated: wid => cy.assertButtons(wid, ARTICLES),
         options: {"chartOptions.size": "small"},
@@ -180,6 +224,7 @@ const WIDGETS: WidgetCase[] = [
     },
     {
         templateId: "ic3.FilterCheckboxRadio",
+        filter: true,
         mdx: MDX_F_ARTICLES,
         assertCreated: wid => cy.assertCheckboxes(wid, ARTICLES),
         options: {"chartOptions.size": "small"},
@@ -187,6 +232,7 @@ const WIDGETS: WidgetCase[] = [
     },
     {
         templateId: "ic3.FilterAutocomplete",
+        filter: true,
         mdx: MDX_F_ARTICLES,
         assertCreated: wid => cy.assertDropdownOptions(wid, ARTICLES),
         options: {"chartOptions.placeholderText": "AI search"},
@@ -194,6 +240,7 @@ const WIDGETS: WidgetCase[] = [
     },
     {
         templateId: "ic3.FilterAutocompleteLazy",
+        filter: true,
         mdx: MDX_F_ARTICLES,
         assertCreated: wid => cy.assertDropdownOptions(wid, ARTICLES),
         options: {"chartOptions.label": "AI Lazy"},
@@ -202,12 +249,14 @@ const WIDGETS: WidgetCase[] = [
     {
         // Same as the lazy autocomplete (+ a scanner button if a camera is available).
         templateId: "ic3.FilterBarcodeAutocomplete",
+        filter: true,
         mdx: MDX_F_ARTICLES,
         options: {"chartOptions.label": "AI Barcode"},
         assertOptions: wid => cy.getWidget(wid).find("label").should("contain.text", "AI Barcode"),
     },
     {
         templateId: "ic3.FilterSlider",
+        filter: true,
         mdx: mdxFilter("[Time].[Calendar].[Year].members.head(3)"),
         assertCreated: wid => cy.assertSlider(wid, ["2005", "2006", "2007"]),
         options: {"chartOptions.orientation": "vertical"},
@@ -215,6 +264,7 @@ const WIDGETS: WidgetCase[] = [
     },
     {
         templateId: "ic3.FilterTree",
+        filter: true,
         mdx: mdxFilter("[Product].[Product].[Category].members"),
         assertCreated: wid => cy.assertTreeExists(wid, "control-icons", "License"),
         options: {"chartOptions.useControlIcons": false},
@@ -225,6 +275,7 @@ const WIDGETS: WidgetCase[] = [
     },
     {
         templateId: "ic3.FilterSwitch",
+        filter: true,
         mdx: mdxFilter("[Time].[Calendar].[Year].members.head(2)"),
         assertCreated: wid => cy.getWidget(wid).find(".MuiSwitch-root").should("have.length", 1),
         options: {"chartOptions.labelRight": "AI Right"},
@@ -232,6 +283,7 @@ const WIDGETS: WidgetCase[] = [
     },
     {
         templateId: "ic3.DatePicker",
+        filter: true,
         mdx: "SELECT {[Time].[Calendar].[Day].members.head(1),[Time].[Calendar].[Day].members.tail(1)} ON \"dates\" FROM [Sales] CELL PROPERTIES CELL_ORDINAL",
         assertCreated: wid => cy.assertDatePicker(wid, null),
         options: {"chartOptions.label": "AI Date"},
@@ -240,6 +292,7 @@ const WIDGETS: WidgetCase[] = [
     {
         // w/o query : the level is an option.
         templateId: "ic3.SinglePanelFilter",
+        filter: true,
         assertCreated: wid => cy.getWidget(wid).find("[data-cy='filter-item']").should("not.exist"),
         options: {"chartOptions.levelId": "[Time].[Calendar].[Year]"},
         assertOptions: wid => cy.getWidget(wid).find("[data-cy='filter-item'] .ic3FilterPanel-fieldName").should("contain.text", "Year"),
@@ -248,6 +301,7 @@ const WIDGETS: WidgetCase[] = [
     // FilterPanel : see its own tests below (a regular case as well).
     {
         templateId: "ic3.FilterPanel",
+        filter: true,
         assertCreated: wid => assertFilterPanelEmpty(wid),
         options: {
             "chartOptions.asGlobalFilter": false,
@@ -791,6 +845,398 @@ describe("AI/Editor Assistant Widgets", () => {
 
             cy.assertWidgetHeader(WID, `[${WID}] AI FilterPanel`);
             assertFilterPanelEmpty(WID);
+
+        });
+
+    });
+
+    /*
+        A filter widget publishes an event (build-widget 'eventName', otherwise named after its title) : the other
+        widgets use it in their MDX as @{eventName}.
+     */
+    describe("Filter events", () => {
+
+        // the first month of the first year of the Sales cube
+        const RANGE_FROM = "01 Jan 2005";
+        const RANGE_TO = "31 Jan 2005";
+
+        /**
+         * Sends the action and applies it (fails on error).
+         */
+        function applyAction(action: any) {
+            aiSendAction(action);
+            aiApplyLastAction();
+        }
+
+        it("build-widget w/ an 'eventName' : the table listening to it is filtered", () => {
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                widgetTitle: "AI Articles",
+                eventName: "article",
+            });
+
+            aiApplyLastAction();
+
+            cy.assertButtons(WID, ARTICLES);
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: MDX_YEARS_BY_ARTICLE,
+                widgetTitle: "AI Table",
+            });
+
+            aiApplyLastAction();
+
+            cy.assertTableRowCount("ww1", 3);
+
+            // all the articles, then the selected one only : a lower amount
+            amountCell("ww1").invoke("text").then(allArticles => {
+
+                cy.selectButton(WID, "Gold");
+
+                amountCell("ww1").should($cell => expect($cell.text()).not.to.eq(allArticles));
+                cy.assertTableRowCount("ww1", 3);
+
+            });
+
+        });
+
+        it("build-widget : an 'eventName' already published by another widget is rejected", () => {
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                eventName: "article",
+            });
+
+            aiApplyLastAction();
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                eventName: "article",
+            });
+
+            aiApplyLastActionWithError("the event", "article", "already published by another widget");
+
+            cy.get('[data-cy="widget-box-ww1"]').should("not.exist");
+
+        });
+
+        it("build-widget : 'eventName' on a widget that is not a filter is rejected", () => {
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: MDX_STD,
+                eventName: "article",
+            });
+
+            aiApplyLastActionWithError("eventName", "is for filter widgets only");
+
+            cy.get(`[data-cy="widget-box-${WID}"]`).should("not.exist");
+
+        });
+
+        it("build-widget : an empty 'eventName' is rejected", () => {
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                eventName: " ",
+            });
+
+            aiApplyLastActionWithError("eventName", "must be a non empty string");
+
+            cy.get(`[data-cy="widget-box-${WID}"]`).should("not.exist");
+
+        });
+
+        it("build-widget w/o 'eventName' : named after its title (lower case)", () => {
+
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                widgetTitle: "Article",
+            });
+
+            cy.assertButtons(WID, ARTICLES);
+
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: mdxYearsBy("article"),
+                widgetTitle: "AI Table",
+            });
+
+            assertFilteredBy("ww1", () => cy.selectButton(WID, "Gold"));
+
+        });
+
+        it("build-widget w/o 'eventName' : made unique (the title one already published)", () => {
+
+            // ww0 : 'article'
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                widgetTitle: "AI Articles",
+                eventName: "article",
+            });
+
+            // ww1 : 'article2'
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                widgetTitle: "Article",
+            });
+
+            cy.assertButtons("ww1", ARTICLES);
+
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: mdxYearsBy("article2"),
+                widgetTitle: "AI Table 2",
+            });
+
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: mdxYearsBy("article"),
+                widgetTitle: "AI Table",
+            });
+
+            // each table filtered by its own filter
+            assertFilteredBy("ww2", () => cy.selectButton("ww1", "Gold"));
+            assertFilteredBy("ww3", () => cy.selectButton(WID, "Server"));
+
+        });
+
+        it("edit-widget-options on the filter : still publishes its event", () => {
+
+            const filterButtons = WIDGETS.find(widget => widget.templateId === "ic3.FilterButtons")!;
+
+            applyAction({
+                action: "build-widget",
+                templateId: filterButtons.templateId,
+                mdx: MDX_F_ARTICLES,
+                widgetTitle: "AI Articles",
+                eventName: "article",
+            });
+
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: MDX_YEARS_BY_ARTICLE,
+                widgetTitle: "AI Table",
+            });
+
+            // a new title (the event is not named after it) + a chart option
+            applyAction({
+                action: "edit-widget-options",
+                widgetId: WID,
+                options: {"$-title": "AI Renamed", ...filterButtons.options},
+            });
+
+            cy.assertWidgetHeader(WID, `[${WID}] AI Renamed`);
+            filterButtons.assertOptions(WID);
+
+            assertFilteredBy("ww1", () => cy.selectButton(WID, "Gold"));
+
+        });
+
+
+        it("build-widget w/ 'rangePicker' : a date range picker (start and end dates)", () => {
+
+            const datePicker = WIDGETS.find(widget => widget.templateId === "ic3.DatePicker")!;
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: datePicker.templateId,
+                mdx: datePicker.mdx,
+                widgetTitle: "AI Range",
+                rangePicker: true,
+            });
+
+            aiApplyLastAction();
+
+            cy.assertWidgetHeader(WID, `[${WID}] AI Range`);
+            cy.assertDatePickerRangeFrom(WID, null);
+            cy.assertDatePickerRangeTo(WID, null);
+
+        });
+
+        it("build-widget w/ 'rangePicker' + 'eventName' : the table listening to it is filtered", () => {
+
+            const datePicker = WIDGETS.find(widget => widget.templateId === "ic3.DatePicker")!;
+
+            applyAction({
+                action: "build-widget",
+                templateId: datePicker.templateId,
+                mdx: datePicker.mdx,
+                widgetTitle: "AI Range",
+                eventName: "range",
+                rangePicker: true,
+            });
+
+            applyAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: mdxYearsBy("range"),
+                widgetTitle: "AI Table",
+            });
+
+            // the first year : the whole year, then its first month only
+            assertFilteredBy("ww1", () => {
+                cy.selectDatePickerRangeFromFromInput(WID, RANGE_FROM);
+                cy.selectDatePickerRangeToFromInput(WID, RANGE_TO);
+            });
+
+            cy.assertDatePickerRangeFrom(WID, RANGE_FROM);
+            cy.assertDatePickerRangeTo(WID, RANGE_TO);
+
+        });
+
+        it("build-widget : 'rangePicker' on a widget that is not a date picker is rejected", () => {
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.FilterButtons",
+                mdx: MDX_F_ARTICLES,
+                rangePicker: true,
+            });
+
+            aiApplyLastActionWithError("rangePicker", "is for the date picker", "ic3.DatePicker");
+
+            cy.get(`[data-cy="widget-box-${WID}"]`).should("not.exist");
+
+        });
+
+    });
+
+    describe("Placement", () => {
+
+        it("build-widget : 'colSpan' / 'height' in a fixed layout are rejected", () => {
+
+            aiSendAction({
+                action: "build-widget",
+                templateId: "ic3.Table",
+                mdx: MDX_STD,
+                colSpan: 2,
+                height: 300,
+            });
+
+            aiApplyLastActionWithError("'colSpan' and 'height' are for a grid layout only", "rectangle");
+
+            cy.get(`[data-cy="widget-box-${WID}"]`).should("not.exist");
+
+        });
+
+    });
+
+    /*
+        A whole dashboard from a single reply (a single card, 'Apply all') : the papagayo question of the fixture
+        DashboardSingleMessage.md (sent as is, can be pasted in the assistant as well) :
+            ww0     : a filter (Filter Buttons) publishing 'article',
+            ww1..   : every widget type that is not a filter (see WIDGETS, same MDX and titles),
+            last    : a table listening to the filter (@{article}).
+
+        Fixed layout : the filter as a first row, then the widgets on a 4 columns grid (explicit rectangles).
+     */
+    describe("Dashboard (single message)", () => {
+
+        const MESSAGE = "cypress/fixtures/AI/DashboardSingleMessage.md";
+
+        const FILTER_TITLE = "AI Articles";
+        const FILTERED_TABLE_TITLE = "AI Filtered Table";
+
+        const FILTERED_TABLE: WidgetCase = {
+            templateId: "ic3.Table",
+            mdx: MDX_YEARS_BY_ARTICLE,
+            assertCreated: wid => cy.assertTableRowCount(wid, 3),
+            options: {},
+            assertOptions: () => {
+            },
+        };
+
+        // ww1.. : in the order of the actions
+        const DASHBOARD_WIDGETS = [...WIDGETS.filter(widget => !widget.filter), FILTERED_TABLE];
+
+        const FILTERED_TABLE_WID = "ww" + DASHBOARD_WIDGETS.length;
+
+        function dashboardWidgetTitle(widget: WidgetCase) {
+            return widget === FILTERED_TABLE ? FILTERED_TABLE_TITLE : widgetTitle(widget);
+        }
+
+        /**
+         * The actions of the message (its json code blocks).
+         */
+        function messageActions(message: string): any[] {
+            return [...message.matchAll(/```json\n([\s\S]*?)\n```/g)].map(match => JSON.parse(match[1]));
+        }
+
+        it("a filter + all the widgets : built w/ 'Apply all'", () => {
+
+            cy.readFile(MESSAGE).then((message: string) => {
+
+                const actions = messageActions(message);
+
+                // the message is in sync w/ the widgets asserted below
+                expect(actions.map(action => [action.templateId, action.widgetTitle]), MESSAGE).to.deep.equal([
+                    ["ic3.FilterButtons", FILTER_TITLE],
+                    ...DASHBOARD_WIDGETS.map(widget => [widget.templateId, dashboardWidgetTitle(widget)]),
+                ]);
+                expect(actions[0].eventName, MESSAGE).to.equal("article");
+
+                aiSendText(message);
+
+                aiAssertActionCards([actions.length]);
+                aiAssertApplyAll("idle", actions.length);
+
+                cy.get(`[data-cy="widget-box-${WID}"]`).should("not.exist");
+
+                aiApplyAll();
+
+                // the filter
+                cy.assertWidgetHeader(WID, `[${WID}] ${FILTER_TITLE}`);
+                cy.assertButtons(WID, ARTICLES);
+
+                // the widgets
+                DASHBOARD_WIDGETS.forEach((widget, idx) => {
+
+                    const wid = "ww" + (idx + 1);
+
+                    if (widget.withHeader !== false) {
+                        cy.assertWidgetHeader(wid, `[${wid}] ${dashboardWidgetTitle(widget)}`);
+                    }
+
+                    (widget.assertCreated ?? rendered)(wid);
+
+                });
+
+                cy.get(`[data-cy="widget-box-ww${actions.length}"]`).should("not.exist");
+
+            });
+
+            // the table listening to the filter : all the articles, then the selected one only (a lower amount)
+            amountCell(FILTERED_TABLE_WID).invoke("text").then(allArticles => {
+
+                cy.selectButton(WID, "Gold");
+
+                amountCell(FILTERED_TABLE_WID).should($cell => expect($cell.text()).not.to.eq(allArticles));
+                cy.assertTableRowCount(FILTERED_TABLE_WID, 3);
+
+            });
 
         });
 

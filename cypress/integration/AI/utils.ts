@@ -223,7 +223,20 @@ function aiTypeMultiline(question: string) {
  */
 export function aiSendMultiline(...lines: string[]) {
 
-    aiTypeMultiline([PAPAGAYO, ...lines].join("\n"));
+    aiSendText([PAPAGAYO, ...lines].join("\n"));
+
+}
+
+/**
+ * Sends the (multi-line) question as is and waits for the whole (papagayo) reply.
+ *
+ * @param question e.g., the content of a fixture : must start with "papagayo:" (see aiReply())
+ */
+export function aiSendText(question: string) {
+
+    aiReply(question);
+
+    aiTypeMultiline(question);
 
     cy.get(INPUT).type("{enter}");
 
@@ -376,6 +389,18 @@ export function aiAssertActionCards(rowsPerCard: number[]) {
 export function aiLastAction(fromLast = 0) {
 
     return cy.get(`${ASSISTANT} [data-cy='ai-answer'] ${ACTION_ROW}`).eq(-1 - fromLast);
+
+}
+
+/**
+ * Shows the details of an action (collapsed by default : not rendered until expanded, see BaseActionCard).
+ *
+ * @param fromLast see aiLastAction()
+ */
+export function aiExpandLastAction(fromLast = 0) {
+
+    aiLastAction(fromLast).find("[data-cy='ai-action-toggle']").click();
+    aiLastAction(fromLast).find("[data-cy='ai-action-toggle']").should("have.attr", "aria-expanded", "true");
 
 }
 
