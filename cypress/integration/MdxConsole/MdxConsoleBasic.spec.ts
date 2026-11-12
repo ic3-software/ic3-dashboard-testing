@@ -8,9 +8,7 @@ function selectSalesDemoSchema() {
     cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser [data-cy='field-schemaName']").get('li.MuiAutocomplete-option[data-option-index="0"]').click()
 }
 
-function executeQuery() {
-    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Select a Schema");
-
+function selectSchemaAndTypeQuery() {
     selectSalesDemoSchema();
 
     cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").click();
@@ -24,6 +22,12 @@ function executeQuery() {
             + "-- " + new Date()
         )
         .wait(500)
+}
+
+function executeQuery() {
+    cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Select a Schema");
+
+    selectSchemaAndTypeQuery();
 
     // one and only one query
     cy.waitForQueryCount(0);
@@ -95,29 +99,37 @@ describe("Mdx Console", () => {
 
     });
 
-    it("Debugger", () => {
+    /**
+     * Profile | Debug : the profiler widget shows the query details (selected by default) : Info | Details | copy.
+     */
+    function profileQuery(action: "mdxConsole.profile" | "mdxConsole.debug") {
 
-        selectSalesDemoSchema()
+        selectSchemaAndTypeQuery();
 
+        cy.get(`button[data-cy='appMenu-button-${action}']`).click();
 
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").click();
-        cy.get(".ic3MdxConsoleSchemaBrowser-schemaChooser .ic3FormFieldGroup-summaryAsLabel").contains("Sales (Demo)");
-
-        cy.getWidget("!w-console").find('.cm-content')
-            .invoke('text', "SELECT  \n" +
-                "  [Measures].members  on 0\n" +
-                "  [Customers].[Geography].[Country] on 1\n" +
-                "FROM [Sales] \n"
-                + "-- " + new Date()
-            )
-            .wait(500)
-
-        cy.get("button[data-cy='appMenu-button-mdxConsole.debug']").click();
-
-
-        cy.assertTableColCount("w-debugger", 2);
+        cy.assertTableColCount("w-debugger", 3);
         cy.assertTableColumnHeader("w-debugger", 0, "Info");
         cy.assertTableColumnHeader("w-debugger", 1, "Details");
+
+        cy.get("[data-widget-id='w-debugger']").should("contain.text", "Elapsed Time");
+    }
+
+    it("Profiler", () => {
+
+        profileQuery("mdxConsole.profile");
+
+        cy.getWidgetHeader("w-debugger")
+            .should("contain.text", "Profiler")
+            .and("not.contain.text", "Debug Info");
+
+    });
+
+    it("Debugger", () => {
+
+        profileQuery("mdxConsole.debug");
+
+        cy.getWidgetHeader("w-debugger").should("contain.text", "Profiler (with Debug Info)");
 
     });
 });
