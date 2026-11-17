@@ -1362,7 +1362,7 @@ declare global {
 
             widgetEditorChangeBoolean(name: string): void;
 
-            widgetEditorApplyAndClose(): void;
+            widgetEditorApplyAndClose(extraTimeout?: number): void;
 
             widgetEditorApply(): void;
 
@@ -5083,11 +5083,11 @@ Cypress.Commands.add("widgetEditorChangeBoolean", (input: string) => {
 
 });
 
-Cypress.Commands.add("widgetEditorApplyAndClose", () => {
+Cypress.Commands.add("widgetEditorApplyAndClose", (extraTimeout = 0 /* e.g., slow server */) => {
 
     cy.widgetEditorApply();
     cy.wait(400) /* ensure first data-cy-ready has been removed by isRunning... */;
-    cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + 7})
+    cy.get('[data-cy="app-query-status"]', {timeout: QUERY_STATUS_TIMEOUT + extraTimeout + 7})
         .should('have.class', 'data-cy-ready')
     ;
     cy.widgetEditorClose();

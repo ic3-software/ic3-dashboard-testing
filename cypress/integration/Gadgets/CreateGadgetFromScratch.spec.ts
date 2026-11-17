@@ -37,7 +37,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
         cy.get('[data-cy="toolbar-openOptionsEditor"]').click();
         cy.widgetEditorEnterMdxStatement('SELECT [Measures].[Amount] ON "Columns" [Customer].[Customer].[Type].allmembers ON "Rows" FROM [Sales]')
 
-        cy.widgetEditorApplyAndClose();
+        cy.widgetEditorApplyAndClose(30000) /* slow nightly server */;
 
         // Place Buttons
         cy.get("[data-cy='appMenu-button-newWidget']").click();
@@ -55,7 +55,7 @@ describe("Gadgets/CreateGadgetFromScratch", () => {
         cy.widgetEditorOpenOptionGroup("groupSelection");
         cy.widgetEditorChangeTextOption("Publish-Selection", "selYear");
 
-        cy.widgetEditorApplyAndClose();
+        cy.widgetEditorApplyAndClose(30000) /* slow nightly server */;
 
         // Add event to Table query
         cy.clickUserMenuAddEventToQueries("ww1");
