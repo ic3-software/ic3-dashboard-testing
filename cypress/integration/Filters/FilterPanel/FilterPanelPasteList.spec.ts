@@ -99,7 +99,17 @@ describe("Filters/Filter Panel Paste List", () => {
         return cy.get("[data-cy='search-content'] [data-cy^='fp-item-']");
     }
 
+    /**
+     * The paste match is asynchronous: the matched members are selected (and ticked) only once the marker is
+     * 'applied'. Leaving paste mode before that cancels the paste.
+     */
+    function waitPasteApplied() {
+        cy.get("[data-cy-paste='applied']").should("exist");
+        cy.get("[data-cy-paste='matching']").should("not.exist");
+    }
+
     function assertChip(count: number) {
+        waitPasteApplied();
         cy.get("[data-cy='paste-list-chip']")
             .should("be.visible")
             .and("contain.text", `Pasted list · ${count} values`);
@@ -108,9 +118,11 @@ describe("Filters/Filter Panel Paste List", () => {
     function assertNoPasteMode() {
         cy.get("[data-cy='paste-list-chip']").should("not.exist");
         cy.get("[data-cy='paste-feedback']").should("not.exist");
+        cy.get("[data-cy-paste]").should("not.exist");
     }
 
     function assertFeedback(found: number, total: number, notFound = 0) {
+        waitPasteApplied();
         cy.get("[data-cy='paste-feedback']")
             .should("contain.text", `${found} of ${total} found and added to selection`);
 
