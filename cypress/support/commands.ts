@@ -957,6 +957,8 @@ declare global {
 
             assertPivotTableTopHeader(widgetId: string, row: number, col: number, value: string): void;
 
+            assertPivotTableTopHeaderFullyVisible(widgetId: string, row: number, col: number): void;
+
             assertPivotTableCell(widgetId: string, row: number, col: number, value: string | string[]): void;
 
             assertPivotTableCellSelected(widgetId: string, row: number, col: number): void;
@@ -3039,6 +3041,39 @@ Cypress.Commands.add("assertPivotTableTopHeader", (widgetId: string, row: number
     cy.getWidget(widgetId)
         .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${col}']`)
         .invoke('attr', "data-name").should('eq', value)
+});
+
+Cypress.Commands.add("assertPivotTableTopHeaderFullyVisible", (widgetId: string, row: number, col: number) => {
+
+    // using visual data-vr / data-vc (after a drilldown not the same anymore as data-r / data-c)
+
+    const tolerance = 1; // px (rounding)
+
+    cy.getWidget(widgetId)
+        .find(`.ic3WidgetBox-content .ic3-pt-header div[data-vr='${row}'][data-vc='${col}']`)
+        .should($cell => {
+
+            const name = $cell.attr("data-name");
+
+            const label = $cell.find(".ic3-pt-header-label")[0];
+            expect(label, `label of '${name}'`).to.exist;
+
+            const cellRect = $cell[0].getBoundingClientRect();
+            const labelRect = label.getBoundingClientRect();
+
+            expect(labelRect.top, `label top of '${name}'`).to.be.at.least(cellRect.top - tolerance);
+            expect(labelRect.bottom, `label bottom of '${name}'`).to.be.at.most(cellRect.bottom + tolerance);
+
+            // the label itself is not clipping its text
+            expect(label.scrollHeight, `label scrollHeight of '${name}'`).to.be.at.most(label.clientHeight + tolerance);
+
+            const header = $cell.closest(".ic3-pt-header")[0];
+            const headerRect = header.getBoundingClientRect();
+
+            expect(cellRect.bottom, `cell bottom of '${name}'`).to.be.at.most(headerRect.bottom + tolerance);
+        })
+    ;
+
 });
 
 Cypress.Commands.add("assertPivotTableCell", (widgetId: string, row: number, col: number, value: string | string[]) => {
