@@ -1,6 +1,52 @@
+/**
+ * Tracing a failure on GitHub (no screenshot) : the gvi requests (e.g., the queries) sent by the test.
+ */
+interface GviRequest {
+    start: number;
+    end?: number;
+    status?: number;
+    body: string;
+}
+
+/**
+ * e.g., +1234 ms → +1500 ms : 200 : <body> ; a request never answered : pending.
+ */
+function traceGviRequests(requests: GviRequest[], t0: number): string {
+
+    const ms = (time: number) => "+" + (time - t0) + " ms";
+
+    return "\ngvi requests :\n" + requests.map(r =>
+        "  " + ms(r.start) + " → " + (r.end != null ? ms(r.end) + " : " + r.status : "pending") + " : " + r.body
+    ).join("\n");
+
+}
+
 describe("Gadgets/CreateGadgetFromScratch", () => {
 
     beforeEach(() => {
+
+        const t0 = Date.now();
+        const requests: GviRequest[] = [];
+
+        cy.intercept("POST", "**/icCube/gvi*", req => {
+
+            const body = typeof req.body === "string" ? req.body : JSON.stringify(req.body);
+            const request: GviRequest = {start: Date.now(), body: body.replace(/userPassword=[^&]*/, "userPassword=***").slice(0, 300)};
+
+            requests.push(request);
+
+            req.on("response", res => {
+                request.end = Date.now();
+                request.status = res.statusCode;
+            });
+
+        });
+
+        cy.on("fail", err => {
+            err.message += traceGviRequests(requests, t0);
+            throw err;
+        });
+
         cy.login();
         cy.openGadgetEditor();
     });

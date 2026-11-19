@@ -100,7 +100,7 @@ describe("Mdx Console", () => {
     });
 
     /**
-     * Profile | Debug : the profiler widget shows the query details (selected by default) : Info | Details | copy.
+     * Profile | Debug : the query executed, its time in the status (ms below a second, s above).
      */
     function profileQuery(action: "mdxConsole.profile" | "mdxConsole.debug") {
 
@@ -108,20 +108,22 @@ describe("Mdx Console", () => {
 
         cy.get(`button[data-cy='appMenu-button-${action}']`).click();
 
-        cy.assertTableColCount("w-debugger", 3);
-        cy.assertTableColumnHeader("w-debugger", 0, "Info");
-        cy.assertTableColumnHeader("w-debugger", 1, "Details");
-
-        cy.get("[data-widget-id='w-debugger']").should("contain.text", "Elapsed Time");
+        cy.getWidget("!w-status").find(".ic3MdxConsoleStatus-message").contains(/executed in [\d.,]+ m?s/);
     }
 
     it("Profiler", () => {
 
         profileQuery("mdxConsole.profile");
 
-        cy.getWidgetHeader("w-debugger")
-            .should("contain.text", "Profiler")
-            .and("not.contain.text", "Debug Info");
+        // no tabs : the profiler only
+        cy.getWidget("!w-debugger").find(".ic3MdxConsolePanelToolbar-title").should("have.text", "Profiler");
+        cy.getWidget("!w-debugger").find(".MuiTab-root").should("not.exist");
+
+        // the query details (selected by default) : Info | Details | copy
+        cy.assertTableColCount("w-debugger", 3);
+        cy.assertTableColumnHeader("w-debugger", 0, "Info");
+        cy.assertTableColumnHeader("w-debugger", 1, "Details");
+        cy.getWidget("!w-debugger").should("contain.text", "Elapsed Time");
 
     });
 
@@ -129,7 +131,17 @@ describe("Mdx Console", () => {
 
         profileQuery("mdxConsole.debug");
 
-        cy.getWidgetHeader("w-debugger").should("contain.text", "Profiler (with Debug Info)");
+        // the tabs : Debugger (selected) | Measures
+        cy.getWidget("!w-debugger").find(".MuiTab-root").should("have.length", 2);
+        cy.getWidget("!w-debugger").find(".MuiTab-root.Mui-selected").should("have.text", "Debugger");
+
+        // the cells traced per row (a rows axis)
+        cy.getWidget("!w-debugger").find(".ic3MdxConsoleDebuggerWidget-tree")
+            .should("contain.text", "Cell Evaluation")
+            .and("contain.text", "Row");
+
+        cy.getWidget("!w-debugger").find(".MuiTab-root").contains("Measures").click();
+        cy.getWidget("!w-debugger").find(".MuiTab-root.Mui-selected").should("have.text", "Measures");
 
     });
 });
