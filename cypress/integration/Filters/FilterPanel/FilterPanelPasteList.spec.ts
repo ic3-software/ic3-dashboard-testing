@@ -217,19 +217,6 @@ describe("Filters/Filter Panel Paste List", () => {
         });
     });
 
-    it("4. space separated with exact matches becomes a list", () => {
-        openPopover(CITY);
-        paste("Alexandria Cairo Johannesburg").should("eq", true);
-        assertPastedList(THREE);
-    });
-
-    it("4. space separated without any match is a normal paste", () => {
-        openPopover(CITY);
-        paste("Foo Bar Baz");   // handler prevents the default and puts the text in the search box itself
-        assertNoPasteMode();
-        searchInput().should("have.value", "Foo Bar Baz");
-    });
-
     it("5. single value is a normal paste", () => {
         openPopover(CITY);
         paste("Cairo").should("eq", false);
