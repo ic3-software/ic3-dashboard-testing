@@ -640,6 +640,12 @@ declare global {
             performLogin(): void;
 
             /**
+             * The login of the Server UI specs (/icCube/console) : the user / password login page of the icCube server
+             * (the local one, localhost:8282, when running with the localhost:3000 dev. server).
+             */
+            loginServerUI(): void;
+
+            /**
              * @param testAppName        as displayed in the editor report info minus "shared:Cypress - "
              * @param waitForQueryStatus defaulted to true
              * @param waitForPrintStatus defaulted to true
@@ -1606,6 +1612,39 @@ Cypress.Commands.add('performLogin', () => {
         return;
     }
 
+    submitLoginPage();
+
+});
+
+Cypress.Commands.add('loginServerUI', () => {
+
+    // Prerequisites (icCube server) : the cypress user can use the schema builder (see Builder/builderUtils).
+
+    // The localhost:3000 dev. server is the reporting only : the Server UI is served by the local icCube server.
+    // The baseUrl of the current spec file (the next cy.visit, cy.request...).
+    if (Cypress.config().baseUrl === "http://localhost:3000") {
+        Cypress.config("baseUrl", "http://localhost:8282");
+    }
+
+    cy.session("loginServerUI", () => {
+
+        cy.clearAllLocalStorage();
+
+        cy.visit("/icCube/console");
+        submitLoginPage();
+
+        // Not the login page anymore (e.g., wrong user / password).
+        cy.get("input[name='j_username']").should("not.exist");
+
+    })
+
+});
+
+/**
+ * The user / password login page of the icCube server.
+ */
+function submitLoginPage() {
+
     // Cypress 16: Cypress.env() has been removed. Credentials are sensitive, so they are read via cy.env()
     // which keeps them in the Node process and off the command log. See ./cypress.env.json.
     cy.env(['ic3_user', 'ic3_password']).then(({ic3_user, ic3_password}) => {
@@ -1616,7 +1655,7 @@ Cypress.Commands.add('performLogin', () => {
 
     });
 
-});
+}
 
 
 function forceRenderNotVisibleWidgets(doNotForceWidgetRendering?: boolean) {

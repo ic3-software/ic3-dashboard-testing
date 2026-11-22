@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schemaFactory revisionNumber="33">
+    <schemaDefinition name="{{SCHEMA_NAME}}" description="Uploaded (overwritten) by the Cypress specs (Builder/BuilderUndo, AI/BuilderAssistantUndo)" group="Cypress" loadOnStartup="false">
+        <activateIncrementalLoad>false</activateIncrementalLoad>
+        <useUnknownMembersInFacts>true</useUnknownMembersInFacts>
+        <distinctCountOptim>DEFAULT</distinctCountOptim>
+        <autoCleanUpTableColumns>false</autoCleanUpTableColumns>
+        <useFactPartitioning>true</useFactPartitioning>
+        <hierarchyUniqueNameStyle>IncludeDimensionName</hierarchyUniqueNameStyle>
+        <mergeToSchema></mergeToSchema>
+        <inMemoryDS name="In - Memory">
+            <memoryDataTable tableName="Facts" rowLimit="-1" id="530a1a71-a6d7-4239-ace7-990898e10a77">
+                <column name="Partition"
+                        tableType="STRING"
+                        type="INTEGER"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Short"
+                        tableType="STRING"
+                        type="SHORT"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Int"
+                        tableType="STRING"
+                        type="INTEGER"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Long"
+                        tableType="STRING"
+                        type="LONG"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Float"
+                        tableType="STRING"
+                        type="FLOAT"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Double"
+                        tableType="STRING"
+                        type="DOUBLE"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="String"
+                        tableType="STRING"
+                        type="STRING"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Boolean"
+                        tableType="STRING"
+                        type="BOOLEAN"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="Date"
+                        tableType="STRING"
+                        type="DATE"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <column name="DateTime"
+                        tableType="STRING"
+                        type="DATETIME"
+                        selected="true"
+                        primaryKey="false"
+                        nullObjectAsString=""/>
+                <addRowNumber>false</addRowNumber>
+                <stringDateConverter>dd.mm.yyyy</stringDateConverter>
+                <trimStrings>true</trimStrings>
+                <columnSeparator>;</columnSeparator>
+                <commentMarker>#</commentMarker>
+                <dataAsString>Partition;Short;Int;Long;Float;Double;String;Boolean;Date;DateTime
+                    1;2;2;2;2;2;2;0;02.01.1900;02.01.1900
+                    1;2;2;2;2;2;2;1;02.01.1900;02.01.1900
+                    1;3;3;3;3;3;3;0;03.01.1900;03.01.1900
+                    1;3;3;3;3;3;3;1;03.01.1900;03.01.1900
+                    2;3;3;3;3;3;3;1;03.01.1900;03.01.1900
+                    2;3;3;3;3;3;3;0;03.01.1900;03.01.1900
+                    2;4;4;4;4;4;4;0;04.01.1900;04.01.1900
+                    2;5;5;5;5;5;5;1;05.01.1900;05.01.1900
+                    3;2;2;2;2;2;2;1;02.01.1900;02.01.1900
+                    3;2;2;2;2;2;2;1;02.01.1900;02.01.1900
+                    3;3;3;3;3;3;3;0;03.01.1900;03.01.1900
+                    3;;;;;;;;;
+                    3;5;5;5;5;5;5;0;05.01.1900;05.01.1900
+                </dataAsString>
+            </memoryDataTable>
+        </inMemoryDS>
+        <multiLevelDimension dataTableId="530a1a71-a6d7-4239-ace7-990898e10a77"
+                             isTimeDimension="false"
+                             isDefaultTimeDimension="false"
+                             isIndexingByRange="false"
+                             unknownMemberName=""
+                             id="4432ae0d-249c-4abc-b773-1a4539171f81"
+                             name="Partition"
+                             description="Partition of the facts (sales regions)">
+            <multiLevelHierarchy hasAllLevel="true"
+                                 allLevelName="All-L"
+                                 allMemberName="All-M"
+                                 name="Partition"
+                                 isDefault="true">
+                <level name="Partition - L"
+                       nameUnique="true"
+                       nameUniqueInParent="false"
+                       keyUnique="true"
+                       ignoreNameCollision="false">
+                    <column name="Partition"/>
+                    <nameCol name="Partition"/>
+                    <orderType>NONE</orderType>
+                    <orderKind>ASC</orderKind>
+                </level>
+            </multiLevelHierarchy>
+            <multiLevelHierarchy hasAllLevel="true"
+                                 allLevelName="All-L"
+                                 allMemberName="All-M"
+                                 name="Hidden"
+                                 isDefault="false"
+                                 defaultMemberName="">
+                <factAggregationType>MEMBER_AND_ANCESTORS</factAggregationType>
+                <level name="Hidden - L"
+                       nameUnique="true"
+                       nameUniqueInParent="false"
+                       keyUnique="true"
+                       ignoreNameCollision="false">
+                    <column name="Partition"/>
+                    <nameCol name="Partition"/>
+                    <orderType>NONE</orderType>
+                    <orderKind>ASC</orderKind>
+                </level>
+            </multiLevelHierarchy>
+        </multiLevelDimension>
+        <multiLevelDimension dataTableId="530a1a71-a6d7-4239-ace7-990898e10a77"
+                             isTimeDimension="false"
+                             isDefaultTimeDimension="false"
+                             isIndexingByRange="false"
+                             unknownMemberName=""
+                             id="cb7e97ce-a398-445e-be35-89e0923bb7a3"
+                             name="Partitions 2">
+            <multiLevelHierarchy hasAllLevel="true"
+                                 allLevelName="All-L"
+                                 allMemberName="All-M"
+                                 name="Partition 2"
+                                 isDefault="true"
+                                 defaultMemberName="">
+                <factAggregationType>MEMBER_AND_ANCESTORS</factAggregationType>
+                <level name="Partition - L"
+                       nameUnique="true"
+                       nameUniqueInParent="false"
+                       keyUnique="true"
+                       ignoreNameCollision="false">
+                    <column name="Partition"/>
+                    <nameCol name="Partition"/>
+                    <orderType>NONE</orderType>
+                    <orderKind>ASC</orderKind>
+                </level>
+            </multiLevelHierarchy>
+        </multiLevelDimension>
+        <cube id="77ad8552-3f4b-4531-820c-5edaf5483fba" name="Cube">
+            <calculatedMember uniqueName="[Measures].[Calculada]">
+                <formula>[Measures].[The One] +1</formula>
+                <cellProperties></cellProperties>
+            </calculatedMember>
+            <calculatedMember uniqueName="[Measures].[Calculada x 2]">
+                <formula>[Measures].[Calculada] * 2</formula>
+                <cellProperties></cellProperties>
+            </calculatedMember>
+            <calculatedMember uniqueName="[Measures].[Calculada Case]">
+                <formula>[MEASURES].[the ONE] + [measures].[CALCULADA]</formula>
+                <cellProperties></cellProperties>
+            </calculatedMember>
+            <calculatedMember uniqueName="[Measures].[Calculada Case x 2]">
+                <formula>[measures].[calculada case] * 2</formula>
+                <cellProperties></cellProperties>
+            </calculatedMember>
+            <defaultFacts measureGroupName="Facts"
+                          partitioningLevelName="[Partition].[Partition - L]"
+                          partitioningType="OLAP_LEVEL_DEFINED"
+                          newGeneration="true"
+                          dataTableId="530a1a71-a6d7-4239-ace7-990898e10a77"
+                          aggregateDataSourceFacts="false"
+                          unresolvedRowsBehavior="ERROR">
+                <rowFactAggregationType>ADD_ROW</rowFactAggregationType>
+                <measure name="The One" aggregationType="COUNT">
+                    <rollupHierarchy></rollupHierarchy>
+                    <dataColumn name="Partition"/>
+                    <cellProperties></cellProperties>
+                </measure>
+                <links dimensionId="4432ae0d-249c-4abc-b773-1a4539171f81">
+                    <viewLinks type="LAST_LEVEL">
+                        <toColumns name="Partition"/>
+                    </viewLinks>
+                </links>
+                <links dimensionId="cb7e97ce-a398-445e-be35-89e0923bb7a3">
+                    <viewLinks type="LAST_LEVEL">
+                        <toColumns name="Partition"/>
+                    </viewLinks>
+                </links>
+            </defaultFacts>
+        </cube>
+        <localization enabled="false"/>
+        <perspectives name="Default" isDefault="true">
+            <definition>rename [Measures].[The One] as [Uno]
+                rename [Partition] as [Partición]
+                rename [Partition].[Partition] as [Particiones]
+                rename [Partition].[Partition].[Partition - L] as [Partición - N]
+                rename [Partition].[Partition].[1] as [Uno]
+            </definition>
+        </perspectives>
+        <perspectives cubeId="77ad8552-3f4b-4531-820c-5edaf5483fba" name="Mi Cubo" isDefault="false">
+            <definition>rename [Measures].[The One] as [El Uno]
+                rename [Partitions 2] as [Particiones 2]
+            </definition>
+        </perspectives>
+    </schemaDefinition>
+</schemaFactory>
