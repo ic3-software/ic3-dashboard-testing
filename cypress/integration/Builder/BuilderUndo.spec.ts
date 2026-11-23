@@ -71,6 +71,9 @@ describe("Builder : Undo / Redo", () => {
     it("undo step by step, then redo step by step", () => {
 
         builderEditSchemaDescription("first change");
+
+        // Another page visit : another step (see BuilderAutosave).
+        cy.reload();
         builderEditSchemaDescription("second change");
 
         builderToolbarClick("undo");

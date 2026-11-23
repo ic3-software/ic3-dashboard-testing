@@ -128,18 +128,39 @@ function descriptionField() {
 }
 
 /**
- * A manual change of the schema : its description (the current page must be the schema properties : no reload, e.g.,
- * the AI cards keep the revision of their change, see builderOpenSchema()).
+ * The saves of the autosave of a page (see builderWaitAutosave()) : to be set up before the change.
+ */
+export function builderInterceptAutosave() {
+
+    // The saves of a page of the builder : the header of its edit session (one revision per page visit).
+    cy.intercept({method: "POST", headers: {"ic3-edit-session": /.+/}}).as("autosave");
+
+}
+
+/**
+ * The change of the page has been saved by its autosave (see builderInterceptAutosave()).
+ */
+export function builderWaitAutosave() {
+
+    cy.wait("@autosave");
+    cy.get("[data-cy='builder-autosave-status']").should("have.attr", "data-cy-status", "saved");
+
+}
+
+/**
+ * A manual change of the schema : its description, saved when leaving the field (the current page must be the schema
+ * properties : no reload, e.g., the AI cards keep the revision of their change, see builderOpenSchema()).
+ *
+ * The changes of a page visit are a single Undo step (e.g., cy.reload() for another step).
  */
 export function builderEditSchemaDescription(description: string) {
 
-    builderTypeSchemaDescription(description);
+    builderInterceptAutosave();
 
-    // The Save button of the page (no id) : saved, then the page is refreshed with the new revision of the schema and
-    // its fields are new elements (UxModelEditor) : wait for them before going on (e.g., another edit).
-    descriptionField().invoke("attr", "data-cy-before-save", "true");
-    cy.contains("button", /^save$/i).click();
-    descriptionField().should("not.have.attr", "data-cy-before-save");
+    builderTypeSchemaDescription(description);
+    descriptionField().blur();
+
+    builderWaitAutosave();
 
 }
 
