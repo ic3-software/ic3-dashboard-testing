@@ -12,10 +12,11 @@ import {
 } from "./builderUtils";
 
 /**
- * The versions of the schema builder (Server UI, toolbar next to Undo / Redo) : the save points (named versions, kept
- * forever) and the recent changes ; a restore is a change that can be undone. See builderUtils for the prerequisites.
+ * Save and Open of the schema builder (Server UI, top bar next to Undo / Redo) : Save a snapshot names the current state
+ * (kept forever), Open restores a snapshot or a recent change (a change that can be undone). See builderUtils for the
+ * prerequisites.
  */
-describe("Builder : versions", () => {
+describe("Builder : Save / Open", () => {
 
     /**
      * The save points of the previous tests are kept (forever, even once the schema is uploaded again) : a name per test.
@@ -36,7 +37,7 @@ describe("Builder : versions", () => {
 
     });
 
-    it("create a save point : listed, not a change (nothing to undo)", () => {
+    it("save a snapshot : listed, not a change (nothing to undo)", () => {
 
         builderCreateSavePoint(v1);
 
@@ -46,23 +47,23 @@ describe("Builder : versions", () => {
 
     });
 
-    it("restore a save point, then undo the restore", () => {
+    it("open a snapshot, then undo it", () => {
 
         builderCreateSavePoint(v1);
         builderEditSchemaDescription("after v1");
 
         builderRestoreVersion("save-points", 0);
 
-        builderAssertNotification("Restored : " + v1, "Undo");
+        builderAssertNotification("Opened : " + v1, "Undo");
         builderAssertSchemaDescription(BUILDER_SCHEMA_DESCRIPTION);
 
         // Undo from the notification : the restore is undone.
-        builderAssertNotification("Restored : " + v1, "Undo", true);
+        builderAssertNotification("Opened : " + v1, "Undo", true);
         builderAssertSchemaDescription("after v1");
 
     });
 
-    it("the changes after a save point never change it", () => {
+    it("the changes after a snapshot never change it", () => {
 
         builderCreateSavePoint(v1);
 
@@ -77,7 +78,7 @@ describe("Builder : versions", () => {
 
     });
 
-    it("restore a recent change", () => {
+    it("open a recent change", () => {
 
         builderEditSchemaDescription("first change");
 

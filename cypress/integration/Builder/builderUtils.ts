@@ -124,7 +124,7 @@ export function builderAssertNotification(message: string, button?: string, clic
 }
 
 /**
- * Names the current version (toolbar, next to Undo / Redo).
+ * Save a snapshot : names the current state (top bar, next to Undo / Redo).
  */
 export function builderCreateSavePoint(name: string) {
 
@@ -132,18 +132,18 @@ export function builderCreateSavePoint(name: string) {
     cy.get("[data-cy='builder-save-point-name'] input").clear().type(name);
     cy.get("[data-cy='builder-save-point-create']").click();
 
-    builderAssertNotification("Save point created : " + name);
+    builderAssertNotification("Snapshot saved : " + name);
 
-    // The user moves on : the tooltip of the button (hovered, focused again once the popover is closed) is closed.
+    // The user moves on : the tooltip of the button (hovered, focused again once the dialog is closed) is closed.
     cy.document().then(doc => (doc.activeElement as HTMLElement | null)?.blur());
     cy.get("[data-cy='builder-save-point']").parent().trigger("mouseout");
 
 }
 
 /**
- * The versions of the schema (toolbar, next to Undo / Redo) : the newest first.
+ * Open a snapshot (top bar, next to Undo / Redo) : the snapshots and the recent changes, the newest first.
  *
- * @param section save points (named) or recent changes
+ * @param section snapshots (named) or recent changes
  */
 export function builderVersions(section: "save-points" | "recent") {
 
@@ -157,11 +157,13 @@ export function builderVersions(section: "save-points" | "recent") {
 }
 
 /**
- * Restores a version : the page is refreshed (see builderVersions()).
+ * Opens (restores) a snapshot or a recent change : selected, then the Open of the dialog ; the page is refreshed (see
+ * builderVersions()).
  */
 export function builderRestoreVersion(section: "save-points" | "recent", index: number) {
 
-    builderVersions(section).eq(index).find("[data-cy='builder-version-restore']").click();
+    builderVersions(section).eq(index).click();
+    cy.get("[data-cy='builder-versions-open']").should("be.enabled").click();
 
 }
 
