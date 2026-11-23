@@ -133,13 +133,40 @@ function descriptionField() {
  */
 export function builderEditSchemaDescription(description: string) {
 
-    descriptionField().clear().type(description);
+    builderTypeSchemaDescription(description);
 
     // The Save button of the page (no id) : saved, then the page is refreshed with the new revision of the schema and
     // its fields are new elements (UxModelEditor) : wait for them before going on (e.g., another edit).
     descriptionField().invoke("attr", "data-cy-before-save", "true");
     cy.contains("button", /^save$/i).click();
     descriptionField().should("not.have.attr", "data-cy-before-save");
+
+}
+
+/**
+ * Types the description of the schema without saving it : unsaved changes (the current page must be the schema
+ * properties).
+ */
+export function builderTypeSchemaDescription(description: string) {
+
+    descriptionField().clear().type(description);
+
+}
+
+/**
+ * The browser asks (or not) before leaving the page (reload, close the tab, another URL) : the page cancels the
+ * beforeunload event (the prompt of the browser itself cannot be tested).
+ */
+export function builderAssertAsksBeforeLeaving(asks: boolean) {
+
+    cy.window().should(win => {
+
+        const event = new win.Event("beforeunload", {cancelable: true});
+        win.dispatchEvent(event);
+
+        expect(event.defaultPrevented, "the browser asks before leaving the page").to.eq(asks);
+
+    });
 
 }
 
