@@ -49,7 +49,7 @@ export function builderUploadSchema(name: string) {
     }))).then(response => {
         // {success: true} or {error: "..."} not as JSON (not logged in : {status: "error", ...} as JSON).
         const reply = typeof response.body === "string" ? JSON.parse(response.body) : response.body;
-        expect(reply, "upload of the schema " + name).to.have.property("success", true);
+        expect(reply, "upload of the schema " + name + " : " + JSON.stringify(reply)).to.have.property("success", true);
     });
 
 }
@@ -124,15 +124,13 @@ export function builderAssertNotification(message: string, button?: string, clic
 }
 
 /**
- * Save a snapshot : names the current state (top bar, next to Undo / Redo).
+ * Save a snapshot : names the current state (top bar, next to Undo / Redo) ; or an older state (see builderHistoryAction()).
  */
 export function builderCreateSavePoint(name: string) {
 
     cy.get("[data-cy='builder-save-point']").should("be.enabled").click();
-    cy.get("[data-cy='builder-save-point-name'] input").clear().type(name);
-    cy.get("[data-cy='builder-save-point-create']").click();
 
-    builderAssertNotification("Snapshot saved : " + name);
+    builderSaveSnapshotDialog(name);
 
     // The user moves on : the tooltip of the button (hovered, focused again once the dialog is closed) is closed.
     cy.document().then(doc => (doc.activeElement as HTMLElement | null)?.blur());
@@ -141,29 +139,43 @@ export function builderCreateSavePoint(name: string) {
 }
 
 /**
- * Open a snapshot (top bar, next to Undo / Redo) : the snapshots and the recent changes, the newest first.
- *
- * @param section snapshots (named) or recent changes
+ * The dialog of a snapshot : its name, then Save.
  */
-export function builderVersions(section: "save-points" | "recent") {
+export function builderSaveSnapshotDialog(name: string) {
+
+    cy.get("[data-cy='builder-save-point-name'] input").clear().type(name);
+    cy.get("[data-cy='builder-save-point-create']").click();
+
+    builderAssertNotification("Snapshot saved : " + name);
+
+}
+
+/**
+ * The history of the schema (Open a snapshot, top bar) : a table, the newest first (columns : snapshot, change, user,
+ * saved).
+ */
+export function builderHistory() {
 
     cy.get("body").then($body => {
         // Opened once.
         $body.find("[data-cy='builder-versions-list']").length === 0 && cy.get("[data-cy='builder-versions']").click();
     });
 
-    return cy.get(`[data-cy='builder-versions-${section}'] [data-cy='builder-version']`);
+    return cy.get("[data-cy='builder-versions-list'] tbody tr");
 
 }
 
 /**
- * Opens (restores) a snapshot or a recent change : selected, then the Open of the dialog ; the page is refreshed (see
- * builderVersions()).
+ * An action of the popup menu of a row of the history (right click).
+ *
+ * @param row    its index (the newest first) or a text of the row (e.g., the name of a snapshot)
+ * @param action e.g., Open, Save as snapshot, Download
  */
-export function builderRestoreVersion(section: "save-points" | "recent", index: number) {
+export function builderHistoryAction(row: number | string, action: "Open" | "Save as snapshot" | "Download") {
 
-    builderVersions(section).eq(index).click();
-    cy.get("[data-cy='builder-versions-open']").should("be.enabled").click();
+    (typeof row === "number" ? builderHistory().eq(row) : builderHistory().contains("tr", row)).rightclick();
+
+    cy.contains("[role='menuitem']", action).click();
 
 }
 
