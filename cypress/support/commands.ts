@@ -2235,6 +2235,7 @@ Cypress.Commands.add('assertWidgetHeaderSelection', (widgetId: string, selection
 
     return cy.getWidget(widgetId).find(".ic3WidgetBox-header div[data-cy='header-selection-chip']")
         .should('have.length', 1)
+        .find(".MuiChip-label") /* not the 'Clear Selection' delete icon */
         .should('have.text', selection)
 
 });
