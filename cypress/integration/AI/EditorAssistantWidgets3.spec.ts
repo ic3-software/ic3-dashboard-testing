@@ -39,7 +39,7 @@ describe("AI/Editor Assistant Widgets (colors, filter panel, placement, dashboar
     editorAssistantWidgetsHooks();
 
     /*
-        A color option is a name (theme or dashboard colors : get_widget_option_meta allowedValues) or a CSS color
+        A color option is a name (theme or dashboard colors : dashboard_get_widget_option_meta allowedValues) or a CSS color
         added to the dashboard colors (as the color editor picker does).
      */
     describe("Colors", () => {

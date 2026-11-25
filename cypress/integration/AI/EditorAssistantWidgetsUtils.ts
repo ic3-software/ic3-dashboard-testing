@@ -10,7 +10,7 @@ import {
 import {dashboardUnselectAll, useSalesSchema} from "../Editor/utils";
 
 /*
-    Dashboard Editor : AI Assistant build-widget for every widget type (see get_possible_widgets) followed by an
+    Dashboard Editor : AI Assistant build-widget for every widget type (see dashboard_get_possible_widgets) followed by an
     edit-widget-options action changing some of its settings (the title and a chart option).
 
     Requires the fake AI agent (papagayo : the reply is the question w/o its "papagayo:" prefix) : see

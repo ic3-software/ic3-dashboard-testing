@@ -84,9 +84,9 @@ describe("AI/Editor Assistant Tools", () => {
 
     });
 
-    it("get_dashboard_theme : the main colors, colors & palettes (chartPalette) as hex codes", () => {
+    it("dashboard_get_theme : the main colors, colors & palettes (chartPalette) as hex codes", () => {
 
-        aiCallTool("get_dashboard_theme").then(result => {
+        aiCallTool("dashboard_get_theme").then(result => {
 
             // as the theme of the custom ECharts widgets (AiUtils.transformToAiTheme)
             expect(result).to.have.all.keys("typography", "palette", "chartPalette", "colors");
@@ -119,35 +119,35 @@ describe("AI/Editor Assistant Tools", () => {
 
     });
 
-    it("get_dashboard_theme : a CSS color set by the AI is a dashboard color", () => {
+    it("dashboard_get_theme : a CSS color set by the AI is a dashboard color", () => {
 
         buildGeoMap();
 
         setRegionColor("rgb(0, 255, 0)");
 
-        aiCallTool("get_dashboard_theme").then(result => {
+        aiCallTool("dashboard_get_theme").then(result => {
             expect(result.colors).to.include({"ic3dashboard.#00ff00": "#00ff00"});
         });
 
     });
 
-    it("get_widget_option_meta / get_widget_options : a color option is a name", () => {
+    it("dashboard_get_widget_option_meta / dashboard_get_widget_options : a color option is a name", () => {
 
         buildGeoMap();
 
-        aiCallTool("get_widget_option_meta", {widgetId: WID}).then(meta => {
+        aiCallTool("dashboard_get_widget_option_meta", {widgetId: WID}).then(meta => {
 
             const regionColor = (meta as any[]).find(option => option.name === "chartOptions.regionColor");
 
             expect(regionColor.type).to.equal("color");
             expect(regionColor.allowedValues).to.include.members(["default", "red"]);
-            expect(regionColor.description).to.contain("get_dashboard_theme");
+            expect(regionColor.description).to.contain("dashboard_get_theme");
 
         });
 
         setRegionColor("red");
 
-        aiCallTool("get_widget_options", {widgetId: WID}).then(options => {
+        aiCallTool("dashboard_get_widget_options", {widgetId: WID}).then(options => {
             // the name (not the stored {path})
             expect(options["chartOptions.regionColor"]).to.equal("red");
         });
@@ -160,7 +160,7 @@ describe("AI/Editor Assistant Tools", () => {
 
         cy.get(".ic3App-drawer .ic3AIAssistant-root [data-cy='ai-answer']").last()
             .should("contain.text", "unknown tool(s) 'get_palettes'")
-            .should("contain.text", "get_dashboard_theme");
+            .should("contain.text", "dashboard_get_theme");
 
     });
 
