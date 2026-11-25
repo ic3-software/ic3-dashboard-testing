@@ -3,25 +3,25 @@ import {
     builderAssertNotification,
     builderAssertNothingToUndo,
     builderAssertSchemaDescription,
-    builderCreateSavePoint,
     builderEditSchemaDescription,
     builderHistory,
     builderHistoryAction,
+    builderNameVersion,
     builderOpenSchema,
-    builderSaveSnapshotDialog,
+    builderSaveVersion,
     builderUploadSchema
 } from "./builderUtils";
 
 /**
- * Save and Open of the schema builder (Server UI, top bar next to Undo / Redo) : Save a snapshot names the current state
- * (kept forever), Open shows the history of the schema (a table, the actions of a row in its popup menu) : open a
- * snapshot or a change (it can be undone), save an older state as a snapshot, download a state. See builderUtils for
+ * Save and Open of the schema builder (Server UI, top bar next to Undo / Redo) : Save a schema version names the current
+ * state (kept forever), Open shows the history of the schema (a grid, the actions of a row as icons) : restore a
+ * version or a change (it can be undone), name an older state (its name cell), download a state. See builderUtils for
  * the prerequisites.
  */
 describe("Builder : Save / Open", () => {
 
     /**
-     * The snapshots of the previous tests are kept (forever, even once the schema is uploaded again) : a name per test.
+     * The versions of the previous tests are kept (forever, even once the schema is uploaded again) : a name per test.
      */
     let v1 = "";
 
@@ -39,9 +39,9 @@ describe("Builder : Save / Open", () => {
 
     });
 
-    it("save a snapshot : the current state in the history, not a change (nothing to undo)", () => {
+    it("save a schema version : the current state in the history, not a change (nothing to undo)", () => {
 
-        builderCreateSavePoint(v1);
+        builderSaveVersion(v1);
 
         builderAssertNothingToUndo();
 
@@ -49,38 +49,38 @@ describe("Builder : Save / Open", () => {
 
     });
 
-    it("open a snapshot, then undo it", () => {
+    it("restore a schema version, then undo it", () => {
 
-        builderCreateSavePoint(v1);
+        builderSaveVersion(v1);
         builderEditSchemaDescription("after v1");
 
-        builderHistoryAction(v1, "Open");
+        builderHistoryAction(v1, "restore");
 
-        builderAssertNotification("Opened : " + v1, "Undo");
+        builderAssertNotification("Restored : " + v1, "Undo");
         builderAssertSchemaDescription(BUILDER_SCHEMA_DESCRIPTION);
 
-        // Undo from the notification : the open is undone.
-        builderAssertNotification("Opened : " + v1, "Undo", true);
+        // Undo from the notification : the restore is undone.
+        builderAssertNotification("Restored : " + v1, "Undo", true);
         builderAssertSchemaDescription("after v1");
 
     });
 
-    it("the changes after a snapshot never change it", () => {
+    it("the changes after a schema version never change it", () => {
 
-        builderCreateSavePoint(v1);
+        builderSaveVersion(v1);
 
-        // Same page visit : a single revision for both, not the one of the snapshot.
+        // Same page visit : a single revision for both, not the one of the version.
         builderEditSchemaDescription("first change");
         builderEditSchemaDescription("second change");
 
         builderHistory().eq(1).should("contain.text", v1);
 
-        builderHistoryAction(v1, "Open");
+        builderHistoryAction(v1, "restore");
         builderAssertSchemaDescription(BUILDER_SCHEMA_DESCRIPTION);
 
     });
 
-    it("open an older change", () => {
+    it("restore an older change", () => {
 
         builderEditSchemaDescription("first change");
 
@@ -90,27 +90,26 @@ describe("Builder : Save / Open", () => {
 
         // The newest first : the current state (second change), then the first change.
         builderHistory().eq(0).should("contain.text", "Current");
-        builderHistoryAction(1, "Open");
+        builderHistoryAction(1, "restore");
 
         builderAssertSchemaDescription("first change");
 
     });
 
-    it("save an older change as a snapshot", () => {
+    it("name an older change", () => {
 
         builderEditSchemaDescription("first change");
 
         cy.reload();
         builderEditSchemaDescription("second change");
 
-        builderHistoryAction(1, "Save as snapshot");
-        builderSaveSnapshotDialog(v1);
+        builderNameVersion(1, v1);
 
         // Named : the first change, not the current state.
         builderHistory().eq(1).should("contain.text", v1);
         builderHistory().eq(0).should("not.contain.text", v1);
 
-        builderHistoryAction(v1, "Open");
+        builderHistoryAction(v1, "restore");
         builderAssertSchemaDescription("first change");
 
     });
@@ -119,10 +118,10 @@ describe("Builder : Save / Open", () => {
 
         builderEditSchemaDescription("first change");
 
-        cy.intercept("POST", "**DownloadSchemaDefRevision**").as("download");
+        cy.intercept("POST", "**/builder/DownloadSchemaVersion/**").as("download");
 
         // The schema as uploaded (the definition before the change).
-        builderHistoryAction(1, "Download");
+        builderHistoryAction(1, "download");
 
         cy.wait("@download").its("response.statusCode").should("eq", 200);
 

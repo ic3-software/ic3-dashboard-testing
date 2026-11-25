@@ -124,35 +124,27 @@ export function builderAssertNotification(message: string, button?: string, clic
 }
 
 /**
- * Save a snapshot : names the current state (top bar, next to Undo / Redo) ; or an older state (see builderHistoryAction()).
+ * Save a schema version : names the current state (top bar, next to Undo / Redo) ; or an older state (see
+ * builderNameVersion()).
  */
-export function builderCreateSavePoint(name: string) {
+export function builderSaveVersion(name: string) {
 
-    cy.get("[data-cy='builder-save-point']").should("be.enabled").click();
+    cy.get("[data-cy='builder-save-version']").should("be.enabled").click();
 
-    builderSaveSnapshotDialog(name);
+    cy.get("[data-cy='builder-save-version-name'] input").clear().type(name);
+    cy.get("[data-cy='builder-save-version-create']").click();
+
+    builderAssertNotification("Schema version saved : " + name);
 
     // The user moves on : the tooltip of the button (hovered, focused again once the dialog is closed) is closed.
     cy.document().then(doc => (doc.activeElement as HTMLElement | null)?.blur());
-    cy.get("[data-cy='builder-save-point']").parent().trigger("mouseout");
+    cy.get("[data-cy='builder-save-version']").parent().trigger("mouseout");
 
 }
 
 /**
- * The dialog of a snapshot : its name, then Save.
- */
-export function builderSaveSnapshotDialog(name: string) {
-
-    cy.get("[data-cy='builder-save-point-name'] input").clear().type(name);
-    cy.get("[data-cy='builder-save-point-create']").click();
-
-    builderAssertNotification("Snapshot saved : " + name);
-
-}
-
-/**
- * The history of the schema (Open a snapshot, top bar) : a table, the newest first (columns : snapshot, change, user,
- * saved).
+ * The history of the schema (Open a schema version, top bar) : a grid, the newest first (columns : actions, name,
+ * change, user, saved).
  */
 export function builderHistory() {
 
@@ -161,21 +153,43 @@ export function builderHistory() {
         $body.find("[data-cy='builder-versions-list']").length === 0 && cy.get("[data-cy='builder-versions']").click();
     });
 
-    return cy.get("[data-cy='builder-versions-list'] tbody tr");
+    return cy.get("[data-cy='builder-versions-list'] .MuiDataGrid-row");
 
 }
 
 /**
- * An action of the popup menu of a row of the history (right click).
- *
- * @param row    its index (the newest first) or a text of the row (e.g., the name of a snapshot)
- * @param action e.g., Open, Save as snapshot, Download
+ * @param row its index (the newest first) or a text of the row (e.g., the name of a version)
  */
-export function builderHistoryAction(row: number | string, action: "Open" | "Save as snapshot" | "Download") {
+function builderHistoryRow(row: number | string) {
 
-    (typeof row === "number" ? builderHistory().eq(row) : builderHistory().contains("tr", row)).rightclick();
+    return typeof row === "number" ? builderHistory().eq(row) : builderHistory().filter(`:contains("${row}")`);
 
-    cy.contains("[role='menuitem']", action).click();
+}
+
+/**
+ * A click in the grid of the history : not scrolled to the top (its rows are virtualized : rendered again, the element
+ * clicked is detached).
+ */
+const GRID_CLICK = {scrollBehavior: "nearest"} as const;
+
+/**
+ * An action of a row of the history (its icons).
+ */
+export function builderHistoryAction(row: number | string, action: "restore" | "download") {
+
+    builderHistoryRow(row).find(`[data-cy='builder-version-${action}']`).should("be.enabled").click(GRID_CLICK);
+
+}
+
+/**
+ * Names a version of the history (an older state) : its name cell.
+ */
+export function builderNameVersion(row: number | string, name: string) {
+
+    builderHistoryRow(row).find("[data-field='name']").click(GRID_CLICK);
+    cy.get("[data-cy='builder-versions-list'] [data-field='name'] input").type(name + "{enter}");
+
+    builderAssertNotification("Schema version saved : " + name);
 
 }
 
